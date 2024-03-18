@@ -15,7 +15,7 @@ if (isset($_GET['theme']) && $_GET['theme'] == "dark") {
     header("location:index.php");
 
 }
-if(isset($_SESSION['access_of']->d) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->d == 0) {
+if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d == 0) {
         header("location:404.php");
     
 }
@@ -23,16 +23,16 @@ if(isset($_SESSION['access_of']->d) && $_SESSION['role_id'] == 3 && $_SESSION['a
 
 
 
-$total_users = count($pdo->read("access", ['company_profile_id' => $_SESSION['cp_id']]));
-$total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['cp_id']]));
-$total_employees = count($pdo->read("employees", ['company_profile_id' => $_SESSION['cp_id']]));
-$sales_2_today = $pdo->read("sales_2", ['created_at'=>date("Y-m-d"), 'company_profile_id' => $_SESSION['cp_id']]);
-$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]);
+$total_users = count($pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$total_employees = count($pdo->read("employees", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$sales_2_today = $pdo->read("sales_2", ['created_at'=>date("Y-m-d"), 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $today_sales = count($sales_2_today);
 $total_sales = count($sales_2);
 
 $total_amount = [];
-$revenue = $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]);
+$revenue = $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 foreach ($revenue as $re) {
     $total_amount[] = $re['total_amount'];

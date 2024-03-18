@@ -3,14 +3,14 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if(isset($_SESSION['access_of']->d) && $_SESSION['access_of']->d != 0) {
+if(isset($_SESSION['access_of']->d) && $_SESSION['ovalfox_pos_access_of']->d != 0) {
 
 }
 $success = "";
 $error = "";
 $id = "";
 
-$access = $pdo->read("access", ['company_profile_id' => $_SESSION['cp_id']]);
+$access = $pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -64,7 +64,7 @@ if (isset($_POST['add_customer_btn'])) {
     }
 }
 if (isset($_GET['edit_customer'])) {
-    $id = $pdo->read("access", ['id' => $_GET['edit_customer'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("access", ['id' => $_GET['edit_customer'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

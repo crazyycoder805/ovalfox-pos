@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['access_of']->s) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->s == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s == 0) {
     
         header("location:404.php");
     
@@ -12,14 +12,14 @@ $success = "";
 $error = "";
 $id = "";
 
-$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]);
+$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $products = $pdo->read("products");
 
 
-    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['cp_id']}")[0]['billNumber'] + 1;
+    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['billNumber'] + 1;
 
 
-$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['cp_id']]);
+$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -35,7 +35,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['cp_id']
 
             <div class="from-wrapper">
                 <?php 
-                    if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == "2") {
+                    if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
                     ?>
                 <form method="post">
                     <button type="submit" name="logout" id="logout" style="color: black !important;"><i
@@ -185,14 +185,14 @@ foreach ($customers as $customer) {
                                                 <label class="col-form-label">Select
                                                     Booker</label>
                                                 <?php 
-if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == "2") {
+if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
 ?>
                                                 <input class="form-control" disabled
-                                                    value="<?php echo $_SESSION['username']; ?>" name="booker_name"
+                                                    value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
                                                     id="booker_name">
 
-                                                <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == "1") {
-$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['cp_id']]); 
+                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
+$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
                                                 <select class="select2 form-control select-opt" name="booker_name"
@@ -212,8 +212,8 @@ foreach ($bookers as $booker) {
                                                     <?php } ?>
                                                 </select>
 
-                                                <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == "3") {
-$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['cp_id']]); 
+                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
+$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
                                                 <select class="select2 form-control select-opt" name="book" id="book">

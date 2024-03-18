@@ -13,15 +13,15 @@ if (isset($_POST['username'])) {
         $user = $pdo->read('access', ['username'=>$_POST['username'], 'password'=>$_POST['password'], 'company_profile_id'=>$_POST['organization']]);
         
         if (!empty($user)) {
-            $_SESSION['user_id'] = $user[0]['id'];
+            $_SESSION['ovalfox_pos_user_id'] = $user[0]['id'];
             $company = $pdo->read("companies_profile", ['id'=>$_POST['organization']]);
-            $_SESSION['cp_id'] = $company[0]['id'];
-            $_SESSION['username'] = $user[0]['username'];
-            $_SESSION['role_id'] = $user[0]['role_id'];
-            $_SESSION['email'] = $user[0]['email'];
+            $_SESSION['ovalfox_pos_cp_id'] = $company[0]['id'];
+            $_SESSION['ovalfox_pos_username'] = $user[0]['username'];
+            $_SESSION['ovalfox_pos_role_id'] = $user[0]['role_id'];
+            $_SESSION['ovalfox_pos_email'] = $user[0]['email'];
             
             if ($user[0]['role_id'] == 3) {
-                $_SESSION['access_of'] = json_decode($user[0]['access_of']);
+                $_SESSION['ovalfox_pos_access_of'] = json_decode($user[0]['access_of']);
 
             }
             header('location:index.php');

@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-  if (isset($_SESSION['access_of']->st) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->st == 0) {
+  if (isset($_SESSION['ovalfox_pos_access_of']->st) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->st == 0) {
         header("location:404.php");
     
 }
@@ -11,13 +11,13 @@ $success = "";
 $error = "";
 $id = "";
 
-$stores = $pdo->read("stores", ['company_profile_id' => $_SESSION['cp_id']]);
+$stores = $pdo->read("stores", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 if (isset($_POST['add_store_btn'])) {
     if (!empty($_POST['store_name'])) {
         if (!$pdo->isDataInserted("stores", ['store_name' => $_POST['store_name']])) {
-            if ($pdo->create("stores", ['store_name' => $_POST['store_name'], 'company_profile_id'=>$_SESSION['cp_id'], 'store_details' => empty($_POST['store_details']) ? "" : $_POST['store_details']])) {
+            if ($pdo->create("stores", ['store_name' => $_POST['store_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'store_details' => empty($_POST['store_details']) ? "" : $_POST['store_details']])) {
                 $success = "Store added.";
                 $pdo->headTo("store.php");
             } else {
@@ -53,7 +53,7 @@ if (isset($_POST['add_store_btn'])) {
     }
 }
 if (isset($_GET['edit_store'])) {
-    $id = $pdo->read("stores", ['id' => $_GET['edit_store'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("stores", ['id' => $_GET['edit_store'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['access_of']->l) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->l == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->l) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->l == 0) {
 
     header("location:404.php");
     
@@ -12,7 +12,7 @@ $success = "";
 $error = "";
 $id = "";
 
-$ledger = $pdo->read("ledger", ['company_profile_id' => $_SESSION['cp_id']]);
+$ledger = $pdo->read("ledger", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -24,7 +24,7 @@ if (isset($_POST['add_ledger_btn'])) {
 
 
 
-            $pdo->create("ledger", ['date' => $_POST['date'], 'payment_type' => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['cp_id'], 'total_amount' => $_POST['total_amount'], 'recevied_amount' => $_POST['recevied_amount'], 'details' => $_POST['details'], 'payment_from' => $_POST['payment_from'], 'dr' => $_POST['dr'], 'cr' => $_POST['cr'], 'remaining_amount' => $_POST['remaining_amount']])
+            $pdo->create("ledger", ['date' => $_POST['date'], 'payment_type' => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'total_amount' => $_POST['total_amount'], 'recevied_amount' => $_POST['recevied_amount'], 'details' => $_POST['details'], 'payment_from' => $_POST['payment_from'], 'dr' => $_POST['dr'], 'cr' => $_POST['cr'], 'remaining_amount' => $_POST['remaining_amount']])
 
 
         ) {
@@ -68,7 +68,7 @@ if (isset($_POST['add_ledger_btn'])) {
     }
 }
 if (isset($_GET['edit_ledger'])) {
-    $id = $pdo->read("ledger", ['id' => $_GET['edit_ledger'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("ledger", ['id' => $_GET['edit_ledger'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

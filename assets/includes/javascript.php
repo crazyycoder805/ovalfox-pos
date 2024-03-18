@@ -37,15 +37,15 @@ $(document).ready(function() {
 <script src="assets/js/apexchart/chart.js"></script>
 
 <?php 
-$sales_1 = $pdo->read("sales_1", ['company_profile_id' => $_SESSION['cp_id']]);
-$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]);
+$sales_1 = $pdo->read("sales_1", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $total_sales = count($sales_1) + count($sales_2);
 
-$purchases_1 = $pdo->read("purchases_1", ['company_profile_id' => $_SESSION['cp_id']]);
-$purchases_2 = $pdo->read("purchases_2", ['company_profile_id' => $_SESSION['cp_id']]);
+$purchases_1 = $pdo->read("purchases_1", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$purchases_2 = $pdo->read("purchases_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $total_purchase = count($purchases_1) + count($purchases_2);
 
-$gernel_expenses = count($pdo->read("gernel_expenses", ['company_profile_id' => $_SESSION['cp_id']]));
+$gernel_expenses = count($pdo->read("gernel_expenses", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 
 
 ?>

@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->cp) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->cp == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->cp) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->cp == 0) {
         header("location:404.php");
     
 }

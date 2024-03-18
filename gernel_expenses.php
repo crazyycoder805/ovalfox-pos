@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
- if (isset($_SESSION['access_of']->g) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->g == 0) {
+ if (isset($_SESSION['ovalfox_pos_access_of']->g) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->g == 0) {
         header("location:404.php");
     
 }
@@ -11,8 +11,8 @@ $success = "";
 $error = "";
 $id = "";
 
-$expense_categories = $pdo->read("expense_categories", ['company_profile_id' => $_SESSION['cp_id']]);
-$gernel_expenses = $pdo->read("gernel_expenses", ['company_profile_id' => $_SESSION['cp_id']]);
+$expense_categories = $pdo->read("expense_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$gernel_expenses = $pdo->read("gernel_expenses", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -23,9 +23,9 @@ if (isset($_POST['add_customer_btn'])) {
         if (
 
 
-            $pdo->create("gernel_expenses", ['expense_category_id' => $_POST['expense_category_id'], 'company_profile_id'=>$_SESSION['cp_id'], 'expense_name' => $_POST['expense_name'], 'date' => $_POST['date'], 
+            $pdo->create("gernel_expenses", ['expense_category_id' => $_POST['expense_category_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'expense_name' => $_POST['expense_name'], 'date' => $_POST['date'], 
             'paid_by' => $_POST['paid_by'], 'paid_to' => $_POST['paid_to'], 'amount' => $_POST['amount']])
-&&             $pdo->create("ledger", ['date' => $_POST['date'], 'company_profile_id'=>$_SESSION['cp_id'], 'payment_type' => $_POST['expense_name'], 'total_amount' => $_POST['amount'], 'dr' => $_POST['amount'],
+&&             $pdo->create("ledger", ['date' => $_POST['date'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'payment_type' => $_POST['expense_name'], 'total_amount' => $_POST['amount'], 'dr' => $_POST['amount'],
 'status' => "GERNEL_EXPENSE"])
 
 
@@ -64,7 +64,7 @@ if (isset($_POST['add_customer_btn'])) {
     }
 }
 if (isset($_GET['edit_gernel_expense'])) {
-    $id = $pdo->read("gernel_expenses", ['id' => $_GET['edit_gernel_expense'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("gernel_expenses", ['id' => $_GET['edit_gernel_expense'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

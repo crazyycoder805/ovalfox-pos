@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->em) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->em == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->em) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->em == 0) {
         header("location:404.php");
     
 }
@@ -13,8 +13,8 @@ $success = "";
 $error = "";
 $id = "";
 
-$employees = $pdo->read("employees", ['company_profile_id' => $_SESSION['cp_id']]);
-$designations = $pdo->read("designations", ['company_profile_id' => $_SESSION['cp_id']]);
+$employees = $pdo->read("employees", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$designations = $pdo->read("designations", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -25,7 +25,7 @@ if (isset($_POST['add_employee_btn'])) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
                     if ($pdo->validateInput($_POST['email'], 'email')) {
-                        if ($pdo->createMulti("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                        if ($pdo->createMulti("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
                         'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
                         'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
                         'email' => $_POST['email']], ["profile_image", 'cnic_front_pic', 'cnic_back_pic'], ['profile_image', 'cnic_front_pic', 'cnic_back_pic'], 
@@ -103,7 +103,7 @@ if (isset($_POST['add_employee_btn'])) {
 
 
 if (isset($_GET['edit_employee'])) {
-    $id = $pdo->read("employees", ['id' => $_GET['edit_employee'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("employees", ['id' => $_GET['edit_employee'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

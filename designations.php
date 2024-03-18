@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->ds) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ds == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->ds) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ds == 0) {
         header("location:404.php");
     
 }
@@ -13,14 +13,14 @@ $success = "";
 $error = "";
 $id = "";
 
-$designations = $pdo->read("designations", ['company_profile_id' => $_SESSION['cp_id']]);
+$designations = $pdo->read("designations", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
 if (isset($_POST['add_designation_btn'])) {
     if (!empty($_POST['name'])) {
         if (!$pdo->isDataInserted("designations", ['name' => $_POST['name']])) {
-            if ($pdo->create("designations", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id']])) {
+            if ($pdo->create("designations", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                 $success = "Designation added.";
                 $pdo->headTo("designations.php");
             } else {
@@ -56,7 +56,7 @@ if (isset($_POST['add_designation_btn'])) {
     }
 }
 if (isset($_GET['edit_designation'])) {
-    $id = $pdo->read("designations", ['id' => $_GET['edit_designation'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("designations", ['id' => $_GET['edit_designation'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

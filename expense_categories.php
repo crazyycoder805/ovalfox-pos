@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->ec) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ec == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->ec) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ec == 0) {
         header("location:404.php");
     
 }
@@ -13,14 +13,14 @@ $success = "";
 $error = "";
 $id = "";
 
-$expense_categories = $pdo->read("expense_categories", ['company_profile_id' => $_SESSION['cp_id']]);
+$expense_categories = $pdo->read("expense_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
 if (isset($_POST['add_expense_category_btn'])) {
     if (!empty($_POST['name'])) {
         if (!$pdo->isDataInserted("expense_categories", ['name' => $_POST['name']])) {
-            if ($pdo->create("expense_categories", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id']], "image", ['image'], ['image_type'])) {
+            if ($pdo->create("expense_categories", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], "image", ['image'], ['image_type'])) {
                 $success = "Expense category added.";
                 $pdo->headTo("expense_categories.php");
             } else {
@@ -66,7 +66,7 @@ if (isset($_POST['add_expense_category_btn'])) {
     }
 }
 if (isset($_GET['edit_expense_category'])) {
-    $id = $pdo->read("expense_categories", ['id' => $_GET['edit_expense_category'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("expense_categories", ['id' => $_GET['edit_expense_category'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

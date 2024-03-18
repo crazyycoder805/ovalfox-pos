@@ -7,10 +7,10 @@ require_once 'assets/includes/pdo.php';
 
 if ($_POST['__FILE__'] == "productSelect") {
     $data = "";
-    $product = $pdo->read("products", ['id' => $_POST['product'], 'company_profile_id'=>$_SESSION['cp_id']]);
-    $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $product = $pdo->read("products", ['id' => $_POST['product'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($customer)) {
-        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['cp_id']], ' LIMIT 0, 5');
+        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5');
 
         foreach ($sales_2_last_rate as $sale1) {
             $data .= "
@@ -30,7 +30,7 @@ if ($_POST['__FILE__'] == "productSelect") {
     $productData = [$item_code, $product_price, $product_name, $total_quantity, $data];
     echo json_encode($productData);
 } else if ($_POST['__FILE__'] == "productFetch") {
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $html = "";
 ?>
 
@@ -68,27 +68,27 @@ echo json_encode($data);
 
 <?php
 } else if ($_POST['__FILE__'] == 'productAdd') {
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !empty($_POST['customer_manual'])) && 
     !empty($_POST['booker_name']) && !empty($_POST['date']) && !empty($_POST['date']) && $_POST['total_quantity'] != "" && (!empty($_POST['item_code_search']) || !empty($_POST['product_id']))) {
 
         $customerId = "";
         $customer = "";
         if (!empty($_POST['customer_manual'])) { 
-            if (!$pdo->isDataInserted("customers", ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['cp_id']])) {
-                $returnedId = $pdo->create('customers', ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['cp_id']]);
-                $customerId = $pdo->read('customers', ['id'=> $returnedId, 'company_profile_id'=>$_SESSION['cp_id']]);
-                $customer = $pdo->read("customers", ['id'=> $customerId[0]['name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+            if (!$pdo->isDataInserted("customers", ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
+                $returnedId = $pdo->create('customers', ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+                $customerId = $pdo->read('customers', ['id'=> $returnedId, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+                $customer = $pdo->read("customers", ['id'=> $customerId[0]['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
             } else {
-                $customerId = $pdo->read('customers', ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['cp_id']]);
+                $customerId = $pdo->read('customers', ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
             }
         }
         if ($_POST['type'] == "rf") {
-            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['cp_id']], ["total_quantity" => $_POST['total_quantity']]);
-            if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]))) {
+            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
+            if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
     
-                if ($pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
+                if ($pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                 'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 
                 'bill_number' => $_POST['bill_number'], 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0, 
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"])) {
@@ -98,26 +98,26 @@ echo json_encode($data);
     
                 }
             } else {
-                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']], ['total_amount' => $_POST['total_amount']]);
+                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => $_POST['total_amount']]);
             }
-            $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
+            $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
             'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'item_code' => $_POST['item_code'], 
             'item_name' => "(Refunded) " . $_POST['item_name'], 'item_price' => $_POST['item_price'], 'quantity' => $_POST['quantity'], 'amount' => $_POST['amount'], 
             'discount' => empty($_POST['discount_in_amount']) ? 0 : $_POST['discount_in_amount'], 'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
         } else {
-            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['cp_id']], ["total_quantity" => $_POST['total_quantity']]);
-            if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]))) {
-                $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
+            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
+            if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
+                $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
                 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 'bill_number' => $_POST['bill_number'], 
                 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0,  
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"]);
             } else {
-                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']], ['total_amount' => $_POST['total_amount']]);
+                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => $_POST['total_amount']]);
             }
     
     
     
-            $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 
+            $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
             'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
             'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
             'item_code' => $_POST['item_code'], 'item_name' => $_POST['item_name'], 'item_price' => $_POST['item_price'], 
@@ -159,14 +159,14 @@ echo json_encode($data);
     $data = "";
 
     if (isset($_POST['productId'])) {
-        $product = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $product = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     } else if (isset($_POST['product'])) {
-        $product = $pdo->read("products", ['item_code' => $_POST['product'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $product = $pdo->read("products", ['item_code' => $_POST['product'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     }
 
-    $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($customer)) {
-        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['cp_id']], ' LIMIT 0, 5');
+        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5');
 
         foreach ($sales_2_last_rate as $sale1) {
             $data .= "
@@ -188,14 +188,14 @@ echo json_encode($data);
 ?>
 
 <?php } else if ($_POST['__FILE__'] == "deleteProductSales1") {
-    $pr = $pdo->read("sales_1", ['id' => $_POST['salesId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $pr = $pdo->read("sales_1", ['id' => $_POST['salesId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $totalAmount = $pr[0]['amount'];
     $productData = [$totalAmount];
     echo json_encode($productData);
     $pdo->customQuery("DELETE FROM sales_1 WHERE id = {$_POST['salesId']}");
 ?>
 <?php } else if ($_POST['__FILE__'] == "deletePurchase") {
-    $pr = $pdo->read("purchases_1", ['id' => $_POST['purchaseId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $pr = $pdo->read("purchases_1", ['id' => $_POST['purchaseId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $totalAmount = $pr[0]['total_amount'];
     $productData = [$totalAmount];
     echo json_encode($productData);
@@ -205,12 +205,12 @@ echo json_encode($data);
 
 <?php } else if ($_POST['__FILE__'] == "selectTypeQuantity") {
    if (!empty($_POST['productId']) || !empty($_POST['itemSearch'])){
-        $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
         if (!empty($_POST['productId'])) {
-            $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+            $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
         } else if (!empty($_POST['itemSearch'])) {
-            $pr = $pdo->read("products", ['item_code' => $_POST['itemSearch'], 'company_profile_id'=>$_SESSION['cp_id']]);
+            $pr = $pdo->read("products", ['item_code' => $_POST['itemSearch'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
         }
         $type = $_POST['type'];
@@ -244,16 +244,16 @@ echo json_encode($data);
 
 <?php } else if ($_POST['__FILE__'] == "refundItem") {
 
-    $pdouctId = $pdo->read("products", ["id" => $_POST['productId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $pdouctId = $pdo->read("products", ["id" => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
 
-    $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'item_code' => "(Refunded)" . $_POST['item_code'], 'item_name' => $_POST['item_name'], 'item_price' => $_POST['item_price'], 'quantity' => $_POST['quantity'], 'amount' => $_POST['amount'], 'discount' => $_POST['discount'], 'extra_discount' => $_POST['extra_discount']]);
+    $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'item_code' => "(Refunded)" . $_POST['item_code'], 'item_name' => $_POST['item_name'], 'item_price' => $_POST['item_price'], 'quantity' => $_POST['quantity'], 'amount' => $_POST['amount'], 'discount' => $_POST['discount'], 'extra_discount' => $_POST['extra_discount']]);
 
 ?>
 
 <?php } else if ($_POST['__FILE__'] == "loadInvoice") {
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['cp_id']]);
-    $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
     
     $html = "";
@@ -285,14 +285,14 @@ echo json_encode($data);
 
 <?php } else if ($_POST['__FILE__'] == "sales2Update") {
     
-    $customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
-    $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
-    $pdo->update("customers", ["id" => $customer[0]['id'], 'company_profile_id'=>$_SESSION['cp_id']], ["balance" => $_POST['pending_amount']]);
-    $pdo->create("ledger", ["payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['cp_id'], "total_amount" => $_POST['total_amount'], "recevied_amount" => $_POST['recevied_amount'],
+    $pdo->update("customers", ["id" => $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["balance" => $_POST['pending_amount']]);
+    $pdo->create("ledger", ["payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], "recevied_amount" => $_POST['recevied_amount'],
     "details" => $_POST['details'], "payment_from" => $customer[0]['id'], "dr" => $_POST['pending_amount'], "cr" => $_POST['recevied_amount'], 
     "remaining_amount" => $_POST['final_amount'], "status" => $_POST['pending_amount'] != 0 || $_POST['pending_amount'] != "0" ? "Paid" : "Unpaid"]);
-    $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']], ['discount' => $_POST['discount_in_amount'], 'final_amount' => $_POST['final_amount'], 
+    $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => $_POST['discount_in_amount'], 'final_amount' => $_POST['final_amount'], 
     'recevied_amount' => $_POST['recevied_amount'], 'returned_amount' => $_POST['returned_amount'], 'pending_amount' => $_POST['pending_amount'], 
     "status" => $_POST['pending_amount'] == 0 || $_POST['pending_amount'] == "0" ? "Paid" : "Unpaid"]);
     
@@ -311,35 +311,35 @@ echo json_encode($data);
     !empty($_POST['wholesale_price'])&& 
     !empty($_POST['purchase_price'])) {
 
-        $product = $pdo->read("products", ['id'=> $_POST['item_name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $product = $pdo->read("products", ['id'=> $_POST['item_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
 
-        $pdo->update("products", ['id' => $_POST['item_name'], 'company_profile_id'=>$_SESSION['cp_id']], ["total_quantity" => $_POST['total_quantity'],
+        $pdo->update("products", ['id' => $_POST['item_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity'],
         "quantity_per_box" => $_POST['quantity_per_box'],"box_quantity" => $_POST['box_quantity'],
          "purchase_per_unit_price" => $_POST['purchase_price'],
          "trade_unit_price" => $_POST['trades_price'],
          "whole_sale_price" => $_POST['wholesale_price']]);
     
-        if (empty($pdo->read("purchases_2", ["order_number" => $_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id']]))) {
+        if (empty($pdo->read("purchases_2", ["order_number" => $_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
 
-            $pdo->create("purchases_2", ['order_number' => $_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id'], 'bill_number' => $_POST['bill_number'], 
+            $pdo->create("purchases_2", ['order_number' => $_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'bill_number' => $_POST['bill_number'], 
             'date' => $_POST['date'], 'company_name' => $_POST['company_name']
-            , 'operator' => $_SESSION['user_id'],
+            , 'operator' => $_SESSION['ovalfox_pos_user_id'],
             'total_amount' => $_POST['net_payable_amount'], 'paid_amount' => 0, 
             'remaining_amount' => 0]);
         } else {
-            $pdo->update("purchases_2", ["order_number" => $_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id']], ['total_amount' => $_POST['net_payable_amount']]);
+            $pdo->update("purchases_2", ["order_number" => $_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => $_POST['net_payable_amount']]);
 
         }
-        $pdo->create("purchases_1", ['order_number' => $_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id'], 'bill_number' => $_POST['bill_number'], 'date' => $_POST['date'], 
+        $pdo->create("purchases_1", ['order_number' => $_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'bill_number' => $_POST['bill_number'], 'date' => $_POST['date'], 
         'company_name' => $_POST['company_name']
-        , 'operator' => $_SESSION['user_id'], 'item_code' => $product[0]['item_code'], 'item_name' => $product[0]['product_name'], 'item_price' => $_POST['purchase_price'], 
+        , 'operator' => $_SESSION['ovalfox_pos_user_id'], 'item_code' => $product[0]['item_code'], 'item_name' => $product[0]['product_name'], 'item_price' => $_POST['purchase_price'], 
         'quantity' => $_POST['total_quantity'], 
         'total_amount' => $_POST['purchase_price'], 'discount' => $_POST['discount'], 'net_amount' =>  $_POST['net_payable_amount'], 'product_expiry' => $_POST['expiry_date']]);    
 
-        if (!empty($pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'bill_number'=>$_POST['bill_number'], 'company_profile_id'=>$_SESSION['cp_id']]))) {
+        if (!empty($pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'bill_number'=>$_POST['bill_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
 
-            $ps = $pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'bill_number'=>$_POST['bill_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+            $ps = $pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'bill_number'=>$_POST['bill_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
             $tm = [];
             $amm = 0;
             foreach ($ps as $item) {
@@ -355,12 +355,12 @@ echo json_encode($data);
 
 <?php
 } else if ($_POST['__FILE__'] == 'purchaseFetch') {
-    $purchases_2 = $pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $purchases_2 = $pdo->read("purchases_1", ['order_number'=>$_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
 ?>
 <?php
     foreach ($purchases_2 as $pur) {
-        $pdouct = $pdo->read("products", ['product_name'=> $pur['item_name'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $pdouct = $pdo->read("products", ['product_name'=> $pur['item_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     ?>
 
 
@@ -387,34 +387,34 @@ echo json_encode($data);
       
         if (!empty($_POST["net_payable_amount"])) { 
 
-            $pdo->update("purchases_2", ['order_number'=>$_POST['order_no'], 'company_profile_id'=>$_SESSION['cp_id']], ['total_amount' => $_POST['net_payable_amount'], 
+            $pdo->update("purchases_2", ['order_number'=>$_POST['order_no'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => $_POST['net_payable_amount'], 
             'paid_amount' => $_POST['amount_paid'], 
             'remaining_amount' => $_POST['pending_amount'], 
             ]);
 
-            $pdo->create("ledger", ['date'=>$_POST['date'], 'company_profile_id'=>$_SESSION['cp_id'],'total_amount' => $_POST['net_payable_amount'], 
+            $pdo->create("ledger", ['date'=>$_POST['date'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'],'total_amount' => $_POST['net_payable_amount'], 
             'remaining_amount' => $_POST['pending_amount'], 
-            'payment_from' => $_SESSION['user_id'], 
+            'payment_from' => $_SESSION['ovalfox_pos_user_id'], 
             'dr' => $_POST["amount_paid"], 
             'cr' => 0
             ]);
-            $pdo->update("suppliers", ["id"=>$_POST['company_id'], 'company_profile_id'=>$_SESSION['cp_id']], ['balanace'=>$_POST['pending_amount']]);
+            $pdo->update("suppliers", ["id"=>$_POST['company_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['balanace'=>$_POST['pending_amount']]);
         }
     ?>
 
 <?php
 } else if ($_POST['__FILE__'] == 'foodProduct') {
    
-    $productSelected = $pdo->read('products', ['id'=>$_POST['pid'], 'company_profile_id'=>$_SESSION['cp_id']]);
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $productSelected = $pdo->read('products', ['id'=>$_POST['pid'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
-    $pdo->update("products", ['id' => $_POST['pid'], 'company_profile_id'=>$_SESSION['cp_id']], ["total_quantity" => $productSelected[0]["total_quantity"] - 1]);
+    $pdo->update("products", ['id' => $_POST['pid'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $productSelected[0]["total_quantity"] - 1]);
 
      
        
     
         // if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number']]))) {
-        //     $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
+        //     $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
         //     'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => $_POST['discount_in_amount'], 'bill_number' => $_POST['bill_number'], 
         //     'total_amount' => $_POST['total_amount'], 'final_amount' => $_POST['final_amount'], 'recevied_amount' => $_POST['recevied_amount'],  
         //     'returned_amount' => $_POST['returned_amount'], 'pending_amount' => $_POST['pending_amount'], 'status' => "Unpaid"]);
@@ -424,17 +424,17 @@ echo json_encode($data);
         
     
     
-    $salePd = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], "item_code"=> $productSelected[0]["item_code"], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $salePd = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], "item_code"=> $productSelected[0]["item_code"], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
     if (empty($salePd)) {
-        $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id'], 'customer_name' => "AA", 
+        $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => "AA", 
         'booker_name' => "AA", 'operator_name' => "AA", 'date' => "AA", 
         'item_code' => $productSelected[0]['item_code'], 'item_name' => $productSelected[0]['product_name'], 'item_price' => $productSelected[0]['purchase_per_unit_price'], 
         'quantity' => 1, 'amount' => $_POST['amount'], 'discount' => 0, 'extra_discount' => 0]);
         $pods = [$productSelected[0]['purchase_per_unit_price'], 1];
         echo json_encode($pods);
     } else {
-        $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['cp_id']], ['quantity' => $salePd[0]['quantity'] + 1, 
+        $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => $salePd[0]['quantity'] + 1, 
         'amount' =>$_POST['amount']]);
         $pods = [$productSelected[0]['purchase_per_unit_price'], $sales_1[0]['quantity']];
         echo json_encode($pods);
@@ -444,11 +444,11 @@ echo json_encode($data);
     if (isset($_POST['value'])) {
         if ($_POST['value'] == "plus") { 
 
-            $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['cp_id']], ['quantity' => $_POST['quantity'], 
+            $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => $_POST['quantity'], 
             'amount' => $salePd[0]['amount'] + $productSelected[0]['purchase_per_unit_price']]);
         } else {
            
-                $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['cp_id']], ['quantity' => $_POST['quantity'], 
+                $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code'=> $productSelected[0]['item_code'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => $_POST['quantity'], 
                 'amount' => $salePd[0]['amount'] + $productSelected[0]['purchase_per_unit_price']]);
             
         }
@@ -458,14 +458,14 @@ echo json_encode($data);
 
 
 <?php } else if ($_POST['__FILE__'] == "foodFetch") {
-    $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $pdo->update("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]);
+    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 ?>
 
 <?php
     foreach ($sales_1 as $sale) {
-        $pddd = $pdo->read("products", ['item_code'=>$sale['item_code'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $pddd = $pdo->read("products", ['item_code'=>$sale['item_code'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
     ?>
 
@@ -499,19 +499,19 @@ echo json_encode($data);
 <?php } ?>
 
 <?php } else if ($_POST['__FILE__'] == 'salesDelete'){ 
-    foreach ($pdo->read("sales_1", ['invoice_number'=>$_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']]) as $sale) {
+    foreach ($pdo->read("sales_1", ['invoice_number'=>$_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]) as $sale) {
         if (!empty($sale)) {
             $pdo->delete("sales_1", $sale['id']);
         }
     }
 
-    $pdo->read("sales_2", ['invoice_number'=> $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['cp_id']])
+    $pdo->read("sales_2", ['invoice_number'=> $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])
     ?>
 
 
 <?php } else if ($_POST['__FILE__'] == "typeQ") {
    if (!empty($_POST['productId'])){
-        $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['cp_id']]);
+        $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
         $type = $_POST['type'];
         $quantityType = $_POST['typeQuantity'];
 

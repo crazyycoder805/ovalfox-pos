@@ -10,7 +10,7 @@
 
 
             <?php 
-            if (isset($_SESSION['access_of']->d) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->d != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d != 0) {
             ?>
             <li>
                 <a href="index.php">
@@ -27,7 +27,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="index.php">
                     <span class="icon-menu feather-icon">
@@ -45,7 +45,7 @@
             </li>
             <?php } ?>
             <?php 
-            if (isset($_SESSION['access_of']->s) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->s != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
             ?>
             <li>
                 <a href="sales.php">
@@ -62,7 +62,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="sales.php">
                     <span class="icon-menu feather-icon">
@@ -82,7 +82,7 @@
 
 
             <?php 
-            if (isset($_SESSION['access_of']->s) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->s != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
             ?>
             <li>
                 <a href="purchase.php">
@@ -99,7 +99,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="purchase.php">
                     <span class="icon-menu feather-icon">
@@ -117,7 +117,7 @@
             </li>
             <?php } ?>
             <?php 
-            if (isset($_SESSION['access_of']->g) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->g != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->g) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->g != 0) {
             ?>
             <li>
                 <a href="gernel_expenses.php">
@@ -134,7 +134,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="gernel_expenses.php">
                     <span class="icon-menu feather-icon">
@@ -152,7 +152,7 @@
             </li>
             <?php } ?>
             <?php 
-            if (isset($_SESSION['access_of']->l) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->l != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->l) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->l != 0) {
             ?>
             <li>
                 <a href="ledger.php">
@@ -169,7 +169,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="ledger.php">
                     <span class="icon-menu feather-icon">
@@ -187,7 +187,7 @@
             </li>
             <?php } ?>
             <?php 
-            if (isset($_SESSION['access_of']->s) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->st != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->st != 0) {
             ?>
             <li>
                 <a href="store.php">
@@ -204,7 +204,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="store.php">
                     <span class="icon-menu feather-icon">
@@ -222,7 +222,7 @@
             </li>
             <?php } ?>
             <?php 
-            if (isset($_SESSION['access_of']->d) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ds != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ds != 0) {
             ?>
             <li>
                 <a href="designations.php">
@@ -239,7 +239,7 @@
                     </span>
                 </a>
             </li>
-            <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
             <li>
                 <a href="designations.php">
                     <span class="icon-menu feather-icon">
@@ -273,7 +273,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->p) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->pc != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pc != 0) {
                     ?>
                     <li>
                         <a href="categories.php">
@@ -284,7 +284,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="categories.php">
                             <span class="icon-dash">
@@ -296,7 +296,7 @@
                     </li>
                     <?php } ?>
                     <?php 
-                    if (isset($_SESSION['access_of']->p) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->p != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->p != 0) {
                     ?>
                     <li>
                         <a href="products.php">
@@ -307,7 +307,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="products.php">
                             <span class="icon-dash">
@@ -339,7 +339,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->c) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->c != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c != 0) {
                     ?>
                     <li>
                         <a href="customers.php">
@@ -350,7 +350,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="customers.php">
                             <span class="icon-dash">
@@ -381,7 +381,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->e) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ec != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ec != 0) {
                     ?>
                     <li>
                         <a href="expense_categories.php">
@@ -392,7 +392,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="expense_categories.php">
                             <span class="icon-dash">
@@ -421,7 +421,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->s) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ss != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ss != 0) {
                     ?>
                     <li>
                         <a href="suppliers.php">
@@ -432,7 +432,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="suppliers.php">
                             <span class="icon-dash">
@@ -461,7 +461,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->c) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->cp != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->cp != 0) {
                     ?>
                     <li>
                         <a href="companies_profile.php">
@@ -472,7 +472,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="companies_profile.php">
                             <span class="icon-dash">
@@ -501,7 +501,7 @@
                 </a>
                 <ul class="sub-menu">
                     <?php 
-                    if (isset($_SESSION['access_of']->e) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->em != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->em != 0) {
                     ?>
                     <li>
                         <a href="employees.php">
@@ -512,7 +512,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="employees.php">
                             <span class="icon-dash">
@@ -550,7 +550,7 @@
                         </a>
                     </li>
                     <?php 
-                    if (isset($_SESSION['access_of']->r) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->r != 0) {
+                    if (isset($_SESSION['ovalfox_pos_access_of']->r) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->r != 0) {
                     ?>
                     <li>
                         <a href="roles.php">
@@ -561,7 +561,7 @@
                             </span>
                         </a>
                     </li>
-                    <?php } else if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1) { ?>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
                     <li>
                         <a href="roles.php">
                             <span class="icon-dash">

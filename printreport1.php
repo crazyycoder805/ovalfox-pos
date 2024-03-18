@@ -26,13 +26,13 @@ if (!isset($s) || !isset($t)) {
     
 
     if ($t == "category") {
-        $data = $pdo->customQuery("SELECT * FROM categories WHERE category LIKE '%$s%' OR created_at LIKE '%$s%' AND company_profile_id = {$_SESSION['cp_id']};");
+        $data = $pdo->customQuery("SELECT * FROM categories WHERE category LIKE '%$s%' OR created_at LIKE '%$s%' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
     } else if ($t == "subcategory") {
      
         $data = $pdo->customQuery("SELECT *
         FROM sub_categories
         INNER JOIN categories ON sub_categories.category_id = categories.id
-        WHERE sub_category LIKE '%$s%' OR sub_categories.created_at LIKE '%$s%' AND sub_categories.company_profile_id = {$_SESSION['cp_id']};");
+        WHERE sub_category LIKE '%$s%' OR sub_categories.created_at LIKE '%$s%' AND sub_categories.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
     } else if ($t == "product") {
      
@@ -60,7 +60,7 @@ if (!isset($s) || !isset($t)) {
               col LIKE '%$s%' OR
               discount LIKE '%$s%' OR
               low_stock_limit LIKE '%$s%'
-              AND products.company_profile_id = {$_SESSION['cp_id']};");
+              AND products.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "customer") {
             
@@ -75,7 +75,7 @@ if (!isset($s) || !isset($t)) {
                 balance LIKE '%$s%' OR
                 bill_head LIKE '%$s%' OR
                 created_at LIKE '%$s%'
-                AND customers.company_profile_id = {$_SESSION['cp_id']};");
+                AND customers.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "expensecategory") {
             
@@ -85,7 +85,7 @@ if (!isset($s) || !isset($t)) {
             WHERE name LIKE '%$s%' OR
                
                 created_at LIKE '%$s%'
-                AND expense_categories.company_profile_id = {$_SESSION['cp_id']};");
+                AND expense_categories.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "supplier") {
             
@@ -103,7 +103,7 @@ if (!isset($s) || !isset($t)) {
             bill_head LIKE '%$s%' OR
                
                 created_at LIKE '%$s%'
-                AND suppliers.company_profile_id = {$_SESSION['cp_id']};");
+                AND suppliers.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "gernelexpense") {
             
@@ -117,7 +117,7 @@ if (!isset($s) || !isset($t)) {
             paid_to LIKE '%$s%' OR
             amount LIKE '%$s%' OR
             gernel_expenses.created_at LIKE '%$s%'
-                AND gernel_expenses.company_profile_id = {$_SESSION['cp_id']};");
+                AND gernel_expenses.company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "store") {
             
@@ -126,7 +126,7 @@ if (!isset($s) || !isset($t)) {
             WHERE store_name LIKE '%$s%' OR
             store_details LIKE '%$s%' OR
             created_at LIKE '%$s%'
-                AND company_profile_id = {$_SESSION['cp_id']};");
+                AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "ledger") {
             
@@ -143,7 +143,7 @@ if (!isset($s) || !isset($t)) {
             remaining_amount LIKE '%$s%' OR
             status LIKE '%$s%' OR
             created_at LIKE '%$s%'
-                AND company_profile_id = {$_SESSION['cp_id']};");
+                AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         } else if ($t == "designation") {
             
@@ -152,7 +152,7 @@ if (!isset($s) || !isset($t)) {
             WHERE name LIKE '%$s%' OR
             
             created_at LIKE '%$s%'
-                AND company_profile_id = {$_SESSION['cp_id']};");
+                AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']};");
 
         }
         

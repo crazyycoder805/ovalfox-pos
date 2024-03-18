@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['access_of']->c) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->c == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c == 0) {
         header("location:404.php");
     
 }
@@ -11,7 +11,7 @@ $success = "";
 $error = "";
 $id = "";
 
-$users = $pdo->read("access", ['company_profile_id' => $_SESSION['cp_id']]);
+$users = $pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -20,7 +20,7 @@ if (isset($_POST['add_user_btn'])) {
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
 
-                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['cp_id'], 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']], 
+                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']], 
                 "image", ['image'], 'image_type')) {
                     $success = "User added.";
                     $pdo->headTo("users.php");
@@ -60,7 +60,7 @@ if (isset($_POST['add_user_btn'])) {
     }
 }
 if (isset($_GET['edit_user'])) {
-    $id = $pdo->read("access", ['id' => $_GET['edit_user'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("access", ['id' => $_GET['edit_user'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

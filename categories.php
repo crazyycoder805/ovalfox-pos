@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->pc) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->pc == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->pc) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pc == 0) {
         header("location:404.php");
     
 }
@@ -13,15 +13,15 @@ $success = "";
 $error = "";
 $id = "";
 
-$categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['cp_id']]);
-$sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['cp_id']]);
+$categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
 if (isset($_POST['add_category_btn'])) {
     if (!empty($_POST['category'])) {
         if (!$pdo->isDataInserted("categories", ['category' => $_POST['category']])) {
-            if ($pdo->create("categories", ['category' => $_POST['category'], 'company_profile_id'=>$_SESSION['cp_id']], "image", ['image'], ['image_type'])) {
+            if ($pdo->create("categories", ['category' => $_POST['category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], "image", ['image'], ['image_type'])) {
                 $success = "Category added.";
                 $pdo->headTo("categories.php");
             } else {
@@ -70,7 +70,7 @@ if (isset($_POST['add_category_btn'])) {
         if (!empty($_POST['category_id'])) {
 
             if (!$pdo->isDataInserted("sub_categories", ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
-                if ($pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['cp_id'], 'category_id' => $_POST['category_id']], "image", ['image'], ['image_type'])) {
+                if ($pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id']], "image", ['image'], ['image_type'])) {
                     $success = "Sub category added.";
                     $pdo->headTo("categories.php");
                 } else {
@@ -124,9 +124,9 @@ if (isset($_POST['add_category_btn'])) {
 }
 
 if (isset($_GET['edit_category'])) {
-    $id = $pdo->read("categories", ['id' => $_GET['edit_category'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("categories", ['id' => $_GET['edit_category'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 } else if (isset($_GET['edit_sub_category'])) {
-    $id = $pdo->read("sub_categories", ['id' => $_GET['edit_sub_category'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("sub_categories", ['id' => $_GET['edit_sub_category'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 
@@ -348,7 +348,7 @@ if (isset($_GET['edit_category'])) {
                                                         <tbody>
                                                             <?php
                                                             foreach ($sub_categories as $sub_category) {
-                                                                $category_inner = $pdo->read("categories", ['id' => $sub_category['category_id'], 'company_profile_id' => $_SESSION['cp_id']]);
+                                                                $category_inner = $pdo->read("categories", ['id' => $sub_category['category_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
                                                             ?>
                                                             <tr>
                                                                 <td><?php echo $sub_category['id']; ?></td>

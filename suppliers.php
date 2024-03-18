@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->ss) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->ss == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->ss) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ss == 0) {
         header("location:404.php");
     
 }
@@ -13,7 +13,7 @@ $success = "";
 $error = "";
 $id = "";
 
-$suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['cp_id']]);
+$suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -23,7 +23,7 @@ if (isset($_POST['add_supplier_btn'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['mobile'], 'phone')) {
 
-                if ($pdo->create("suppliers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
+                if ($pdo->create("suppliers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
                 'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']], 
                 "image", ['image'], ['image_type'])) {
                     $success = "Supplier added.";
@@ -81,7 +81,7 @@ if (isset($_POST['add_supplier_btn'])) {
     }
 }
 if (isset($_GET['edit_supplier'])) {
-    $id = $pdo->read("suppliers", ['id' => $_GET['edit_supplier'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("suppliers", ['id' => $_GET['edit_supplier'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 

@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['access_of']->r) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->r == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->r) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->r == 0) {
         header("location:404.php");
     
 }
@@ -13,15 +13,15 @@ $success = "";
 $error = "";
 $id = "";
 
-$roles = $pdo->read("roles", ['company_profile_id' => $_SESSION['cp_id']]);
-$operators = $pdo->read("access", ['role_id'=>'3', 'company_profile_id' => $_SESSION['cp_id']]);
+$roles = $pdo->read("roles", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$operators = $pdo->read("access", ['role_id'=>'3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
 if (isset($_POST['add_role_btn'])) {
     if (!empty($_POST['name'])) {
         if (!$pdo->isDataInserted("roles", ['name' => $_POST['name']])) {
-            if ($pdo->create("roles", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id']])) {
+            if ($pdo->create("roles", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                 $success = "Role added.";
                 $pdo->headTo("roles.php");
             } else {
@@ -91,9 +91,9 @@ if (isset($_POST['add_role_btn'])) {
 
 $rolesA = "";
 if (isset($_GET['edit_role'])) {
-    $id = $pdo->read("roles", ['id' => $_GET['edit_role'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("roles", ['id' => $_GET['edit_role'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 } else if (isset($_GET['update_role'])) {
-    $id = $pdo->read("access", ['id' => $_GET['update_role'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("access", ['id' => $_GET['update_role'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
     $rolesA = json_decode($id[0]['access_of']);
 }
 ?>

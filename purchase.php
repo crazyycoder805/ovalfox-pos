@@ -8,17 +8,17 @@ $success = "";
 $error = "";
 $id = "";
 
-$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]);
-$products = $pdo->read("products", ['company_profile_id' => $_SESSION['cp_id']]);
-$suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['cp_id']]);
+$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 $billNumber = 0;
-if (!empty($pdo->read("sales_2", ['company_profile_id' => $_SESSION['cp_id']]))) {
+if (!empty($pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]))) {
 
-    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['cp_id']}")[0]['billNumber'] + 1;
+    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['billNumber'] + 1;
 }
-$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['cp_id']]);
+$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 

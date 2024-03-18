@@ -1,15 +1,23 @@
 <?php
 require_once 'pdo.php';
 session_start();
+$script_name = $_SERVER['SCRIPT_NAME'];
+$pattern = "~(/[\w-]+\.php|/)$~";
+$name = '';
+if (preg_match($pattern, $script_name, $matches)) {
+    $name = trim($matches[1], '/');
+}
 
-if ($_SERVER['SCRIPT_NAME'] != "/ovalfoxpos/login.php") {
-    if (!isset($_SESSION["username"])) {
+
+
+if ($name != "login.php") {
+    if (!isset($_SESSION["ovalfox_pos_username"])) {
         header("location:login.php");
     }
 }
 
-if (isset($_SESSION["role_id"]) && $_SESSION['role_id'] == "2") {
-    if ($_SERVER['SCRIPT_NAME'] != "/ovalfoxpos/sales.php") {
+if (isset($_SESSION["ovalfox_pos_role_id"]) && $_SESSION['ovalfox_pos_role_id'] == "2") {
+    if ($name != "sales.php") {
 
         header("location:sales.php");
     }
@@ -84,7 +92,7 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" id="theme-change" type="text/css" href="#">
     <link rel="stylesheet" href="assets/css/selectorCustom.css" />
 
-    <?php if ($_SERVER['SCRIPT_NAME'] == "/ovalfoxpos/login.php") {
+    <?php if ($name == "login.php") {
     ?>
     <link rel="stylesheet" type="text/css" href="assets/css/auth.css">
 

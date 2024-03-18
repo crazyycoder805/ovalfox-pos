@@ -3,17 +3,17 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['access_of']->p) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->p == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->p == 0) {
     header("location:404.php");
 }
 $success = "";
 $error = "";
 $id = "";
 
-$products = $pdo->read("products", ['company_profile_id' => $_SESSION['cp_id']]);
-$categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['cp_id']]);
-$sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['cp_id']]);
-$stores = $pdo->read("stores", ['company_profile_id' => $_SESSION['cp_id']]);
+$products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$stores = $pdo->read("stores", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -22,7 +22,7 @@ if (isset($_POST['add_product_btn'])) {
         if (!empty($_POST['item_code']) && !empty($_POST['category_id']) && !empty($_POST['sub_category_id']) && !empty($_POST['product_name']) && !empty($_POST['product_details'])  && !empty($_POST['purchase_per_unit_price']) && !empty($_POST['purchase_per_box_price']) && !empty($_POST['whole_sale_price']) && !empty($_POST['trade_unit_price']) && !empty($_POST['trade_box_price']) && !empty($_POST['whole_sale_box_price'])  && !empty($_POST['quantity_per_box']) && !empty($_POST['total_quantity']) && !empty($_POST['store_id'])  && !empty($_POST['row']) && !empty($_POST['col'])) {
             if (!$pdo->isDataInserted("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product_name']])) {
     
-                if ($pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
+                if ($pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
                 'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
                 'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
                 'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
@@ -77,7 +77,7 @@ if (isset($_POST['add_product_btn'])) {
     }
 }
 if (isset($_GET['edit_product'])) {
-    $id = $pdo->read("products", ['id' => $_GET['edit_product'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("products", ['id' => $_GET['edit_product'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 
  
@@ -423,9 +423,9 @@ if (isset($_GET['edit_product'])) {
                                                 <tbody>
                                                     <?php
                                                             foreach ($products as $product) {
-                                                                $category2 = $pdo->read("categories", ['id' => $product['category_id'], 'company_profile_id' => $_SESSION['cp_id']]);
-                                                                $sub_category2 = $pdo->read("sub_categories", ['id' => $product['sub_category_id'], 'company_profile_id' => $_SESSION['cp_id']]);
-                                                                $store2 = $pdo->read("stores", ['id' => $product['store_id'], 'company_profile_id' => $_SESSION['cp_id']]);
+                                                                $category2 = $pdo->read("categories", ['id' => $product['category_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+                                                                $sub_category2 = $pdo->read("sub_categories", ['id' => $product['sub_category_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+                                                                $store2 = $pdo->read("stores", ['id' => $product['store_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
                                                             ?>
                                                     <tr>

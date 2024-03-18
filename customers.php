@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['access_of']->c) && $_SESSION['role_id'] == 3 && $_SESSION['access_of']->c == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c == 0) {
         header("location:404.php");
     
 }
@@ -11,7 +11,7 @@ $success = "";
 $error = "";
 $id = "";
 
-$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['cp_id']]);
+$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 
@@ -21,7 +21,7 @@ if (isset($_POST['add_customer_btn'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['phone'], 'phone')) {
 
-                if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['cp_id'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+                if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
                 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']], "image", ['image'], 'image_type')) {
                     $success = "Customer added.";
                     $pdo->headTo("customers.php");
@@ -77,7 +77,7 @@ if (isset($_POST['add_customer_btn'])) {
     }
 }
 if (isset($_GET['edit_customer'])) {
-    $id = $pdo->read("customers", ['id' => $_GET['edit_customer'], 'company_profile_id' => $_SESSION['cp_id']]);
+    $id = $pdo->read("customers", ['id' => $_GET['edit_customer'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 }
 ?>
 
