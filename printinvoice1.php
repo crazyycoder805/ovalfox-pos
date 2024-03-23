@@ -80,6 +80,8 @@ $total_price = 0;
                     <th style="padding-right: 50px; border-bottom: 1px solid black;">Qty</th>
                     <th style="padding-right: 100px; border-bottom: 1px solid black;">Price / Unit</th>
                     <th style="border-bottom: 1px solid black;">Amount</th>
+                    <th style="border-bottom: 1px solid black;">Product Details</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -99,13 +101,15 @@ $total_price = 0;
                     <td style="padding-right: 100px; border-bottom: 1px solid black;">
                         <?php echo $sale['item_price']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['amount']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sales_2[0]['details']; ?></td>
+
                 </tr>
                 <?php } ?>
                 <tr>
                     <th style="border-bottom: 1px solid black;"></th>
                     <th style="text-align: left;border-bottom: 1px solid black;">Total</th>
                     <th style="text-align: left;border-bottom: 1px solid black;"><?php echo $total_quantity; ?></th>
-                    <th style="text-align: right;border-bottom: 1px solid black;" colspan="2">Rs
+                    <th style="text-align: right;border-bottom: 1px solid black;" colspan="3">Rs
                         <?php echo $total_price; ?></th>
                 </tr>
             </tbody>
@@ -120,7 +124,7 @@ $total_price = 0;
             <div style="width: 400px;">
                 <p> <b>Invoice Amount In Words:</b> <span id="aiw"></span> only</p>
 
-                <p> <b>Terms and Conditions:</b> Twenty Two Thousand Two Hundred Twenty One Rupees only</p>
+                <p> <b>Terms and Conditions:</b> <br /> <textarea style="border: 0px;" placeholder="Type..." name="" id="" cols="30" rows="10"></textarea></p>
 
 
             </div>

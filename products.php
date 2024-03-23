@@ -15,23 +15,37 @@ $categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['ovalf
 $sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $stores = $pdo->read("stores", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
-
+$image_result = '';
 
 if (isset($_POST['add_product_btn'])) {
 
         if (!empty($_POST['item_code']) && !empty($_POST['category_id']) && !empty($_POST['sub_category_id']) && !empty($_POST['product_name']) && !empty($_POST['product_details'])  && !empty($_POST['purchase_per_unit_price']) && !empty($_POST['purchase_per_box_price']) && !empty($_POST['whole_sale_price']) && !empty($_POST['trade_unit_price']) && !empty($_POST['trade_box_price']) && !empty($_POST['whole_sale_box_price'])  && !empty($_POST['quantity_per_box']) && !empty($_POST['total_quantity']) && !empty($_POST['store_id'])  && !empty($_POST['row']) && !empty($_POST['col'])) {
             if (!$pdo->isDataInserted("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product_name']])) {
-    
-                if ($pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
-                'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
-                'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
-                'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
-                'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']], "image", ['image'], ['image_type'])) {
-                    $success = "Product added.";
-                    $pdo->headTo("products.php");
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/products');
+                        if ($image_result && $pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
+                    'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                    'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
+                    'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
+                    'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 'image' => $image_result['filename']])) {
+                        $success = "Product added.";
+                        $pdo->headTo("products.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 } else {
-                    $error = "Something went wrong.";
+                    if ($pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
+                    'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                    'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
+                    'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
+                    'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
+                        $success = "Product added.";
+                        $pdo->headTo("products.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 }
+                
             } else {
                 $error = "Product already added.";
             }
@@ -42,9 +56,19 @@ if (isset($_POST['add_product_btn'])) {
 } else if (isset($_POST['edit_product_btn'])) {
     if (!empty($_POST['item_code']) && !empty($_POST['category_id']) && !empty($_POST['sub_category_id']) && !empty($_POST['product_name']) && !empty($_POST['product_details'])  && !empty($_POST['purchase_per_unit_price']) && !empty($_POST['purchase_per_box_price']) && !empty($_POST['whole_sale_price']) && !empty($_POST['trade_unit_price']) && !empty($_POST['trade_box_price']) && !empty($_POST['whole_sale_box_price'])  && !empty($_POST['quantity_per_box']) && !empty($_POST['total_quantity']) && !empty($_POST['store_id'])  && !empty($_POST['row']) && !empty($_POST['col'])) {
         if (!$pdo->isDataInsertedUpdate("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product_name']])) {
-            if (empty($_FILES['image']['name'])) {
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/products');
 
-                if ($pdo->update("products", ['id' => $_GET['edit_product']], ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
+                if ($image_result && $pdo->update("products", ['id' => $_GET['edit_product']], ['item_code' => $_POST['item_code'], 
+                'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 
+                'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
+                'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 
+                'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                'purchase_per_box_price' => $_POST['purchase_per_box_price'], 
+                'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
+                'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 
+                'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 
+                'image' => $image_result['filename']])) {
                     $success = "Product updated.";
                     $pdo->headTo("products.php");
                 } else {
@@ -55,7 +79,7 @@ if (isset($_POST['add_product_btn'])) {
                 'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 'purchase_per_box_price' => $_POST['purchase_per_box_price'], 
                 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 'trade_box_price' => $_POST['trade_box_price'], 
                 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 
-                'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']], "image", ['image'], ['image_type'])) {
+                'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
                     $success = "Product updated.";
                     $pdo->headTo("products.php");
                 } else {
@@ -143,8 +167,7 @@ if (isset($_GET['edit_product'])) {
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="image" class="col-form-label">Sub category
-                                                            image</label>
+                                                        <label for="image" class="col-form-label">Product</label>
                                                         <input class="form-control" name="image" type="file" id="image">
 
                                                         <?php 
@@ -153,7 +176,7 @@ if (isset($_GET['edit_product'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=products&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/products/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -229,7 +252,7 @@ if (isset($_GET['edit_product'])) {
                                                 <div class="form-group">
                                                     <label for="product_details" class="col-form-label">Product
                                                         details</label>
-                                                    <textarea class="form-control" placeholder="Shop Details"
+                                                    <textarea class="form-control" placeholder="Product Details"
                                                         name="product_details"
                                                         id="product_details"><?php echo isset($_GET['edit_product']) ? $id[0]['product_details'] : null; ?></textarea>
                                                 </div>
@@ -332,8 +355,7 @@ if (isset($_GET['edit_product'])) {
                                                 <div class="col-md">
 
                                                     <div class="form-group s-opt">
-                                                        <label for="store_id" class="col-form-label">Sub
-                                                            categories</label>
+                                                        <label for="store_id" class="col-form-label">Store</label>
                                                         <select class="select2 form-control select-opt" name="store_id"
                                                             id="store_id">
                                                             <?php
@@ -431,7 +453,7 @@ if (isset($_GET['edit_product'])) {
                                                     <tr>
                                                         <td><?php echo $product['id']; ?></td>
                                                         <td><img width="100" height="50"
-                                                                src="display_image.php?t=products&i=image&it=image_type&id=<?php echo $product['id']; ?>"
+                                                                src="assets/ovalfox/products/<?php echo $product['image']; ?>"
                                                                 alt="" /></td>
                                                         <td><?php echo $product['item_code']; ?></td>
                                                         <td><?php echo $category2[0]['category']; ?></td>

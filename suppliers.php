@@ -16,20 +16,33 @@ $id = "";
 $suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
-
+$image_result = '';
 if (isset($_POST['add_supplier_btn'])) {
 
     if (!empty($_POST['name']) && !empty($_POST['dist_name']) && !empty($_POST['cnic']) && !empty($_POST['mobile']) && !empty($_POST['office']) && !empty($_POST['address']) && !empty($_POST['dist_address'])  && !empty($_POST['balanace'])  && !empty($_POST['bill_head'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['mobile'], 'phone')) {
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/suppliers');
 
-                if ($pdo->create("suppliers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
-                'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']], 
-                "image", ['image'], ['image_type'])) {
-                    $success = "Supplier added.";
-                    $pdo->headTo("suppliers.php");
+                    if ($image_result && $pdo->create("suppliers", ['name' => $_POST['name'], 
+                    'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
+                    'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 
+                    'image' => $image_result['filename'], 'bill_head' => $_POST['bill_head']])) {
+                        $success = "Supplier added.";
+                        $pdo->headTo("suppliers.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 } else {
-                    $error = "Something went wrong.";
+                    if ($pdo->create("suppliers", ['name' => $_POST['name'], 
+                    'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
+                    'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']])) {
+                        $success = "Supplier added.";
+                        $pdo->headTo("suppliers.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 }
             } else {
                 $error = "Invalid Mobile.";
@@ -44,9 +57,13 @@ if (isset($_POST['add_supplier_btn'])) {
     if (!empty($_POST['name']) && !empty($_POST['dist_name']) && !empty($_POST['cnic']) && !empty($_POST['mobile']) && !empty($_POST['office']) && !empty($_POST['address']) && !empty($_POST['dist_address'])  && !empty($_POST['balanace'])  && !empty($_POST['bill_head'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['mobile'], 'phone')) {
-                if (empty($_FILES['image']['name'])) {
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/suppliers');
 
-                    if ($pdo->update("suppliers", ['id' => $_GET['edit_supplier']], ['name' => $_POST['name'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']])) {
+                    if ($image_result && $pdo->update("suppliers", ['id' => $_GET['edit_supplier']], ['name' => $_POST['name'], 
+                    'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
+                    'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 
+                    'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
                         $success = "Supplier updated.";
                         $pdo->headTo("suppliers.php");
                     } else {
@@ -155,7 +172,7 @@ if (isset($_GET['edit_supplier'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=suppliers&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/suppliers/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -248,9 +265,9 @@ if (isset($_GET['edit_supplier'])) {
                                                 <div class="col-md">
 
                                                     <div class="form-group">
-                                                        <label for="dist_address" class="col-form-label">Dist
+                                                        <label for="Dist Address" class="col-form-label">Dist
                                                             address</label>
-                                                        <textarea class="form-control" placeholder="dist_address"
+                                                        <textarea class="form-control" placeholder="Dist Address"
                                                             name="dist_address"
                                                             id="dist_address"><?php echo isset($_GET['edit_supplier']) ? $id[0]['dist_address'] : null; ?></textarea>
                                                     </div>
@@ -296,7 +313,7 @@ if (isset($_GET['edit_supplier'])) {
                                                         <td><?php echo $supplier['id']; ?></td>
                                                         <td><?php echo $supplier['name']; ?></td>
                                                         <td><img width="100" height="50"
-                                                                src="display_image.php?t=suppliers&i=image&it=image_type&id=<?php echo $supplier['id']; ?>"
+                                                                src="assets/ovalfox/suppliers/<?php echo $supplier['image']; ?>"
                                                                 alt="" /></td>
                                                         <td><?php echo $supplier['dist_name']; ?></td>
 

@@ -16,7 +16,7 @@ $id = "";
 $employees = $pdo->read("employees", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $designations = $pdo->read("designations", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
-
+$image_result = '';
 
 if (isset($_POST['add_employee_btn'])) {
 
@@ -25,15 +25,78 @@ if (isset($_POST['add_employee_btn'])) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
                     if ($pdo->validateInput($_POST['email'], 'email')) {
-                        if ($pdo->createMulti("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
-                        'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
-                        'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
-                        'email' => $_POST['email']], ["profile_image", 'cnic_front_pic', 'cnic_back_pic'], ['profile_image', 'cnic_front_pic', 'cnic_back_pic'], 
-                        ['profile_image_type', 'cnic_front_pic_type', 'cnic_back_pic_type'])) {
-                            $success = "Employee added.";
-                            $pdo->headTo("employees.php");
+
+
+                        if (!empty($_FILES['profile_image']['name'])) {
+                            $image_result = $pdo2->upload('profile_image', 'assets/ovalfox/employees/profile_images');
+        
+                            if ($pdo->create("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                            'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            'profile_image' => $image_result['filename']])) {
+                                $success = "Employee added.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong.";
+                            }
+                        } else if (!empty($_FILES['cnic_front_pic']['name'])) {
+                            $image_result = $pdo2->upload('cnic_front_pic', 'assets/ovalfox/employees/cnic_front_pics');
+        
+                            if ($pdo->create("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                            'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            'cnic_front_pic' => $image_result['filename']])) {
+                                $success = "Employee added.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong.";
+                            }
+                        }else if (!empty($_FILES['cnic_back_pic']['name'])) {
+                            $image_result = $pdo2->upload('cnic_back_pic', 'assets/ovalfox/employees/cnic_back_pics');
+        
+                            if ($pdo->create("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                            'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            'cnic_back_pic' => $image_result['filename']])) {
+                                $success = "Employee added.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong.";
+                            }
+                        } else if (!empty($_FILES['profile_image']['name']) && !empty($_FILES['cnic_back_pic']['name']) && !empty($_FILES['cnic_front_pic']['name'])) {
+                            $image_result1 = $pdo2->upload('profile_image', 'assets/ovalfox/employees/profile_image');
+                            $image_result2 = $pdo2->upload('cnic_back_pic', 'assets/ovalfox/employees/cnic_back_pics');
+                            $image_result3 = $pdo2->upload('cnic_front_pic', 'assets/ovalfox/employees/cnic_front_pics');
+
+                            if ($pdo->create("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                            'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            'profile_image' => $image_result1['filename'], 
+                            'cnic_back_pic' => $image_result2['filename'],
+                            'cnic_front_pic' => $image_result3['filename'], 
+                            
+                            ])) {
+                                $success = "Employee added.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong.";
+                            }
                         } else {
-                            $error = "Something went wrong.";
+                            if ($pdo->create("employees", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 'address1' => $_POST['address1'], 
+                            'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            
+                            ])) {
+                                $success = "Employee added.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong.";
+                            }
                         }
                     } else {
                         $error = "Invalid Email.";
@@ -56,27 +119,79 @@ if (isset($_POST['add_employee_btn'])) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
                     if ($pdo->validateInput($_POST['email'], 'email')) {
-                        if (empty($_FILES['profile_image']['name']) && empty($_FILES['cnic_front_pic']['name']) && empty($_FILES['cnic_back_pic']['name'])) {
-
-                            if ($pdo->updateMulti("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
+                        if (!empty($_FILES['profile_image']['name'])) {
+                            $image_result = $pdo2->upload('profile_image', 'assets/ovalfox/employees/profile_images');
+        
+                            if ($pdo->update("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
                             'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
-                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email']])) {
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 
+                            'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 
+                            'email' => $_POST['email'], 
+                            'profile_image' => $image_result['filename']])) {
                                 $success = "Employee updated.";
                                 $pdo->headTo("employees.php");
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
-                        } else {
-                            if ($pdo->updateMulti("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
-                            'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 
-                            'designation_id' => $_POST['designation_id'], 'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 
-                            'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email']], ["profile_image", 'cnic_front_pic', 'cnic_back_pic'], ['profile_image', 'cnic_front_pic', 'cnic_back_pic'], 
-                            ['profile_image_type', 'cnic_front_pic_type', 'cnic_back_pic_type'])) {
+                        } else if (!empty($_FILES['cnic_front_pic']['name'])) {
+                            $image_result = $pdo2->upload('cnic_front_pic', 'assets/ovalfox/employees/cnic_front_pics');
+        
+                            if ($pdo->update("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
+                            'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 
+                            'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email'], 
+                            'cnic_front_pic' => $image_result['filename']])) {
                                 $success = "Employee updated.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong. or can't update this because no changes was found";
+                            }
+                        }else if (!empty($_FILES['cnic_back_pic']['name'])) {
+                            $image_result = $pdo2->upload('cnic_back_pic', 'assets/ovalfox/employees/cnic_back_pics');
+        
+                            if ($pdo->update("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
+                            'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 
+                            'salary' => $_POST['salary'], 'start_date' => $_POST['start_date'], 
+                            'end_date' => $_POST['end_date'], 'email' => $_POST['email'], 
+                            'cnic_back_pic' => $image_result['filename']])) {
+                                $success = "Employee updated.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong. or can't update this because no changes was found";
+                            }
+                        } else if (!empty($_FILES['profile_image']['name']) && !empty($_FILES['cnic_back_pic']['name']) && !empty($_FILES['cnic_front_pic']['name'])) {
+                            $image_result1 = $pdo2->upload('profile_image', 'assets/ovalfox/employees/profile_image');
+                            $image_result2 = $pdo2->upload('cnic_back_pic', 'assets/ovalfox/employees/cnic_back_pics');
+                            $image_result3 = $pdo2->upload('cnic_front_pic', 'assets/ovalfox/employees/cnic_front_pics');
+                            if ($pdo->update("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
+                            'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 
+                            'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email'],
+                            'profile_image' => $image_result1['filename'], 
+                            'cnic_back_pic' => $image_result2['filename'],
+                            'cnic_front_pic' => $image_result3['filename'], 
+                            ])) {
+                                $success = "Employee updated.";
+                                $pdo->headTo("employees.php");
+                            } else {
+                                $error = "Something went wrong. or can't update this because no changes was found";
+                            }
+                            
+                        } else {
+                            if ($pdo->update("employees", ['id' => $_GET['edit_employee']], ['name' => $_POST['name'], 'father_name' => $_POST['father_name'], 'cnic' => $_POST['cnic'], 
+                            'address1' => $_POST['address1'], 'address2' => $_POST['address2'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'designation_id' => $_POST['designation_id'], 
+                            'designation_name' => $_POST['designation_name'], 'salary' => $_POST['salary'], 
+                            'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email'],
+                            
+                            ])) {
+                                $success = "Employee updated.";
+                                $pdo->headTo("employees.php");
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
                         }
+                        
                     } else {
                         $error = "Invalid Email.";
                     }
@@ -178,7 +293,7 @@ if (isset($_GET['edit_employee'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=employees&i=profile_image&it=profile_image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/employees/profile_images/<?php echo $id[0]['profile_image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -197,7 +312,7 @@ if (isset($_GET['edit_employee'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=employees&i=cnic_front_pic&it=cnic_front_pic_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/employees/cnic_front_pics/<?php echo $id[0]['cnic_front_pic']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -216,7 +331,7 @@ if (isset($_GET['edit_employee'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=employees&i=cnic_back_pic&it=cnic_back_pic_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/employees/cnic_back_pics/<?php echo $id[0]['cnic_back_pics']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -262,7 +377,7 @@ if (isset($_GET['edit_employee'])) {
                                                 <div class="col-md">
                                                     <div class="form-group">
                                                         <label for="address1" class="col-form-label">Address 1</label>
-                                                        <textarea class="form-control" placeholder="Shop Details"
+                                                        <textarea class="form-control" placeholder="Address 1"
                                                             name="address1"
                                                             id="address1"><?php echo isset($_GET['edit_employee']) ? $id[0]['address1'] : null; ?></textarea>
                                                     </div>
@@ -271,7 +386,7 @@ if (isset($_GET['edit_employee'])) {
 
                                                     <div class="form-group">
                                                         <label for="address2" class="col-form-label">Address 2</label>
-                                                        <textarea class="form-control" placeholder="Shop Details"
+                                                        <textarea class="form-control" placeholder="Address 2"
                                                             name="address2"
                                                             id="address2"><?php echo isset($_GET['edit_employee']) ? $id[0]['address2'] : null; ?></textarea>
                                                     </div>
@@ -286,7 +401,7 @@ if (isset($_GET['edit_employee'])) {
                                                         <input
                                                             value="<?php echo isset($_GET['edit_employee']) ? $id[0]['phone1'] : null; ?>"
                                                             class="form-control" name="phone1" type="tel"
-                                                            placeholder="Enter Company Phone 1" id="phone1">
+                                                            placeholder="Enter Employee Phone 1" id="phone1">
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
@@ -296,7 +411,7 @@ if (isset($_GET['edit_employee'])) {
                                                         <input
                                                             value="<?php echo isset($_GET['edit_employee']) ? $id[0]['phone2'] : null; ?>"
                                                             class="form-control" name="phone2" type="tel"
-                                                            placeholder="Enter Company Phone 1" id="phone2">
+                                                            placeholder="Enter Employee Phone 1" id="phone2">
                                                     </div>
                                                 </div>
                                                 <div class="col-md">
@@ -422,13 +537,13 @@ if (isset($_GET['edit_employee'])) {
                                                     <tr>
                                                         <td><?php echo $employee['id']; ?></td>
                                                         <td><img width="100" height="50"
-                                                                src="display_image.php?t=employees&i=profile_image&it=profile_image_type&id=<?php echo $employee['id']; ?>"
+                                                                src="assets/ovalfox/employees/profile_images/<?php echo $employee['profile_image']; ?>"
                                                                 alt="" /></td>
                                                         <td><img width="100" height="50"
-                                                                src="display_image.php?t=employees&i=cnic_front_pic&it=cnic_front_pic_type&id=<?php echo $employee['id']; ?>"
+                                                                src="assets/ovalfox/employees/cnic_front_pics/<?php echo $employee['cnic_front_pic']; ?>"
                                                                 alt="" /></td>
                                                         <td><img width="100" height="50"
-                                                                src="display_image.php?t=employees&i=cnic_back_pic&it=cnic_back_pic_type&id=<?php echo $employee['id']; ?>"
+                                                                src="assets/ovalfox/employees/cnic_back_pics/<?php echo $employee['cnic_back_pic']; ?>"
                                                                 alt="" /></td>
                                                         <td><?php echo $employee['name']; ?></td>
                                                         <td><?php echo $employee['father_name']; ?></td>

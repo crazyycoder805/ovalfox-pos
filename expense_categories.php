@@ -15,17 +15,31 @@ $id = "";
 
 $expense_categories = $pdo->read("expense_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+$image_result = '';
 
 
 if (isset($_POST['add_expense_category_btn'])) {
     if (!empty($_POST['name'])) {
         if (!$pdo->isDataInserted("expense_categories", ['name' => $_POST['name']])) {
-            if ($pdo->create("expense_categories", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], "image", ['image'], ['image_type'])) {
-                $success = "Expense category added.";
-                $pdo->headTo("expense_categories.php");
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/expense_categories');
+                if ($image_result && $pdo->create("expense_categories", ['name' => $_POST['name'], 
+                'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'image' => $image_result['filename']])) {
+                    $success = "Expense category added.";
+                    $pdo->headTo("expense_categories.php");
+                } else {
+                    $error = "Something went wrong.";
+                }
             } else {
-                $error = "Something went wrong.";
+                if ($pdo->create("expense_categories", ['name' => $_POST['name'], 
+                'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
+                    $success = "Expense category added.";
+                    $pdo->headTo("expense_categories.php");
+                } else {
+                    $error = "Something went wrong.";
+                }
             }
+            
         } else {
             $error = "Expense category already added.";
         }
@@ -35,16 +49,17 @@ if (isset($_POST['add_expense_category_btn'])) {
 } else if (isset($_POST['edit_expense_category_btn'])) {
     if (!empty($_POST['name'])) {
         if (!$pdo->isDataInsertedUpdate("expense_categories", ['name' => $_POST['name']])) {
-            if (empty($_FILES['image']['name'])) {
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/expense_categories');
 
-                if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name']])) {
+                if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name'], 'image' => $image_result['filename']])) {
                     $success = "Expense category updated.";
                     $pdo->headTo("expense_categories.php");
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
             } else {
-                if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name']], "image", ['image'], ['image_type'])) {
+                if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name']])) {
                     $success = "Expense category updated.";
                     $pdo->headTo("expense_categories.php");
                 } else {
@@ -140,7 +155,7 @@ if (isset($_GET['edit_expense_category'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=products&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/expense_categories/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -178,7 +193,7 @@ if (isset($_GET['edit_expense_category'])) {
                                                             <tr>
                                                                 <td><?php echo $expense_category['id']; ?></td>
                                                                 <td><img width="100" height="50"
-                                                                        src="display_image.php?t=expense_categories&i=image&it=image_type&id=<?php echo $expense_category['id']; ?>"
+                                                                        src="assets/ovalfox/expense_categories/<?php echo $expense_category['image']; ?>"
                                                                         alt="" /></td>
                                                                 <td><?php echo $expense_category['name']; ?></td>
                                                                 <td><?php echo $expense_category['created_at']; ?></td>

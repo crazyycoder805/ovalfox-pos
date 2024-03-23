@@ -31,6 +31,14 @@ if ($_POST['__FILE__'] == "productSelect") {
     echo json_encode($productData);
 } else if ($_POST['__FILE__'] == "productFetch") {
     $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+
+    $all_over_qty = [];
+
+    foreach ($sales_1 as $ss) {
+        $all_over_qty[] = $ss['quantity'];
+    }
+
+    $all_over_qty = array_sum($all_over_qty);
     $html = "";
 ?>
 
@@ -56,7 +64,7 @@ if ($_POST['__FILE__'] == "productSelect") {
 
 <?php } 
 
-$data = [$html, count($sales_1)];
+$data = [$html, count($sales_1), $all_over_qty];
 
 echo json_encode($data);
 
@@ -70,7 +78,8 @@ echo json_encode($data);
 } else if ($_POST['__FILE__'] == 'productAdd') {
     $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !empty($_POST['customer_manual'])) && 
-    !empty($_POST['booker_name']) && !empty($_POST['date']) && !empty($_POST['date']) && $_POST['total_quantity'] != "" && (!empty($_POST['item_code_search']) || !empty($_POST['product_id']))) {
+    !empty($_POST['booker_name']) && !empty($_POST['date']) && !empty($_POST['date']) && !empty($_POST['total_quantity']) && !empty($_POST['quantity']) 
+    && (!empty($_POST['item_code_search']) || !empty($_POST['product_id']))) {
 
         $customerId = "";
         $customer = "";
@@ -254,7 +263,13 @@ echo json_encode($data);
 <?php } else if ($_POST['__FILE__'] == "loadInvoice") {
     $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $all_over_qty = [];
 
+    foreach ($sales_1 as $ss) {
+        $all_over_qty[] = $ss['quantity'];
+    }
+
+    $all_over_qty = array_sum($all_over_qty);
     
     $html = "";
 
@@ -276,7 +291,7 @@ echo json_encode($data);
     }
 
 
-    $productData = [$html, $sales_2, count($sales_1)];
+    $productData = [$html, $sales_2, count($sales_1), $all_over_qty];
     echo json_encode($productData);
 
 ?>

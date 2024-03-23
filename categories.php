@@ -17,16 +17,28 @@ $categories = $pdo->read("categories", ['company_profile_id' => $_SESSION['ovalf
 $sub_categories = $pdo->read("sub_categories", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
-
+$image_result = '';
 if (isset($_POST['add_category_btn'])) {
     if (!empty($_POST['category'])) {
         if (!$pdo->isDataInserted("categories", ['category' => $_POST['category']])) {
-            if ($pdo->create("categories", ['category' => $_POST['category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], "image", ['image'], ['image_type'])) {
-                $success = "Category added.";
-                $pdo->headTo("categories.php");
+           
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/categories');
+                if ($image_result && $pdo->create("categories", ['category' => $_POST['category'], 'image' => $image_result['filename'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']])) {
+                    $success = "Category added.";
+                    $pdo->headTo("categories.php");
+                } else {
+                    $error = "Something went wrong.";
+                }
             } else {
-                $error = "Something went wrong.";
+                if ($pdo->create("categories", ['category' => $_POST['category'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']])) {
+                    $success = "Category added.";
+                    $pdo->headTo("categories.php");
+                } else {
+                    $error = "Something went wrong.";
+                }
             }
+            
         } else {
             $error = "Category already added.";
         }
@@ -36,15 +48,17 @@ if (isset($_POST['add_category_btn'])) {
 } else if (isset($_POST['edit_category_btn'])) {
     if (!empty($_POST['category'])) {
         if (!$pdo->isDataInsertedUpdate("categories", ['category' => $_POST['category']])) {
-            if (empty($_FILES['image']['name'])) {
-                if ($pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category']])) {
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/categories');
+
+                if ($image_result && $pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category'], 'image' => $image_result['filename']])) {
                     $success = "Category updated.";
                     $pdo->headTo("categories.php");
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
             } else {
-                if ($pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category']], "image", ['image'], ['image_type'])) {
+                if ($pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category']])) {
                     $success = "Category updated.";
                     $pdo->headTo("categories.php");
                 } else {
@@ -70,11 +84,24 @@ if (isset($_POST['add_category_btn'])) {
         if (!empty($_POST['category_id'])) {
 
             if (!$pdo->isDataInserted("sub_categories", ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
-                if ($pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id']], "image", ['image'], ['image_type'])) {
-                    $success = "Sub category added.";
-                    $pdo->headTo("categories.php");
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/sub_categories');
+
+                    if ($image_result && $pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                    'category_id' => $_POST['category_id'], 'image' => $image_result['filename']])) {
+                        $success = "Sub category added.";
+                        $pdo->headTo("categories.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 } else {
-                    $error = "Something went wrong.";
+                    if ($pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                    'category_id' => $_POST['category_id']])) {
+                        $success = "Sub category added.";
+                        $pdo->headTo("categories.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 }
             } else {
                 $error = "Sub category already added.";
@@ -90,15 +117,17 @@ if (isset($_POST['add_category_btn'])) {
         if (!empty($_POST['category_id'])) {
 
             if (!$pdo->isDataInsertedUpdate("sub_categories", ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
-                if (empty($_FILES['image']['name'])) {
-                    if ($pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
+                if (!empty($_FILES['image']['name'])) {
+                        $image_result = $pdo2->upload('image', 'assets/ovalfox/sub_categories');
+    
+                    if ($image_result && $pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id'], "image" => $image_result['filename']])) {
                         $success = "Sub category updated.";
                         $pdo->headTo("categories.php");
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found.";
                     }
                 } else {
-                    if ($pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']], "image", ['image'], ['image_type'])) {
+                    if ($pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
                         $success = "Sub category updated.";
                         $pdo->headTo("categories.php");
                     } else {
@@ -199,7 +228,7 @@ if (isset($_GET['edit_category'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=categories&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/categories/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -237,7 +266,7 @@ if (isset($_GET['edit_category'])) {
                                                             <tr>
                                                                 <td><?php echo $category['id']; ?></td>
                                                                 <td><img width="100" height="50"
-                                                                        src="display_image.php?t=categories&i=image&it=image_type&id=<?php echo $category['id']; ?>"
+                                                                        src="assets/ovalfox/categories/<?php echo $category['image']; ?>"
                                                                         alt="" /></td>
                                                                 <td><?php echo $category['category']; ?></td>
 
@@ -259,8 +288,9 @@ if (isset($_GET['edit_category'])) {
                                                         </tbody>
                                                     </table>
                                                     <div class="form-group mb-3">
-                                                        <button id="printbtncategory" class="btn btn-danger" type="button"><i class="fa fa-print"></i> Print</button>
-                                                        
+                                                        <button id="printbtncategory" class="btn btn-danger"
+                                                            type="button"><i class="fa fa-print"></i> Print</button>
+
                                                     </div>
 
                                                 </div>
@@ -296,7 +326,7 @@ if (isset($_GET['edit_category'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=sub_categories&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/sub_categories/<?php echo $id[0]['id']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -353,7 +383,7 @@ if (isset($_GET['edit_category'])) {
                                                             <tr>
                                                                 <td><?php echo $sub_category['id']; ?></td>
                                                                 <td><img width="100" height="50"
-                                                                        src="display_image.php?t=sub_categories&i=image&it=image_type&id=<?php echo $sub_category['id']; ?>"
+                                                                        src="assets/ovalfox/sub_categories/<?php echo $sub_category['image']; ?>"
                                                                         alt="" /></td>
                                                                 <td><?php echo $category_inner[0]['category']; ?></td>
 
@@ -377,8 +407,9 @@ if (isset($_GET['edit_category'])) {
                                                         </tbody>
                                                     </table>
                                                     <div class="form-group mb-3">
-                                                        <button id="printbtnsubcategory" class="btn btn-danger" type="button"><i class="fa fa-print"></i> Print</button>
-                                                        
+                                                        <button id="printbtnsubcategory" class="btn btn-danger"
+                                                            type="button"><i class="fa fa-print"></i> Print</button>
+
                                                     </div>
                                                 </div>
 
@@ -407,18 +438,18 @@ if (isset($_GET['edit_category'])) {
 
 
     <script>
-        let searchedValue = "";
+    let searchedValue = "";
 
-        $(document).on("input", e=>{
-            searchedValue = e.target.value;
-        })
-        $("#printbtncategory").on("click", e=>{
-            location.href = `printreport1.php?s=${searchedValue}&t=category`;
-        });
+    $(document).on("input", e => {
+        searchedValue = e.target.value;
+    })
+    $("#printbtncategory").on("click", e => {
+        location.href = `printreport1.php?s=${searchedValue}&t=category`;
+    });
 
-        $("#printbtnsubcategory").on("click", e=>{
-            location.href = `printreport1.php?s=${searchedValue}&t=subcategory`;
-        });
+    $("#printbtnsubcategory").on("click", e => {
+        location.href = `printreport1.php?s=${searchedValue}&t=subcategory`;
+    });
     </script>
 
 </body>

@@ -13,20 +13,31 @@ $id = "";
 
 $users = $pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+$image_result = '';
 
 
 if (isset($_POST['add_user_btn'])) {
 
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
-
-                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']], 
-                "image", ['image'], 'image_type')) {
+            if (!empty($_FILES['image']['name'])) {
+                $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
+                if ($image_result && $pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                     $success = "User added.";
                     $pdo->headTo("users.php");
                 } else {
                     $error = "Something went wrong.";
                 }
+            } else {
+                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
+                    $success = "User added.";
+                    $pdo->headTo("users.php");
+                } else {
+                    $error = "Something went wrong.";
+                }
+            }
             
         } else {
             $error = "Invalid Email.";
@@ -37,14 +48,28 @@ if (isset($_POST['add_user_btn'])) {
 } else if (isset($_POST['edit_user_btn'])) {
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
-
-                if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
-                    $success = "User updated.";
-                    $pdo->headTo("users.php");
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
+                    
+                    if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 
+                    'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
+                        $success = "User updated.";
+                        $pdo->headTo("users.php");
+                    } else {
+                        $error = "Something went wrong. or can't update this because no changes was found";
+                    }
+               
                 } else {
-                    $error = "Something went wrong. or can't update this because no changes was found";
+                    if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 'password' => $_POST['password'], 
+                    'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
+                        $success = "User updated.";
+                        $pdo->headTo("users.php");
+                    } else {
+                        $error = "Something went wrong. or can't update this because no changes was found";
+                    }
+               
                 }
-           
+                
         } else {
             $error = "Invalid Email.";
         }
@@ -124,12 +149,22 @@ if (isset($_GET['edit_user'])) {
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="image" class="col-form-label">Profile image</label>
+                                                        <label for="image" class="col-form-label">User image</label>
                                                         <input
                                                             value="<?php echo isset($_GET['edit_user']) ? $id[0]['image'] : null; ?>"
                                                             class="form-control" name="image" type="file" id="image">
                                                     </div>
+                                                    <?php 
+                                                            if (isset($_GET['edit_user'])) {
+                                                            ?>
+                                                    Previous image:
+                                                    <br />
+                                                    <img width="100" height="100"
+                                                        src="assets/ovalfox/users/<?php echo $id[0]['image']; ?>"
+                                                        alt="" />
+                                                    <?php } ?>
                                                 </div>
+
                                                 <div class="col-md">
 
                                                     <div class="form-group">
@@ -208,7 +243,7 @@ if (isset($_GET['edit_user'])) {
                                                         <tr>
                                                             <td><?php echo $user['id']; ?></td>
                                                             <td><img width="100" height="50"
-                                                                    src="display_image.php?t=users&i=image&it=image_type&id=<?php echo $user['id']; ?>"
+                                                                    src="assets/ovalfox/users/<?php echo $user['image']; ?>"
                                                                     alt="" /></td>
 
                                                             <td><?php echo $user['username']; ?></td>

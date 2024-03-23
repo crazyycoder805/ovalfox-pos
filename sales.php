@@ -65,6 +65,8 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                                 <div class="row">
                                                     <div class="col-md">
                                                         <h3>Total items: <b id="total_items">0</b></h3>
+                                                        <h3>Total Quantity: <b id="total_quantity_added">0</b></h3>
+
                                                         <table id=""
                                                             class="table table-striped table-bordered dt-responsive ">
                                                             <thead>
@@ -188,8 +190,8 @@ foreach ($customers as $customer) {
 if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
 ?>
                                                 <input class="form-control" disabled
-                                                    value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
-                                                    id="booker_name">
+                                                    value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
+                                                    name="booker_name" id="booker_name">
 
                                                 <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
@@ -739,6 +741,14 @@ foreach ($bookers as $booker) {
         $("#product").on("input", e => {
             productId = e.target.value;
             $("#item_code_search").val('');
+            $("#quantity").val('');
+            $("#total_quantity").val('');
+
+            $("#total_quantity").val('');
+            $("#discount").val('');
+            $("#extra_discount").val('');
+            $("#total_amount").val('');
+
             if ($("#item_code_search").val() == "") {
                 $.ajax({
                     type: "POST",
@@ -827,15 +837,12 @@ foreach ($bookers as $booker) {
                             box_quantity = product[6];
                             quantity_per_box = product[7];
                             if (toggleValue == "box") {
-                                $("#total_quantity").val(+total_quantity_is - (+$(
-                                        "#quantity")
-                                    .val() * +
-                                    quantity_per_box));
-                                total_amount.val((+$("#quantity").val() * +
-                                        quantity_per_box) * +
-                                    unit_price.val());
+                                $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * + quantity_per_box));
+                                total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
                             } else if (toggleValue == "piece") {
                                 total_quantity.val(totalQuan - quantity.val());
+                                total_amount.val(+$("#quantity").val() * +unit_price.val());
+
                             }
                             unit_price.focus();
                             initialQuantity = totalQuan;
@@ -1002,6 +1009,8 @@ foreach ($bookers as $booker) {
                             const product = JSON.parse(e);
                             $("#data").html(product[0]);
                             $("#total_items").text(product[1]);
+                            $("#total_quantity_added").text(product[2]);
+
                         }
                     });
                 }
@@ -1102,6 +1111,7 @@ foreach ($bookers as $booker) {
 
                         $("#data").html(product[0]);
                         $("#total_items").text(product[2]);
+                        $("#total_quantity_added").text(product[3]);
 
                         $("#final_amount").val(+product[1][0]['total_amount']);
                         $("#discount_in_amount").val(+product[1][0]['discount']);
@@ -1120,15 +1130,7 @@ foreach ($bookers as $booker) {
 
         $("#wholeFormBtn").on("click", e => {
             quantityAdd = 0;
-            if ($("#manual_customer").is(":checked")) {
-                $("#customer_manual").prop("disabled", true);
-                $("#manual_customer").prop("disabled", true);
 
-            } else {
-                $("#manual_customer").prop("disabled", true);
-                $("#customer_manual").prop("disabled", true);
-
-            }
             if ($("#invoice_number").val() == "") {
                 <?php
                     $maxedInvoiceNumber = $pdo->customQuery("SELECT MAX(invoice_number) AS maxedInvoiceNumber FROM sales_2")[0]['maxedInvoiceNumber'] + 1;
@@ -1215,10 +1217,27 @@ foreach ($bookers as $booker) {
                             const product = JSON.parse(e);
                             $("#data").html(product[0]);
                             $("#total_items").text(product[1]);
+                            $("#total_quantity_added").text(product[2]);
+
                             document.getElementById("free_items")
                                 .checked =
                                 false;
+                            $("#invoice_number").prop("disabled", true);
+                            if ($("#manual_customer").is(":checked")) {
+                                $("#customer_manual").prop("disabled", true);
+                                $("#manual_customer").prop("disabled", true);
 
+                            } else {
+                                $("#manual_customer").prop("disabled", true);
+                                $("#customer_manual").prop("disabled", true);
+
+                            }
+
+                            $("#customer_name").prop("disabled", true);
+                            $("#booker_name").prop("disabled", true);
+
+                            $("#customer_manual").prop("disabled", true);
+                            $("#manual_customer").prop("disabled", true);
                         }
                     });
                 }

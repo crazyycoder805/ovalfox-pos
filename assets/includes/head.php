@@ -1,5 +1,7 @@
 <?php
 require_once 'pdo.php';
+require_once 'pdo2.php';
+
 session_start();
 $script_name = $_SERVER['SCRIPT_NAME'];
 $pattern = "~(/[\w-]+\.php|/)$~";

@@ -15,7 +15,7 @@ $id = "";
 
 $companies_profile = $pdo->read("companies_profile");
 
-
+$image_result = '';
 
 if (isset($_POST['add_company_btn'])) {
 
@@ -23,13 +23,24 @@ if (isset($_POST['add_company_btn'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
-
-                    if ($pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
-                    'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']], "image", ['image'], ['image_type'])) {
-                        $success = "Company added.";
-                        $pdo->headTo("companies_profile.php");
+                    if (!empty($_FILES['image']['name'])) {
+                        $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
+    
+                        if ($image_result && $pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
+                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
+                            $success = "Company added.";
+                            $pdo->headTo("companies_profile.php");
+                        } else {
+                            $error = "Something went wrong.";
+                        }
                     } else {
-                        $error = "Something went wrong.";
+                        if ($pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
+                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                            $success = "Company added.";
+                            $pdo->headTo("companies_profile.php");
+                        } else {
+                            $error = "Something went wrong.";
+                        }
                     }
                 } else {
                     $error = "Invalid Phone2.";
@@ -48,10 +59,12 @@ if (isset($_POST['add_company_btn'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
-                    if (empty($_FILES['image']['name'])) {
-
-                        if ($pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                    if (!empty($_FILES['image']['name'])) {
+                        $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
+        
+                        if ($image_result && $pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
+                        'image' => $image_result['filename']])) {
                             $success = "Company updated.";
                             $pdo->headTo("companies_profile.php");
                         } else {
@@ -59,7 +72,7 @@ if (isset($_POST['add_company_btn'])) {
                         }
                     } else {
                         if ($pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']], "image", ['image'], ['image_type'])) {
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company updated.";
                             $pdo->headTo("companies_profile.php");
                         } else {
@@ -153,8 +166,7 @@ if (isset($_GET['edit_company'])) {
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="image" class="col-form-label">Sub category
-                                                            image</label>
+                                                        <label for="image" class="col-form-label">Company profile image</label>
                                                         <input class="form-control" name="image" type="file" id="image">
 
                                                         <?php 
@@ -163,7 +175,7 @@ if (isset($_GET['edit_company'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=companies_profile&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/companies_profile/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -240,7 +252,7 @@ if (isset($_GET['edit_company'])) {
                                                     <div class="col-md">
                                                         <div class="form-group">
                                                             <label for="address" class="col-form-label">Address</label>
-                                                            <textarea class="form-control" placeholder="Shop Details"
+                                                            <textarea class="form-control" placeholder="Address"
                                                                 name="address"
                                                                 id="address"><?php echo isset($_GET['edit_company']) ? $id[0]['address'] : null; ?></textarea>
                                                         </div>
@@ -282,7 +294,7 @@ if (isset($_GET['edit_company'])) {
                                                         <tr>
                                                             <td><?php echo $company['id']; ?></td>
                                                             <td><img width="100" height="50"
-                                                                    src="display_image.php?t=companies_profile&i=image&it=image_type&id=<?php echo $company['id']; ?>"
+                                                                    src="assets/ovalfox/companies_profile/<?php echo $company['image']; ?>"
                                                                     alt="" /></td>
                                                             <td><?php echo $company['company_name']; ?></td>
                                                             <td><?php echo $company['registration_id']; ?></td>

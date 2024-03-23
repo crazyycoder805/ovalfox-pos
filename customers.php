@@ -12,6 +12,7 @@ $error = "";
 $id = "";
 
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$image_result = '';
 
 
 
@@ -20,13 +21,17 @@ if (isset($_POST['add_customer_btn'])) {
     if (!empty($_POST['name']) && !empty($_POST['cnic']) && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['balance'])  && !empty($_POST['bill_head'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['phone'], 'phone')) {
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
 
-                if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-                'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']], "image", ['image'], 'image_type')) {
-                    $success = "Customer added.";
-                    $pdo->headTo("customers.php");
-                } else {
-                    $error = "Something went wrong.";
+                    if ($image_result && $pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                    'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
+                        $success = "Customer added.";
+                        $pdo->headTo("customers.php");
+                    } else {
+                        $error = "Something went wrong.";
+                    }
                 }
             } else {
                 $error = "Invalid Phone.";
@@ -41,10 +46,12 @@ if (isset($_POST['add_customer_btn'])) {
     if (!empty($_POST['name']) && !empty($_POST['cnic']) && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['balance'])  && !empty($_POST['bill_head'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['phone'], 'phone')) {
-                if (empty($_FILES['image']['name'])) {
+                if (!empty($_FILES['image']['name'])) {
+                    $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
 
-                    if ($pdo->update("customers", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
+                    if ($image_result && $pdo->update("customers", ['id' => $_GET['edit_customer']], 
+                    ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
                         $success = "Customer updated.";
                         $pdo->headTo("customers.php");
                     } else {
@@ -52,7 +59,7 @@ if (isset($_POST['add_customer_btn'])) {
                     }
                 } else {
                     if ($pdo->update("customers", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 
-                    'address' => $_POST['address'], 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']], "image", ['image'], 'image_type')) {
+                    'address' => $_POST['address'], 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
                         $success = "Customer updated.";
                         $pdo->headTo("customers.php");
                     } else {
@@ -150,7 +157,7 @@ if (isset($_GET['edit_customer'])) {
                                                         Previous image:
                                                         <br />
                                                         <img width="100" height="100"
-                                                            src="display_image.php?t=customers&i=image&it=image_type&id=<?php echo $id[0]['id']; ?>"
+                                                            src="assets/ovalfox/customers/<?php echo $id[0]['image']; ?>"
                                                             alt="" />
                                                         <?php } ?>
                                                     </div>
@@ -188,14 +195,14 @@ if (isset($_GET['edit_customer'])) {
 
                                                 <div class="form-group">
                                                     <label for="address" class="col-form-label">Address</label>
-                                                    <textarea class="form-control" placeholder="Shop Details"
+                                                    <textarea class="form-control" placeholder="Customer Address"
                                                         name="address"
                                                         id="address"><?php echo isset($_GET['edit_customer']) ? $id[0]['address'] : null; ?></textarea>
                                                 </div>
                                                 <div class="col-md">
 
                                                     <div class="form-group">
-                                                        <label for="balance" class="col-form-label">balance</label>
+                                                        <label for="balance" class="col-form-label">Balance</label>
                                                         <input
                                                             value="<?php echo isset($_GET['edit_customer']) ? $id[0]['balance'] : null; ?>"
                                                             class="form-control" name="balance" type="number"
@@ -246,7 +253,7 @@ if (isset($_GET['edit_customer'])) {
                                                         <tr>
                                                             <td><?php echo $customer['id']; ?></td>
                                                             <td><img width="100" height="50"
-                                                                    src="display_image.php?t=customers&i=image&it=image_type&id=<?php echo $customer['id']; ?>"
+                                                                    src="assets/ovalfox/customers/<?php echo $customer['image']; ?>"
                                                                     alt="" /></td>
 
                                                             <td><?php echo $customer['name']; ?></td>
