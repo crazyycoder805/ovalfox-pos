@@ -29,7 +29,203 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 <body>
     <?php require_once 'assets/includes/preloader.php'; ?>
 
+    <div class="modal fade modalCustomer" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
 
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">Customer previous record</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="" class="table table-striped table-bordered dt-responsive ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+
+                                <th>Customer Name</th>
+
+                            </tr>
+                        <tbody id="customerDataShow">
+                        </tbody>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+        aria-controls="offcanvasRight">Toggle right offcanvas</button>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            ...
+        </div>
+    </div> -->
+    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+        aria-controls="offcanvasScrolling">Enable body scrolling</button>
+
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+        id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="row">
+
+
+                <div class="col-md">
+                    <label class="col-form-label">Current
+                        Date</label>
+
+                    <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
+                        class="form-control" name="current_date" type="date" placeholder="Enter End Date"
+                        id="current_date">
+
+
+
+
+
+                </div>
+
+
+
+            </div>
+            <div class="row">
+
+                <div class="col-md">
+
+                    <div class="form-group">
+
+
+                        <input class="form-control" class="" disabled name="customer_manual" type="text"
+                            id="customer_manual">
+                    </div>
+
+
+                    <div class="checkbox">
+                        <input name="manual_customer" value="manual_customer" id="manual_customer" type="checkbox">
+                        <label for="manual_customer">Add Customer</label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md">
+
+                    <label class="col-form-label">Type</label>
+
+                    <select class="select2 form-control select-opt" name="type" id="type">
+                        <option></option>
+                        <option selected value="tr">
+                            Trade
+                            rate
+                        </option>
+                        <option value="wr">Wholesale
+                            rate
+                        </option>
+                        <option value="rf">Refund
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md">
+
+                    <div class="form-group">
+                        <label class="col-form-label">Customer
+                            Name</label>
+
+                        <select class="select2 form-control select-opt" name="customer_name" id="customer_name">
+                            <option selected value="">
+                            </option>
+                            <?php
+
+foreach ($customers as $customer) {
+
+?>
+                            <option value="<?php echo $customer['id']; ?>">
+                                <?php echo $customer['name']; ?>
+                            </option>
+
+
+                            <?php } ?>
+                        </select>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="form-group">
+
+                        <label class="col-form-label">Select
+                            Booker</label>
+                        <?php 
+if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
+?>
+                        <input class="form-control" disabled value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
+                            name="booker_name" id="booker_name">
+
+                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
+$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+?>
+
+                        <select class="select2 form-control select-opt" name="booker_name" id="booker_name">
+                            <option selected value="">
+                            </option>
+                            <?php
+
+foreach ($bookers as $booker) {
+
+?>
+                            <option value="<?php echo $booker['id']; ?>">
+                                <?php echo $booker['username']; ?>
+                            </option>
+
+
+                            <?php } ?>
+                        </select>
+
+                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
+$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+?>
+
+                        <select class="select2 form-control select-opt" name="book" id="book">
+                            <option selected value="">
+                            </option>
+                            <?php
+
+foreach ($bookers as $booker) {
+
+?>
+                            <option value="<?php echo $booker['id']; ?>">
+                                <?php echo $booker['username']; ?>
+                            </option>
+
+
+                            <?php } ?>
+                        </select>
+                        <?php } ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
     <div class="page-wrapper">
         <div class="main-content">
 
@@ -52,12 +248,12 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
 
                             <div class="card-body">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="card" style="overflow: scroll; height: 800px;">
+                                    <div class="card" style="overflow: scroll; height: 300px;">
 
                                         <div class="card-body">
 
@@ -67,7 +263,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                                         <h3>Total items: <b id="total_items">0</b></h3>
                                                         <h3>Total Quantity: <b id="total_quantity_added">0</b></h3>
 
-                                                        <table id=""
+                                                        <table id="itemAddedtable"
                                                             class="table table-striped table-bordered dt-responsive ">
                                                             <thead>
                                                                 <tr>
@@ -81,6 +277,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                                                     <th>Price</th>
                                                                     <th>Total Amount</th>
                                                                     <th>Discount</th>
+                                                                    <th>Extra discount</th>
                                                                     <th>Remove</th>
 
                                                                 </tr>
@@ -118,7 +315,115 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
 
                         </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="card">
 
+                                    <div class="card-body">
+                                        <h3>Item information:</h3>
+
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+
+                                            <div class="row mt-3">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Search
+                                                            Through
+                                                            Item Code</label>
+
+                                                        <input class="form-control" class="" name="item_code_search"
+                                                            type="text" placeholder="Search Through Item Code"
+                                                            id="item_code_search">
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+
+                                                        <label class="col-form-label">Product name</label>
+
+                                                        <select class="select2 form-control select-opt" name="product"
+                                                            id="product">
+                                                            <option selected value="">Select
+                                                                product
+                                                            </option>
+                                                            <?php
+
+foreach ($products as $product) {
+
+?>
+                                                            <option value="<?php echo $product['id']; ?>">
+                                                                <?php echo $product['product_name']; ?>
+                                                            </option>
+
+
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Last
+                                                            Rate</label>
+
+
+                                                        <select class="select2 form-control select-opt" name="last_rate"
+                                                            id="last_rate">
+                                                            <option disabled selected value="">
+                                                                Select last rate
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Unit
+                                                            Price</label>
+
+                                                        <input class="form-control" class="" name="unit_price"
+                                                            type="number" placeholder="Enter Unit Price"
+                                                            id="unit_price">
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md" style="display: none;">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Item
+                                                            Code</label>
+
+                                                        <input class="form-control" disabled class="" name="item_code"
+                                                            type="text" placeholder="Enter Item Code" id="item_code">
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+
+
+
+
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md">
 
@@ -139,7 +444,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                     <div class="row">
 
 
-                                        <div class="col-lg">
+                                        <div class="col-md">
                                             <label class="col-form-label">Current
                                                 Date</label>
 
@@ -154,7 +459,45 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
                                         </div>
 
-                                        <div class="col-lg">
+
+
+                                        <div class="col-md">
+
+                                            <div class="form-group">
+
+
+                                                <input class="form-control" class="" disabled name="customer_manual"
+                                                    type="text" id="customer_manual">
+                                            </div>
+
+
+                                            <div class="checkbox">
+                                                <input name="manual_customer" value="manual_customer"
+                                                    id="manual_customer" type="checkbox">
+                                                <label for="manual_customer">Add Customer</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+
+                                            <label class="col-form-label">Type</label>
+
+                                            <select class="select2 form-control select-opt" name="type" id="type">
+                                                <option></option>
+                                                <option selected value="tr">
+                                                    Trade
+                                                    rate
+                                                </option>
+                                                <option value="wr">Wholesale
+                                                    rate
+                                                </option>
+                                                <option value="rf">Refund
+                                                </option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md">
 
                                             <div class="form-group">
                                                 <label class="col-form-label">Customer
@@ -181,7 +524,7 @@ foreach ($customers as $customer) {
 
                                         </div>
 
-                                        <div class="col-lg">
+                                        <div class="col-md">
                                             <div class="form-group">
 
                                                 <label class="col-form-label">Select
@@ -237,140 +580,6 @@ foreach ($bookers as $booker) {
 
                                             </div>
                                         </div>
-
-                                        <div class="col-lg">
-
-                                            <div class="form-group">
-
-
-                                                <input class="form-control" class="" disabled name="customer_manual"
-                                                    type="text" id="customer_manual">
-                                            </div>
-
-
-                                            <div class="checkbox">
-                                                <input name="manual_customer" value="manual_customer"
-                                                    id="manual_customer" type="checkbox">
-                                                <label for="manual_customer">Add Customer</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg">
-
-                                            <label class="col-form-label">Type</label>
-
-                                            <select class="select2 form-control select-opt" name="type" id="type">
-                                                <option></option>
-                                                <option selected value="tr">
-                                                    Trade
-                                                    rate
-                                                </option>
-                                                <option value="wr">Wholesale
-                                                    rate
-                                                </option>
-                                                <option value="rf">Refund
-                                                </option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-
-
-
-
-                            </div>
-
-
-                        </div>
-                        <div class="card">
-
-                            <div class="card-body">
-                                <h3>Item information:</h3>
-
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-
-
-                                    <div class="row mt-3">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Search
-                                                    Through
-                                                    Item Code</label>
-
-                                                <input class="form-control" class="" name="item_code_search" type="text"
-                                                    placeholder="Search Through Item Code" id="item_code_search">
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Product name</label>
-
-                                                <select class="select2 form-control select-opt" name="product"
-                                                    id="product">
-                                                    <option selected value="">Select
-                                                        product
-                                                    </option>
-                                                    <?php
-
-                                                foreach ($products as $product) {
-
-                                                ?>
-                                                    <option value="<?php echo $product['id']; ?>">
-                                                        <?php echo $product['product_name']; ?>
-                                                    </option>
-
-
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Unit
-                                                    Price</label>
-
-                                                <input class="form-control" class="" name="unit_price" type="number"
-                                                    placeholder="Enter Unit Price" id="unit_price">
-                                            </div>
-
-
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Last
-                                                    Rate</label>
-
-
-                                                <select class="select2 form-control select-opt" name="last_rate"
-                                                    id="last_rate">
-                                                    <option disabled selected value="">
-                                                        Select last rate
-                                                    </option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md" style="display: none;">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Item
-                                                    Code</label>
-
-                                                <input class="form-control" disabled class="" name="item_code"
-                                                    type="text" placeholder="Enter Item Code" id="item_code">
-
-                                            </div>
-                                        </div>
-
-
                                     </div>
                                 </div>
 
@@ -382,6 +591,7 @@ foreach ($bookers as $booker) {
 
 
                         </div>
+
                         <div class="card">
 
                             <div class="card-body">
@@ -837,8 +1047,10 @@ foreach ($bookers as $booker) {
                             box_quantity = product[6];
                             quantity_per_box = product[7];
                             if (toggleValue == "box") {
-                                $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * + quantity_per_box));
-                                total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
+                                $("#total_quantity").val(+total_quantity_is - (+$(
+                                    "#quantity").val() * +quantity_per_box));
+                                total_amount.val((+$("#quantity").val() * +
+                                    quantity_per_box) * +unit_price.val());
                             } else if (toggleValue == "piece") {
                                 total_quantity.val(totalQuan - quantity.val());
                                 total_amount.val(+$("#quantity").val() * +unit_price.val());
@@ -888,7 +1100,6 @@ foreach ($bookers as $booker) {
                         );
                         e.target.value = box_quantity;
                     }
-                    console.log(+total_quantity_is - (+$("#quantity").val() * +quantity_per_box));
                     $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * +
                         quantity_per_box));
                     total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
@@ -1180,7 +1391,6 @@ foreach ($bookers as $booker) {
                 },
 
                 success: e => {
-                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -1328,6 +1538,54 @@ foreach ($bookers as $booker) {
             $("#customer_manual").val("");
 
         });
+
+
+        $("#customer_name").on("change", e => {
+            $.ajax({
+                type: "POST",
+                url: "data.php",
+                data: {
+                    '__FILE__': "Show",
+                    "cusId": e.target.value
+                },
+                success: e => {
+                    $("#customerDataShow").html(e);
+                    $(".modalCustomer").modal("show");
+                }
+            })
+
+        });
+
+        $(document).on("blur", "#itemAddedtable td", e => {
+            $(this).attr('contenteditable', 'true');
+            $.ajax({
+                type: "POST",
+                url: "data.php",
+                data: {
+                    "__FILE__": "runtimeTableDataEdit",
+                    "target": `{"${e.target.id}": "${e.target.textContent}"}`
+                },
+                success: e => {
+                    $.ajax({
+                        type: "POST",
+                        url: "data.php",
+                        data: {
+                            "__FILE__": "productFetch",
+                            "invoice_number": $("#invoice_number").val(),
+
+                        },
+                        success: e => {
+                            const product = JSON.parse(e);
+                            $("#data").html(product[0]);
+                            $("#total_items").text(product[1]);
+                            $("#total_quantity_added").text(product[2]);
+
+                        }
+                    });
+                }
+            })
+        })
+
     });
     </script>
 

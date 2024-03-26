@@ -43,18 +43,22 @@ if ($_POST['__FILE__'] == "productSelect") {
 ?>
 
 <?php
-    foreach ($sales_1 as $sale) {
+
+    foreach ($sales_1 as $key => $sale) {
+        $key += 1;
         $html .= "
         <tr>
-    <td contenteditable='true'>{$sale['id']}</td>
+    <td>{$key}</td>
 
-    <td>{$sale['item_code']}</td>
-    <td>{$sale['item_name']}</td>
-    <td>{$sale['quantity']}</td>
+    <td id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
+    <td id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+    <td id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
 
-    <td>{$sale['item_price']}</td>
-    <td>{$sale['amount']}</td>
-    <td>{$sale['discount']}</td>
+    <td id='"."item_priceTabledData{$sale['id']}'>{$sale['item_price']}</td>
+    <td id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
+    <td id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
+    <td id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
+
     <td><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
 </tr>
@@ -140,20 +144,24 @@ echo json_encode($data);
 
 ?>
 <?php
-    foreach ($sales_1 as $sale) {
+    foreach ($sales_1 as $key => $sale) {
+        $key += 1;
+
     ?>
 
 
 <tr>
-    <td contenteditable="true"><?php echo $sale['id']; ?></td>
 
-    <td><?php echo $sale['item_code']; ?></td>
-    <td><?php echo $sale['item_name']; ?></td>
-    <td><?php echo $sale['quantity']; ?></td>
+    <td><?php echo $key; ?></td>
+    <td id='item_codeTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_code']; ?></td>
+    <td id='item_nameTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_name']; ?></td>
+    <td id='quantityTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['quantity']; ?></td>
 
-    <td><?php echo $sale['item_price']; ?></td>
-    <td><?php echo $sale['amount']; ?></td>
-    <td><?php echo $sale['discount']; ?></td>
+    <td id='item_priceTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_price']; ?></td>
+    <td id='amountTabledData<?php echo $sale['id'];?>'><?php echo $sale['amount']; ?></td>
+    <td id='discountTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['discount']; ?></td>
+    <td id='extra_discountTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['extra_discount']; ?></td>
+
     <td><button class="btn btn-danger btn-sm" value="<?php echo $sale['id']; ?>" id="removeItem">Remove</button></td>
 
 </tr>
@@ -175,7 +183,7 @@ echo json_encode($data);
 
     $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($customer)) {
-        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5');
+        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5 ORDER ASC');
 
         foreach ($sales_2_last_rate as $sale1) {
             $data .= "
@@ -273,18 +281,20 @@ echo json_encode($data);
     
     $html = "";
 
-    foreach ($sales_1 as $sale) {
-
+    foreach ($sales_1 as $key => $sale) {
+        $key += 1;
         $html .= "   <tr>
-        <td contenteditable='true'>{$sale['id']}</td>
+        <td>{$key}</td>
 
-        <td>{$sale['item_code']}</td>
-        <td>{$sale['item_name']}</td>
-        <td>{$sale['quantity']}</td>
+        <td id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
+        <td id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+        <td id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
+    
+        <td id='"."item_priceTabledData{$sale['id']}'>{$sale['item_price']}</td>
+        <td id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
+        <td id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
+        <td id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
 
-        <td>{$sale['item_price']}</td>
-        <td>{$sale['amount']}</td>
-        <td>{$sale['discount']}</td>
         <td><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
     </tr>";
@@ -380,7 +390,7 @@ echo json_encode($data);
 
 
 <tr>
-    <td contenteditable="true"><?php echo $pur['id']; ?></td>
+    <td><?php echo $pur['id']; ?></td>
 
     <td><?php echo $pur['order_number']; ?></td>
     <td><?php echo $pur['bill_number']; ?></td>
@@ -557,5 +567,44 @@ echo json_encode($data);
         }
    }
 ?>
+
+<?php } else if ($_POST['__FILE__'] == "customerData") {
+    $onecus = $pdo->read("sales_2", ['id' => $_POST['cusId']]);
+            ?>
+<tr>
+
+    <td><?php echo $onecus[0]['customer_name']; ?></td>
+
+
+</tr>
+
+
+<?php } else if ($_POST['__FILE__'] == "runtimeTableDataEdit") {  ?>
+    <?php
+
+
+$array = json_decode($_POST['target'], true);
+$keys = array_keys($array);
+$key = preg_replace('/TabledData\d+/', '', trim($keys[0]));
+preg_match('/\d+$/', trim($keys[0]), $matches);
+$id = $matches[0];
+
+
+if ($key == "quantity") {
+    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
+    $previousAmount = $selectedItem[0]['amount'];
+    $pdo->update("sales_1", ['id' => $id], ['amount' => array_values($array)[0] * $selectedItem[0]['item_price'], 'quantity' => array_values($array)[0]]);
+
+} else if ($key == "discount") {
+    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
+    $pdo->update("sales_1", ['id' => $id], ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 'discount' => array_values($array)[0]]);
+
+} else if ($key == "extra_discount") {
+    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
+    $pdo->update("sales_1", ['id' => $id], ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 'extra_discount' => array_values($array)[0]]);
+
+}
+?>
+
 
 <?php } ?>
