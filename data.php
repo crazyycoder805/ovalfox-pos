@@ -37,7 +37,11 @@ if ($_POST['__FILE__'] == "productSelect") {
     foreach ($sales_1 as $ss) {
         $all_over_qty[] = $ss['quantity'];
     }
-
+    $sumOfAllProduct = $pdo->read("sales_1", ["invoice_number" => $_POST['invoice_number']]);
+    $amountGrand = [];
+    foreach ($sumOfAllProduct as $amount) {
+        $amountGrand[] = $amount['amount'];
+    }
     $all_over_qty = array_sum($all_over_qty);
     $html = "";
 ?>
@@ -67,8 +71,9 @@ if ($_POST['__FILE__'] == "productSelect") {
     ?>
 
 <?php } 
+$amountGrand = array_sum($amountGrand);
 
-$data = [$html, count($sales_1), $all_over_qty];
+$data = [$html, count($sales_1), $all_over_qty, $amountGrand];
 
 echo json_encode($data);
 
@@ -160,7 +165,8 @@ echo json_encode($data);
     <td id='item_priceTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_price']; ?></td>
     <td id='amountTabledData<?php echo $sale['id'];?>'><?php echo $sale['amount']; ?></td>
     <td id='discountTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['discount']; ?></td>
-    <td id='extra_discountTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['extra_discount']; ?></td>
+    <td id='extra_discountTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+        <?php echo $sale['extra_discount']; ?></td>
 
     <td><button class="btn btn-danger btn-sm" value="<?php echo $sale['id']; ?>" id="removeItem">Remove</button></td>
 
@@ -580,7 +586,7 @@ echo json_encode($data);
 
 
 <?php } else if ($_POST['__FILE__'] == "runtimeTableDataEdit") {  ?>
-    <?php
+<?php
 
 
 $array = json_decode($_POST['target'], true);
@@ -590,20 +596,30 @@ preg_match('/\d+$/', trim($keys[0]), $matches);
 $id = $matches[0];
 
 
+
+
+
 if ($key == "quantity") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id]);
     $previousAmount = $selectedItem[0]['amount'];
-    $pdo->update("sales_1", ['id' => $id], ['amount' => array_values($array)[0] * $selectedItem[0]['item_price'], 'quantity' => array_values($array)[0]]);
+    $pdo->update("sales_1", ['id' => $id], 
+    ['amount' => array_values($array)[0] * $selectedItem[0]['item_price'], 
+    'quantity' => array_values($array)[0]]);
 
 } else if ($key == "discount") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id]);
-    $pdo->update("sales_1", ['id' => $id], ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 'discount' => array_values($array)[0]]);
+    $pdo->update("sales_1", ['id' => $id], 
+    ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 
+    'discount' => array_values($array)[0]]);
 
 } else if ($key == "extra_discount") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id]);
-    $pdo->update("sales_1", ['id' => $id], ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 'extra_discount' => array_values($array)[0]]);
+    $pdo->update("sales_1", ['id' => $id], 
+    ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 
+    'extra_discount' => array_values($array)[0]]);
 
 }
+
 ?>
 
 

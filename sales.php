@@ -1546,90 +1546,98 @@ foreach ($bookers as $booker) {
         });
 
         $(document).on("blur", "#itemAddedtable td", e => {
-            $(this).attr('contenteditable', 'true');
             $.ajax({
                 type: "POST",
                 url: "data.php",
                 data: {
                     "__FILE__": "runtimeTableDataEdit",
-                    "target": `{"${e.target.id}": "${e.target.textContent}"}`
+                    "target": `{"${e.target.id}": "${e.target.textContent}"}`,
+                    "invoice_number": $("#invoice_number").val()
                 },
-                success: e => {
+                success: runtimeTableDataEditE => {
+
+
                     $.ajax({
                         type: "POST",
                         url: "data.php",
                         data: {
                             "__FILE__": "productFetch",
-                            "invoice_number": $("#invoice_number").val(),
+                            "invoice_number": $("#invoice_number")
+                                .val(),
 
                         },
                         success: e => {
                             const product = JSON.parse(e);
                             $("#data").html(product[0]);
                             $("#total_items").text(product[1]);
-                            $("#total_quantity_added").text(product[2]);
+                            $("#total_quantity_added").text(product[
+                                2]);
+                            finalAmount = product[3];
 
+                            $("#final_amount").val(product[
+                                3]);
                         }
                     });
+
                 }
             });
         });
 
-        $("#customer_name").on("change", e=>{
+        $("#customer_name").on("change", e => {
             $("#booker_name").focus();
         });
 
-        $("#booker_name").on("change", e=>{
+        $("#booker_name").on("change", e => {
             $("#product").focus();
         });
-        $("#product").on("change", e=>{
+        $("#product").on("change", e => {
             $("#unit_price").focus();
         });
-        $("#unit_price").keydown(e =>{
+        $("#unit_price").keydown(e => {
             if (e.keyCode == 13) {
                 $("#quantity").focus();
             }
         });
-        $("#quantity").keydown(e =>{
+        $("#quantity").keydown(e => {
             if (e.keyCode == 13) {
                 $("#discount").focus();
             }
         });
-        $("#discount").keydown(e =>{
+        $("#discount").keydown(e => {
             if (e.keyCode == 13) {
                 $("#extra_discount").focus();
             }
         });
 
-        $("#extra_discount").keydown(e =>{
+        $("#extra_discount").keydown(e => {
             if (e.keyCode == 13) {
                 $("#wholeFormBtn").focus();
             }
         });
 
-        $(document).keydown(e=>{
+        $(document).keydown(e => {
             if (e.keyCode == 27) {
                 $("#discount_in_amount").focus();
             }
         });
 
-        $("#discount_in_amount").keydown(e=>{
+        $("#discount_in_amount").keydown(e => {
             if (e.keyCode == 13) {
-                
+
                 $("#amount_received").focus();
             }
         });
-        $("#amount_received").keydown(e=>{
+        $("#amount_received").keydown(e => {
             if (e.keyCode == 13) {
-                
+
                 $("#details").focus();
             }
         });
-       
 
-        $("#details").keydown(e=>{
+
+        $("#details").keydown(e => {
             if (e.keyCode == 13) {
-                
+
                 $("#pBill").focus();
             }
         });
