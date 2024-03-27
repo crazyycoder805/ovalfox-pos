@@ -29,7 +29,8 @@ if (isset($_POST['add_product_btn'])) {
                     'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
                     'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 'image' => $image_result['filename']])) {
                         $success = "Product added.";
-                        $pdo->headTo("products.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -40,7 +41,8 @@ if (isset($_POST['add_product_btn'])) {
                     'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
                     'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
                         $success = "Product added.";
-                        $pdo->headTo("products.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -70,7 +72,8 @@ if (isset($_POST['add_product_btn'])) {
                 'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 
                 'image' => $image_result['filename']])) {
                     $success = "Product updated.";
-                    $pdo->headTo("products.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
@@ -81,7 +84,8 @@ if (isset($_POST['add_product_btn'])) {
                 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 
                 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
                     $success = "Product updated.";
-                    $pdo->headTo("products.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
@@ -95,7 +99,8 @@ if (isset($_POST['add_product_btn'])) {
 } else if (isset($_GET['delete_product'])) {
     if ($pdo->delete("products", $_GET['delete_product'])) {
         $success = "Product deleted.";
-        $pdo->headTo("products.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

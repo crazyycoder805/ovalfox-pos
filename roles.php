@@ -23,7 +23,8 @@ if (isset($_POST['add_role_btn'])) {
         if (!$pdo->isDataInserted("roles", ['name' => $_POST['name']])) {
             if ($pdo->create("roles", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                 $success = "Role added.";
-                $pdo->headTo("roles.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong.";
             }
@@ -38,7 +39,8 @@ if (isset($_POST['add_role_btn'])) {
         if (!$pdo->isDataInsertedUpdate("roles", ['name' => $_POST['name']])) {
             if ($pdo->update("roles", ['id' => $_GET['edit_role']], ['name' => $_POST['name']])) {
                 $success = "Role updated.";
-                $pdo->headTo("roles.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong. or can't update this because no changes was found";
             }
@@ -51,7 +53,8 @@ if (isset($_POST['add_role_btn'])) {
 } else if (isset($_GET['delete_role'])) {
     if ($pdo->delete("roles", $_GET['delete_role'])) {
         $success = "Role deleted.";
-        $pdo->headTo("roles.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }
@@ -79,7 +82,8 @@ if (isset($_POST['add_role_btn'])) {
         "cp"=>$companies, "em"=>$employees, "r"=>$roles]);
         if ($pdo->update("access", ['id'=>$_POST['username']], ['access_of' => $rolesAll])) {
             $success = "Roles added.";
-            $pdo->headTo("roles.php");
+                                  header("Location:{$name}");
+
         } else {
             $error = "Something went wrong.";
         }

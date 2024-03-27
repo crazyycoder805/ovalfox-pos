@@ -25,7 +25,8 @@ if (isset($_POST['add_user_btn'])) {
                 if ($image_result && $pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                     $success = "User added.";
-                    $pdo->headTo("users.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -33,7 +34,8 @@ if (isset($_POST['add_user_btn'])) {
                 if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
                     $success = "User added.";
-                    $pdo->headTo("users.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -54,7 +56,8 @@ if (isset($_POST['add_user_btn'])) {
                     if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 
                     'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                         $success = "User updated.";
-                        $pdo->headTo("users.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found";
                     }
@@ -63,7 +66,8 @@ if (isset($_POST['add_user_btn'])) {
                     if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 'password' => $_POST['password'], 
                     'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
                         $success = "User updated.";
-                        $pdo->headTo("users.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found";
                     }
@@ -79,7 +83,8 @@ if (isset($_POST['add_user_btn'])) {
 } else if (isset($_GET['delete_user'])) {
     if ($pdo->delete("access", $_GET['delete_user'])) {
         $success = "User deleted.";
-        $pdo->headTo("users.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

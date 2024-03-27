@@ -1063,17 +1063,6 @@ foreach ($bookers as $booker) {
                 }
             }
         });
-        $("#unit_price").keyup(function(e) {
-            if (e.keyCode == 13) {
-                quantity.focus();
-            }
-        });
-
-        quantity.keyup(e => {
-            if (e.keyCode == 13) {
-                $("#discount").focus();
-            }
-        });
 
 
 
@@ -1332,7 +1321,7 @@ foreach ($bookers as $booker) {
                         ]);
                         $("#amount_return").val(+product[1][0]['returned_amount']);
                         $("#pending_amount").val(+product[1][0]['pending_amount']);
-                        $("#discount_in_amount").focus();
+                        $("#quantity").focus();
                     }
                 });
             }
@@ -1399,7 +1388,7 @@ foreach ($bookers as $booker) {
                     discount.val('');
                     total_quantity.val('');
                     $("#extra_dsicount").val('');
-                    $("#item_code_search").focus();
+                    $("#product").focus();
 
 
                     $("#final_amount").val(finalAmount + finalerAmount);
@@ -1583,9 +1572,67 @@ foreach ($bookers as $booker) {
                         }
                     });
                 }
-            })
-        })
+            });
+        });
 
+        $("#customer_name").on("change", e=>{
+            $("#booker_name").focus();
+        });
+
+        $("#booker_name").on("change", e=>{
+            $("#product").focus();
+        });
+        $("#product").on("change", e=>{
+            $("#unit_price").focus();
+        });
+        $("#unit_price").keydown(e =>{
+            if (e.keyCode == 13) {
+                $("#quantity").focus();
+            }
+        });
+        $("#quantity").keydown(e =>{
+            if (e.keyCode == 13) {
+                $("#discount").focus();
+            }
+        });
+        $("#discount").keydown(e =>{
+            if (e.keyCode == 13) {
+                $("#extra_discount").focus();
+            }
+        });
+
+        $("#extra_discount").keydown(e =>{
+            if (e.keyCode == 13) {
+                $("#wholeFormBtn").focus();
+            }
+        });
+
+        $(document).keydown(e=>{
+            if (e.keyCode == 27) {
+                $("#discount_in_amount").focus();
+            }
+        });
+
+        $("#discount_in_amount").keydown(e=>{
+            if (e.keyCode == 13) {
+                
+                $("#amount_received").focus();
+            }
+        });
+        $("#amount_received").keydown(e=>{
+            if (e.keyCode == 13) {
+                
+                $("#details").focus();
+            }
+        });
+       
+
+        $("#details").keydown(e=>{
+            if (e.keyCode == 13) {
+                
+                $("#pBill").focus();
+            }
+        });
     });
     </script>
 

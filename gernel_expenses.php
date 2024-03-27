@@ -32,7 +32,8 @@ if (isset($_POST['add_customer_btn'])) {
 
         ) {
             $success = "Gernel expense added.";
-            $pdo->headTo("gernel_expenses.php");
+                                  header("Location:{$name}");
+
         } else {
             $error = "Something went wrong.";
         }
@@ -48,7 +49,8 @@ if (isset($_POST['add_customer_btn'])) {
             $pdo->update("gernel_expenses", ['id' => $_GET['edit_gernel_expense']], ['expense_category_id' => $_POST['expense_category_id'], 'expense_name' => $_POST['expense_name'], 'date' => $_POST['date'], 'paid_by' => $_POST['paid_by'], 'paid_to' => $_POST['paid_to'], 'amount' => $_POST['amount']])
         ) {
             $success = "Gernel expense updated.";
-            $pdo->headTo("gernel_expenses.php");
+                                  header("Location:{$name}");
+
         } else {
             $error = "Something went wrong. or can't update this because no changes was found";
         }
@@ -58,7 +60,8 @@ if (isset($_POST['add_customer_btn'])) {
 } else if (isset($_GET['delete_gernel_expense'])) {
     if ($pdo->delete("gernel_expenses", $_GET['delete_gernel_expense'])) {
         $success = "Gernel expense deleted.";
-        $pdo->headTo("gernel_expenses.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

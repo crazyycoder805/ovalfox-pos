@@ -29,7 +29,7 @@ if (isset($_POST['add_company_btn'])) {
                         if ($image_result && $pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
                         'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                             $success = "Company added.";
-                            $pdo->headTo("companies_profile.php");
+                                         header("Location:{$name}");
                         } else {
                             $error = "Something went wrong.";
                         }
@@ -37,7 +37,7 @@ if (isset($_POST['add_company_btn'])) {
                         if ($pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
                         'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company added.";
-                            $pdo->headTo("companies_profile.php");
+                                         header("Location:{$name}");
                         } else {
                             $error = "Something went wrong.";
                         }
@@ -66,7 +66,7 @@ if (isset($_POST['add_company_btn'])) {
                         'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
                         'image' => $image_result['filename']])) {
                             $success = "Company updated.";
-                            $pdo->headTo("companies_profile.php");
+                                         header("Location:{$name}");
                         } else {
                             $error = "Something went wrong. or can't update this because no changes was found";
                         }
@@ -74,7 +74,7 @@ if (isset($_POST['add_company_btn'])) {
                         if ($pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
                         'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company updated.";
-                            $pdo->headTo("companies_profile.php");
+                                         header("Location:{$name}");
                         } else {
                             $error = "Something went wrong. or can't update this because no changes was found";
                         }
@@ -94,7 +94,7 @@ if (isset($_POST['add_company_btn'])) {
 } else if (isset($_GET['delete_company'])) {
     if ($pdo->delete("companies_profile", $_GET['delete_company'])) {
         $success = "Company deleted.";
-        $pdo->headTo("companies_profile.php");
+                     header("Location:{$name}");
     } else {
         $error = "Something went wrong.";
     }

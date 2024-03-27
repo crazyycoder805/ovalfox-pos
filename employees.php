@@ -36,7 +36,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'email' => $_POST['email'], 
                             'profile_image' => $image_result['filename']])) {
                                 $success = "Employee added.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong.";
                             }
@@ -49,7 +50,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'email' => $_POST['email'], 
                             'cnic_front_pic' => $image_result['filename']])) {
                                 $success = "Employee added.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong.";
                             }
@@ -62,7 +64,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'email' => $_POST['email'], 
                             'cnic_back_pic' => $image_result['filename']])) {
                                 $success = "Employee added.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong.";
                             }
@@ -81,7 +84,8 @@ if (isset($_POST['add_employee_btn'])) {
                             
                             ])) {
                                 $success = "Employee added.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong.";
                             }
@@ -93,7 +97,8 @@ if (isset($_POST['add_employee_btn'])) {
                             
                             ])) {
                                 $success = "Employee added.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong.";
                             }
@@ -129,7 +134,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'email' => $_POST['email'], 
                             'profile_image' => $image_result['filename']])) {
                                 $success = "Employee updated.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
@@ -142,7 +148,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'start_date' => $_POST['start_date'], 'end_date' => $_POST['end_date'], 'email' => $_POST['email'], 
                             'cnic_front_pic' => $image_result['filename']])) {
                                 $success = "Employee updated.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
@@ -156,7 +163,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'end_date' => $_POST['end_date'], 'email' => $_POST['email'], 
                             'cnic_back_pic' => $image_result['filename']])) {
                                 $success = "Employee updated.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
@@ -173,7 +181,8 @@ if (isset($_POST['add_employee_btn'])) {
                             'cnic_front_pic' => $image_result3['filename'], 
                             ])) {
                                 $success = "Employee updated.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
@@ -186,7 +195,8 @@ if (isset($_POST['add_employee_btn'])) {
                             
                             ])) {
                                 $success = "Employee updated.";
-                                $pdo->headTo("employees.php");
+                                                      header("Location:{$name}");
+
                             } else {
                                 $error = "Something went wrong. or can't update this because no changes was found";
                             }
@@ -210,7 +220,8 @@ if (isset($_POST['add_employee_btn'])) {
 } else if (isset($_GET['delete_employee'])) {
     if ($pdo->delete("employees", $_GET['delete_employee'])) {
         $success = "Employee deleted.";
-        $pdo->headTo("employees.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

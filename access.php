@@ -22,7 +22,7 @@ if (isset($_POST['add_customer_btn'])) {
 
                 if ($pdo->create("access", ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 'company_profile_id'=>$_SESSION['cp_id'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']])) {
                     $success = "Customer added.";
-                    $pdo->headTo("access.php");
+                     header("Location:{$name}");
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -42,7 +42,7 @@ if (isset($_POST['add_customer_btn'])) {
 
                 if ($pdo->update("access", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']])) {
                     $success = "Customer updated.";
-                    $pdo->headTo("access.php");
+                     header("Location:{$name}");
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
@@ -58,7 +58,7 @@ if (isset($_POST['add_customer_btn'])) {
 } else if (isset($_GET['delete_customer'])) {
     if ($pdo->delete("access", $_GET['delete_customer'])) {
         $success = "Customer deleted.";
-        $pdo->headTo("access.php");
+         header("Location:{$name}");
     } else {
         $error = "Something went wrong.";
     }

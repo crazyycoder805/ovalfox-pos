@@ -30,7 +30,8 @@ if (isset($_POST['add_supplier_btn'])) {
                     'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 
                     'image' => $image_result['filename'], 'bill_head' => $_POST['bill_head']])) {
                         $success = "Supplier added.";
-                        $pdo->headTo("suppliers.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -39,7 +40,8 @@ if (isset($_POST['add_supplier_btn'])) {
                     'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'dist_name' => $_POST['dist_name'], 'cnic' => $_POST['cnic'], 'mobile' => $_POST['mobile'], 
                     'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head']])) {
                         $success = "Supplier added.";
-                        $pdo->headTo("suppliers.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -65,7 +67,8 @@ if (isset($_POST['add_supplier_btn'])) {
                     'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 
                     'balanace' => $_POST['balanace'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
                         $success = "Supplier updated.";
-                        $pdo->headTo("suppliers.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found";
                     }
@@ -75,7 +78,8 @@ if (isset($_POST['add_supplier_btn'])) {
                     'mobile' => $_POST['mobile'], 'office' => $_POST['office'], 'address' => $_POST['address'], 'dist_address' => $_POST['dist_address'], 'balanace' => $_POST['balanace'], 
                     'bill_head' => $_POST['bill_head']], "image", ['image'], ['image_type'])) {
                         $success = "Supplier updated.";
-                        $pdo->headTo("suppliers.php");
+                                              header("Location:{$name}");
+
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found";
                     }
@@ -92,7 +96,8 @@ if (isset($_POST['add_supplier_btn'])) {
 } else if (isset($_GET['delete_supplier'])) {
     if ($pdo->delete("suppliers", $_GET['delete_supplier'])) {
         $success = "Supplier deleted.";
-        $pdo->headTo("suppliers.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

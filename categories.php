@@ -26,14 +26,14 @@ if (isset($_POST['add_category_btn'])) {
                 $image_result = $pdo2->upload('image', 'assets/ovalfox/categories');
                 if ($image_result && $pdo->create("categories", ['category' => $_POST['category'], 'image' => $image_result['filename'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']])) {
                     $success = "Category added.";
-                    $pdo->headTo("categories.php");
+                                 header("Location:{$name}");
                 } else {
                     $error = "Something went wrong.";
                 }
             } else {
                 if ($pdo->create("categories", ['category' => $_POST['category'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']])) {
                     $success = "Category added.";
-                    $pdo->headTo("categories.php");
+                                 header("Location:{$name}");
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -53,14 +53,14 @@ if (isset($_POST['add_category_btn'])) {
 
                 if ($image_result && $pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category'], 'image' => $image_result['filename']])) {
                     $success = "Category updated.";
-                    $pdo->headTo("categories.php");
+                                 header("Location:{$name}");
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
             } else {
                 if ($pdo->update("categories", ['id' => $_GET['edit_category']], ['category' => $_POST['category']])) {
                     $success = "Category updated.";
-                    $pdo->headTo("categories.php");
+                                 header("Location:{$name}");
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
@@ -75,7 +75,7 @@ if (isset($_POST['add_category_btn'])) {
 } else if (isset($_GET['delete_category'])) {
     if ($pdo->delete("categories", $_GET['delete_category'])) {
         $success = "Category deleted.";
-        $pdo->headTo("categories.php");
+                     header("Location:{$name}");
     } else {
         $error = "Something went wrong.";
     }
@@ -90,7 +90,7 @@ if (isset($_POST['add_category_btn'])) {
                     if ($image_result && $pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'category_id' => $_POST['category_id'], 'image' => $image_result['filename']])) {
                         $success = "Sub category added.";
-                        $pdo->headTo("categories.php");
+                                     header("Location:{$name}");
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -98,7 +98,7 @@ if (isset($_POST['add_category_btn'])) {
                     if ($pdo->create("sub_categories", ['sub_category' => $_POST['sub_category'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'category_id' => $_POST['category_id']])) {
                         $success = "Sub category added.";
-                        $pdo->headTo("categories.php");
+                                     header("Location:{$name}");
                     } else {
                         $error = "Something went wrong.";
                     }
@@ -122,14 +122,14 @@ if (isset($_POST['add_category_btn'])) {
     
                     if ($image_result && $pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id'], "image" => $image_result['filename']])) {
                         $success = "Sub category updated.";
-                        $pdo->headTo("categories.php");
+                                     header("Location:{$name}");
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found.";
                     }
                 } else {
                     if ($pdo->update("sub_categories", ['id'=>$_GET['edit_sub_category']], ['sub_category' => $_POST['sub_category'], 'category_id' => $_POST['category_id']])) {
                         $success = "Sub category updated.";
-                        $pdo->headTo("categories.php");
+                                     header("Location:{$name}");
                     } else {
                         $error = "Something went wrong. or can't update this because no changes was found.";
                     }
@@ -146,7 +146,7 @@ if (isset($_POST['add_category_btn'])) {
 } else if (isset($_GET['delete_sub_category'])) {
     if ($pdo->delete("sub_categories", $_GET['delete_sub_category'])) {
         $success = "Sub category deleted.";
-        $pdo->headTo("categories.php");
+                     header("Location:{$name}");;
     } else {
         $error = "Something went wrong.";
     }
@@ -245,7 +245,7 @@ if (isset($_GET['edit_category'])) {
                                                             name="<?php echo isset($_GET['edit_category']) ? "edit_category_btn" : "add_category_btn"; ?>"
                                                             class="btn btn-danger" type="submit">
                                                     </div>
-                                                    <table id="example1"
+                                                    <table id="categoryTable"
                                                         class="table table-striped table-bordered dt-responsive">
                                                         <thead>
                                                             <tr>
@@ -362,7 +362,7 @@ if (isset($_GET['edit_category'])) {
                                                             name="<?php echo isset($_GET['edit_sub_category']) ? "edit_sub_category_btn" : "add_sub_category_btn"; ?>"
                                                             class="btn btn-danger" type="submit">
                                                     </div>
-                                                    <table id="example2"
+                                                    <table id="subcategory"
                                                         class="table table-striped table-bordered dt-responsive ">
                                                         <thead>
                                                             <tr>
@@ -449,6 +449,10 @@ if (isset($_GET['edit_category'])) {
 
     $("#printbtnsubcategory").on("click", e => {
         location.href = `printreport1.php?s=${searchedValue}&t=subcategory`;
+    });
+    $(document).ready(function() {
+        $('#categoryTable').DataTable();
+        $('#subcategory').DataTable();
     });
     </script>
 

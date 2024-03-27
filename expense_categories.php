@@ -26,7 +26,8 @@ if (isset($_POST['add_expense_category_btn'])) {
                 if ($image_result && $pdo->create("expense_categories", ['name' => $_POST['name'], 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'image' => $image_result['filename']])) {
                     $success = "Expense category added.";
-                    $pdo->headTo("expense_categories.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -34,7 +35,8 @@ if (isset($_POST['add_expense_category_btn'])) {
                 if ($pdo->create("expense_categories", ['name' => $_POST['name'], 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                     $success = "Expense category added.";
-                    $pdo->headTo("expense_categories.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong.";
                 }
@@ -54,14 +56,16 @@ if (isset($_POST['add_expense_category_btn'])) {
 
                 if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name'], 'image' => $image_result['filename']])) {
                     $success = "Expense category updated.";
-                    $pdo->headTo("expense_categories.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
             } else {
                 if ($pdo->update("expense_categories", ['id' => $_GET['edit_expense_category']], ['name' => $_POST['name']])) {
                     $success = "Expense category updated.";
-                    $pdo->headTo("expense_categories.php");
+                                          header("Location:{$name}");
+
                 } else {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
@@ -75,7 +79,8 @@ if (isset($_POST['add_expense_category_btn'])) {
 } else if (isset($_GET['delete_expense_category'])) {
     if ($pdo->delete("expense_categories", $_GET['delete_expense_category'])) {
         $success = "Expense category deleted.";
-        $pdo->headTo("expense_categories.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

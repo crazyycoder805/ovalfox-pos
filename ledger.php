@@ -29,7 +29,8 @@ if (isset($_POST['add_ledger_btn'])) {
 
         ) {
             $success = "Ledger added.";
-            $pdo->headTo("ledger.php");
+                                  header("Location:{$name}");
+
         } else {
             $error = "Something went wrong.";
         }
@@ -52,7 +53,8 @@ if (isset($_POST['add_ledger_btn'])) {
 
         ) {
             $success = "Ledger updated.";
-            $pdo->headTo("ledger.php");
+                                  header("Location:{$name}");
+
         } else {
             $error = "Something went wrong. or can't update this because no changes was found";
         }
@@ -62,7 +64,8 @@ if (isset($_POST['add_ledger_btn'])) {
 } else if (isset($_GET['delete_ledger'])) {
     if ($pdo->delete("ledger", $_GET['delete_ledger'])) {
         $success = "Ledger deleted.";
-        $pdo->headTo("ledger.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

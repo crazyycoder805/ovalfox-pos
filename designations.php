@@ -22,7 +22,8 @@ if (isset($_POST['add_designation_btn'])) {
         if (!$pdo->isDataInserted("designations", ['name' => $_POST['name']])) {
             if ($pdo->create("designations", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                 $success = "Designation added.";
-                $pdo->headTo("designations.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong.";
             }
@@ -37,7 +38,8 @@ if (isset($_POST['add_designation_btn'])) {
         if (!$pdo->isDataInsertedUpdate("designations", ['name' => $_POST['name']])) {
             if ($pdo->update("designations", ['id' => $_GET['edit_designation']], ['name' => $_POST['name']])) {
                 $success = "Designation updated.";
-                $pdo->headTo("designations.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong. or can't update this because no changes was found";
             }
@@ -50,7 +52,8 @@ if (isset($_POST['add_designation_btn'])) {
 } else if (isset($_GET['delete_designation'])) {
     if ($pdo->delete("designations", $_GET['delete_designation'])) {
         $success = "Designation deleted.";
-        $pdo->headTo("designations.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }

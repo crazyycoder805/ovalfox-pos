@@ -19,7 +19,8 @@ if (isset($_POST['add_store_btn'])) {
         if (!$pdo->isDataInserted("stores", ['store_name' => $_POST['store_name']])) {
             if ($pdo->create("stores", ['store_name' => $_POST['store_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'store_details' => empty($_POST['store_details']) ? "" : $_POST['store_details']])) {
                 $success = "Store added.";
-                $pdo->headTo("store.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong.";
             }
@@ -34,7 +35,8 @@ if (isset($_POST['add_store_btn'])) {
         if (!$pdo->isDataInsertedUpdate("stores", ['store_name' => $_POST['store_name']])) {
             if ($pdo->update("stores", ['id' => $_GET['edit_store']], ['store_name' => $_POST['store_name'], 'store_details' => empty($_POST['store_details']) ? null : $_POST['store_details']])) {
                 $success = "Store updated.";
-                $pdo->headTo("store.php");
+                                      header("Location:{$name}");
+
             } else {
                 $error = "Something went wrong. or can't update this because no changes was found";
             }
@@ -47,7 +49,8 @@ if (isset($_POST['add_store_btn'])) {
 } else if (isset($_GET['delete_store'])) {
     if ($pdo->delete("stores", $_GET['delete_store'])) {
         $success = "Store deleted.";
-        $pdo->headTo("store.php");
+                              header("Location:{$name}");
+
     } else {
         $error = "Something went wrong.";
     }
