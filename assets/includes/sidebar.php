@@ -1,6 +1,6 @@
 <aside class="sidebar-wrapper">
     <div class="logo-wrapper">
-        <a href="index-2.html" class="admin-logo">
+        <a href="index.php" class="admin-logo">
             <img src="assets/images/ovalfox/logo.png" alt="" class="sp_logo">
             <img src="assets/images/ovalfox/icon.png" alt="" class="sp_mini_logo">
         </a>

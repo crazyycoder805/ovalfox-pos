@@ -80,7 +80,7 @@ if (isset($_POST["logout"])) {
     </style>
     <?php } else if($settings[0]['theme'] == 'full_white') { ?>
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fonts_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/bootstrap_full_white.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/bs_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/font-aws_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/icon-fa_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/style_full_white.css">
