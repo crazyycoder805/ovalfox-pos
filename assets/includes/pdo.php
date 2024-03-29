@@ -9,7 +9,7 @@ class CRUDPDO
     public function __construct($host, $dbname, $username, $password)
     {
         try {
-            $this->db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+            $this->db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, array(PDO::ATTR_PERSISTENT => true));
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (PDOException $e) {
@@ -938,6 +938,12 @@ public function createMulti($table, $data, $fileInputName = null, $imageColumns 
         $fileName = basename($parsedUrl['path']);
 
         return $fileName;
+    }
+
+    public function __destruct()
+    {
+        // Close the database connection when the object is destroyed
+        $this->db = null;
     }
 }
 

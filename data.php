@@ -103,10 +103,12 @@ echo json_encode($data);
             }
         }
         if ($_POST['type'] == "rf") {
-            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
+            $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
+            ["total_quantity" => $_POST['total_quantity']]);
             if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
     
-                if ($pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
+                if ($pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                 'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 
                 'bill_number' => $_POST['bill_number'], 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0, 
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"])) {
@@ -529,14 +531,16 @@ echo json_encode($data);
 
 <?php } ?>
 
-<?php } else if ($_POST['__FILE__'] == 'salesDelete'){ 
-    foreach ($pdo->read("sales_1", ['invoice_number'=>$_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]) as $sale) {
+<?php } else if ($_POST['__FILE__'] == 'salesDelete'){
+    $sales_1Del = $pdo->read("sales_1", ['invoice_number'=>$_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $pdo->delete("sales_2", $_POST['invoice_number'], 'invoice_number');
+
+    foreach ($sales_1Del as $sale) {
         if (!empty($sale)) {
             $pdo->delete("sales_1", $sale['id']);
         }
     }
 
-    $pdo->read("sales_2", ['invoice_number'=> $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])
     ?>
 
 

@@ -58,174 +58,119 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
             </div>
         </div>
     </div>
-    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-        aria-controls="offcanvasRight">Toggle right offcanvas</button>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            ...
-        </div>
-    </div> -->
-    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-        aria-controls="offcanvasScrolling">Enable body scrolling</button>
+
 
     <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Final Amounts</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="row">
 
-
-                <div class="col-md">
-                    <label class="col-form-label">Current
-                        Date</label>
-
-                    <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                        class="form-control" name="current_date" type="date" placeholder="Enter End Date"
-                        id="current_date">
-
-
-
-
-
-                </div>
-
-
-
-            </div>
-            <div class="row">
-
-                <div class="col-md">
-
-                    <div class="form-group">
-
-
-                        <input class="form-control" class="" disabled name="customer_manual" type="text"
-                            id="customer_manual">
-                    </div>
-
-
-                    <div class="checkbox">
-                        <input name="manual_customer" value="manual_customer" id="manual_customer" type="checkbox">
-                        <label for="manual_customer">Add Customer</label>
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-md">
-
-                    <label class="col-form-label">Type</label>
-
-                    <select class="select2 form-control select-opt" name="type" id="type">
-                        <option></option>
-                        <option selected value="tr">
-                            Trade
-                            rate
-                        </option>
-                        <option value="wr">Wholesale
-                            rate
-                        </option>
-                        <option value="rf">Refund
-                        </option>
-
-                    </select>
-                </div>
-            </div>
             <div class="row">
                 <div class="col-md">
 
                     <div class="form-group">
-                        <label class="col-form-label">Customer
-                            Name</label>
-
-                        <select class="select2 form-control select-opt" name="customer_name" id="customer_name">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($customers as $customer) {
-
-?>
-                            <option value="<?php echo $customer['id']; ?>">
-                                <?php echo $customer['name']; ?>
-                            </option>
-
-
-                            <?php } ?>
-                        </select>
+                        <label class="col-form-label">Total
+                            Amount</label>
+                        <input class="form-control" class="" disabled name="final_amount" type="number"
+                            placeholder="Enter Final Amount" id="final_amount">
                     </div>
-
-
                 </div>
+                <div class="col-md">
 
+                    <div class="form-group">
+                        <label class="col-form-label">Discount</label>
+                        <input class="form-control" class="" name="discount_in_amount" type="number"
+                            placeholder="Enter Discount In Amount" id="discount_in_amount">
+                        <label class="col-form-label">(<strong style="color: red;">In
+                                Amount</strong>)</label>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
 
+                        <label class="col-form-label">Total
+                            Payable</label>
+                        <input class="form-control" class="" disabled name="total_payable" type="number"
+                            placeholder="Enter Total Payable" id="total_payable">
+                    </div>
+                </div>
             </div>
+
+
             <div class="row">
                 <div class="col-md">
                     <div class="form-group">
 
-                        <label class="col-form-label">Select
-                            Booker</label>
-                        <?php 
-if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
-?>
-                        <input class="form-control" disabled value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
-                            name="booker_name" id="booker_name">
-
-                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
-$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                        <select class="select2 form-control select-opt" name="booker_name" id="booker_name">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                            <option value="<?php echo $booker['id']; ?>">
-                                <?php echo $booker['username']; ?>
-                            </option>
-
-
-                            <?php } ?>
-                        </select>
-
-                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
-$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                        <select class="select2 form-control select-opt" name="book" id="book">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                            <option value="<?php echo $booker['id']; ?>">
-                                <?php echo $booker['username']; ?>
-                            </option>
-
-
-                            <?php } ?>
-                        </select>
-                        <?php } ?>
-
+                        <label class="col-form-label">Amount
+                            Received</label>
+                        <input class="form-control" class="" name="amount_received" type="number"
+                            placeholder="Enter Amount Received" id="amount_received">
                     </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label class="col-form-label">Payment
+                            type</label>
+
+                        <select class="select2 form-control select-opt" name="payment_type" id="payment_type">
+
+                            <option value="cod">Cash on
+                                delivery
+                            </option>
+                            <option value="op">Online
+                                payment
+                            </option>
+
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label class="col-form-label">Amount
+                            Return</label>
+                        <input class="form-control" disabled class="" name="amount_return" type="number"
+                            placeholder="Enter Amount Return" id="amount_return">
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label class="col-form-label">Pending
+                            Amount</label>
+                        <input class="form-control" disabled class="" name="pending_amount" type="number"
+                            placeholder="Enter Pending Amount" id="pending_amount">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label class="col-form-label">Details</label>
+                        <textarea rows="1" cols="1" class="form-control" name="details" id="details"
+                            placeholder="Enter Details"></textarea>
+                    </div>
+
+                    <div class="form-group">
+
+                        <button id="clear_bill" style="border-radius: 0pX;" class="btn col-md-12 btn-warning">Clear
+                            Bill</button>
+                        <button id="pBill" name="pBill" style="border-radius: 0pX;"
+                            class="btn col-md-12 btn-primary">Print
+                            Bill</button>
+                        <button style="border-radius: 0pX;" class="btn col-md-12 btn-danger">Show
+                            Unpaid Bills</button>
+                    </div>
+
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
     <div class="page-wrapper">
         <div class="main-content">
 
@@ -243,12 +188,342 @@ foreach ($bookers as $booker) {
 
 
                         <div class="form-group">
-                            <a href="index.php" style="border-radius: 0pX;" class="btn mb-3 btn-danger">Back</a>
+                            <a href="index.php" style="border-radius: 0pX;" class="btn btn-sm btn-danger">Back</a>
+                            <button style="border-radius: 0pX;" class="btn btn-sm btn-primary" type="button"
+                                data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                                aria-controls="offcanvasScrolling">Open final amounts</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-group">
+                            <h6>Next Invoice Number: <?php
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
+FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
+echo $maxedInvoiceNumber;
+?></h6>
+
+
+                            <input class="form-control" class="" name="invoice_number" type="number"
+                                placeholder="Enter Invoice No." id="invoice_number">
+
+                        </div>
+                    </div>
+                    <div class="col-md">
+
+
+                        <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
+                            class="form-control" name="current_date" type="date" placeholder="Enter End Date"
+                            id="current_date">
+
+
+
+
+
+                    </div>
+                    <div class="col-md">
+
+                        <div class="form-group">
+
+
+                            <input class="form-control" class="" disabled name="customer_manual" type="text"
+                                id="customer_manual">
+                        </div>
+
+
+                        <div class="checkbox">
+                            <input name="manual_customer" value="manual_customer" id="manual_customer" type="checkbox">
+                            <label for="manual_customer">Add Customer</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+
+
+                        <select class="select2 form-control select-opt" name="type" id="type">
+                            <option disabled>Select type</option>
+                            <option selected value="tr">
+                                Trade
+                                rate
+                            </option>
+                            <option value="wr">Wholesale
+                                rate
+                            </option>
+                            <option value="rf">Refund
+                            </option>
+
+                        </select>
+                    </div>
+                    <div class="col-md">
+
+                        <div class="form-group">
+
+
+                            <select class="select2 form-control select-opt" name="customer_name" id="customer_name">
+                                <option selected value="">
+                                    Select Customer Name
+                                </option>
+                                <?php
+
+foreach ($customers as $customer) {
+
+?>
+                                <option value="<?php echo $customer['id']; ?>">
+                                    <?php echo $customer['name']; ?>
+                                </option>
+
+
+                                <?php } ?>
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-group">
+
+                            <?php 
+if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
+?>
+                            <input class="form-control" disabled
+                                value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
+                                id="booker_name">
+
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
+$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+?>
+
+                            <select class="select2 form-control select-opt" name="booker_name" id="booker_name">
+                                <option selected value="">
+                                    Select Booker
+                                </option>
+                                <?php
+
+foreach ($bookers as $booker) {
+
+?>
+                                <option value="<?php echo $booker['id']; ?>">
+                                    <?php echo $booker['username']; ?>
+                                </option>
+
+
+                                <?php } ?>
+                            </select>
+
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
+$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+?>
+
+                            <select class="select2 form-control select-opt" name="book" id="book">
+                                <option selected value="">
+                                </option>
+                                <?php
+
+foreach ($bookers as $booker) {
+
+?>
+                                <option value="<?php echo $booker['id']; ?>">
+                                    <?php echo $booker['username']; ?>
+                                </option>
+
+
+                                <?php } ?>
+                            </select>
+                            <?php } ?>
+
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="col-md">
+                        <h6>item information:</h6>
+                        <div class="form-group">
+                            <input class="form-control" class="" name="item_code_search" type="text"
+                                placeholder="Search Through Item Code" id="item_code_search">
+
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+
+
+                            <select class="select2 form-control select-opt" name="product" id="product">
+                                <option selected value="">Select
+                                    product
+                                </option>
+                                <?php
+
+foreach ($products as $product) {
+
+?>
+                                <option value="<?php echo $product['id']; ?>">
+                                    <?php echo $product['product_name']; ?>
+                                </option>
+
+
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-group">
+
+
+                            <select class="select2 form-control select-opt" name="last_rate" id="last_rate">
+                                <option disabled selected value="">
+                                    Select last rate
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+
+
+                            <input class="form-control" class="" name="unit_price" type="number"
+                                placeholder="Enter Unit Price" id="unit_price">
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <h5>Quantity:</h5>
+
+                    <div class="col-md">
+                        <div class="form-group">
+                            <?php     if ($settings[0]['theme'] == "full_white") {
+                                                        ?>
+                            <div class="splash-radio-button">
+                                <input id="piece" name="qua" type="radio" value="piece" checked="">
+                                <label for="piece" class="radio-label">Piece</label>
+                                &nbsp;&nbsp;&nbsp;
+                                <input id="box" name="qua" type="radio" value="box">
+                                <label for="box" class="radio-label">Box</label>
+                            </div>
+
+                            <?php } ?>
+                            <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                                                        ?>
+                            <div class="ad-radio-button">
+                                <input class="radio" id="piece" value="piece" name="qua" type="radio" checked>
+                                <label for="piece" class="radio-label">Piece</label>
+                                &nbsp;&nbsp;
+                                <input class="radio" id="box" value="box" name="qua" type="radio">
+                                <label for="box" class="radio-label">Box</label>
+                            </div>
+                            <?php } ?>
+
+
+                            <div class="checkbox" style="background-color: white;">
+                                <input id="free_items" name="free_items" value="free_items" type="checkbox">
+                                <label for="free_items">Click
+                                    For Free
+                                    Items</label>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-md">
+                        <div class="form-group">
+
+                            <div class="form-group">
+
+                                <input class="form-control" class="" name="quantity" type="number"
+                                    placeholder="Enter Quantity" id="quantity">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+
+                            <input class="form-control" disabled class="" name="total_quantity" type="number"
+                                placeholder="Total Avaiable Quantity" id="total_quantity">
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <h5>Amounts:</h5>
+
+                        <div class="form-group">
+
+                            <h6>
+                                Discount:
+                            </h6>
+
+
+                            <?php     if ($settings[0]['theme'] == "full_white") {
+                                                        ?>
+                            <div class="splash-radio-button">
+                                <input id="discount_amount" name="discount" type="radio" checked="">
+                                <label for="discount_amount" class="radio-label">In
+                                    Amount</label>
+                                &nbsp;&nbsp;&nbsp;
+                                <input id="discount_percentage" name="discount" type="radio">
+                                <label for="discount_percentage" class="radio-label">In
+                                    Percentage</label>
+                            </div>
+
+
+
+
+                            <?php } ?>
+                            <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                                                        ?>
+                            <div class="ad-radio-button">
+
+                                <input id="discount_amount" name="discount" type="radio" checked>
+                                <label for="discount_amount" class="radio-label">In
+                                    Amount</label>
+
+                                <input id="discount_percentage" name="discount" type="radio">
+                                <label for="discount_percentage" class="radio-label">In
+                                    Percentage</label>
+                            </div>
+                            <?php } ?>
+
+
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <input class="form-control" class="" name="discount" type="number"
+                                placeholder="Enter Discount" id="discount">
+                            <label class="col-form-label">(<strong style="color: red;">Press
+                                    Enter</strong>)</label>
+                        </div>
+
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+
+                            <input class="form-control" class="" name="extra_discount" type="number"
+                                placeholder="Extra Discount" id="extra_discount">
+                        </div>
+
+                    </div>
+                    <div class="col-md">
+                        <div class="form-group">
+                            <input class="form-control" disabled class="" name="total_amount" type="text"
+                                placeholder="Total Amount" id="total_amount">
+                        </div>
+                        <div class="form-group">
+
+                            <button style="border-radius: 0pX;" id="wholeFormBtn" class="btn col-md-12 btn-success">Add
+                                Item</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="card">
 
                             <div class="card-body">
@@ -260,9 +535,12 @@ foreach ($bookers as $booker) {
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                 <div class="row">
                                                     <div class="col-md">
-                                                        <h3>Total items: <b id="total_items">0</b></h3>
-                                                        <h3>Total Quantity: <b id="total_quantity_added">0</b></h3>
+                                                        <div class="d-flex flex-row">
+                                                            <h3>Total items: <b id="total_items">0</b></h3>
+                                                            &nbsp;&nbsp;&nbsp;
+                                                            <h3>Total Quantity: <b id="total_quantity_added">0</b></h3>
 
+                                                        </div>
                                                         <table id="itemAddedtable"
                                                             class="table table-striped table-bordered dt-responsive ">
                                                             <thead>
@@ -315,585 +593,9 @@ foreach ($bookers as $booker) {
 
 
                         </div>
-                        <div class="row">
-                            <div class="col-md">
-                                <div class="card">
 
-                                    <div class="card-body">
-                                        <h3>Item information:</h3>
-
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-
-
-                                            <div class="row mt-3">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Search
-                                                            Through
-                                                            Item Code</label>
-
-                                                        <input class="form-control" class="" name="item_code_search"
-                                                            type="text" placeholder="Search Through Item Code"
-                                                            id="item_code_search">
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-
-                                                        <label class="col-form-label">Product name</label>
-
-                                                        <select class="select2 form-control select-opt" name="product"
-                                                            id="product">
-                                                            <option selected value="">Select
-                                                                product
-                                                            </option>
-                                                            <?php
-
-foreach ($products as $product) {
-
-?>
-                                                            <option value="<?php echo $product['id']; ?>">
-                                                                <?php echo $product['product_name']; ?>
-                                                            </option>
-
-
-                                                            <?php } ?>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Last
-                                                            Rate</label>
-
-
-                                                        <select class="select2 form-control select-opt" name="last_rate"
-                                                            id="last_rate">
-                                                            <option disabled selected value="">
-                                                                Select last rate
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Unit
-                                                            Price</label>
-
-                                                        <input class="form-control" class="" name="unit_price"
-                                                            type="number" placeholder="Enter Unit Price"
-                                                            id="unit_price">
-                                                    </div>
-
-
-
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md" style="display: none;">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Item
-                                                            Code</label>
-
-                                                        <input class="form-control" disabled class="" name="item_code"
-                                                            type="text" placeholder="Enter Item Code" id="item_code">
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-
-
-
-
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                    <div class="col-md">
 
-
-                        <div class="form-group">
-                            <label class="col-form-label">Invoice
-                                No.</label>
-
-                            <input class="form-control" value="<?php echo $maxedInvoiceNumber; ?>" class=""
-                                name="invoice_number" type="number" placeholder="Enter Invoice No." id="invoice_number">
-
-                        </div>
-                        <div class="card">
-
-                            <div class="card-body">
-
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="row">
-
-
-                                        <div class="col-md">
-                                            <label class="col-form-label">Current
-                                                Date</label>
-
-                                            <input
-                                                value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                                                class="form-control" name="current_date" type="date"
-                                                placeholder="Enter End Date" id="current_date">
-
-
-
-
-
-                                        </div>
-
-
-
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-
-
-                                                <input class="form-control" class="" disabled name="customer_manual"
-                                                    type="text" id="customer_manual">
-                                            </div>
-
-
-                                            <div class="checkbox">
-                                                <input name="manual_customer" value="manual_customer"
-                                                    id="manual_customer" type="checkbox">
-                                                <label for="manual_customer">Add Customer</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-
-                                            <label class="col-form-label">Type</label>
-
-                                            <select class="select2 form-control select-opt" name="type" id="type">
-                                                <option></option>
-                                                <option selected value="tr">
-                                                    Trade
-                                                    rate
-                                                </option>
-                                                <option value="wr">Wholesale
-                                                    rate
-                                                </option>
-                                                <option value="rf">Refund
-                                                </option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Customer
-                                                    Name</label>
-
-                                                <select class="select2 form-control select-opt" name="customer_name"
-                                                    id="customer_name">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
-
-foreach ($customers as $customer) {
-
-?>
-                                                    <option value="<?php echo $customer['id']; ?>">
-                                                        <?php echo $customer['name']; ?>
-                                                    </option>
-
-
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
-
-
-                                        </div>
-
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Select
-                                                    Booker</label>
-                                                <?php 
-if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
-?>
-                                                <input class="form-control" disabled
-                                                    value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
-                                                    name="booker_name" id="booker_name">
-
-                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
-$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                                                <select class="select2 form-control select-opt" name="booker_name"
-                                                    id="booker_name">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                                                    <option value="<?php echo $booker['id']; ?>">
-                                                        <?php echo $booker['username']; ?>
-                                                    </option>
-
-
-                                                    <?php } ?>
-                                                </select>
-
-                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
-$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                                                <select class="select2 form-control select-opt" name="book" id="book">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                                                    <option value="<?php echo $booker['id']; ?>">
-                                                        <?php echo $booker['username']; ?>
-                                                    </option>
-
-
-                                                    <?php } ?>
-                                                </select>
-                                                <?php } ?>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-
-
-                            </div>
-
-
-                        </div>
-
-                        <div class="card">
-
-                            <div class="card-body">
-
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-
-
-                                    <h3>Quantity:</h3>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <?php     if ($settings[0]['theme'] == "full_white") {
-                                                        ?>
-                                                <div class="splash-radio-button">
-                                                    <input id="piece" name="qua" type="radio" value="piece" checked="">
-                                                    <label for="piece" class="radio-label">Piece</label>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <input id="box" name="qua" type="radio" value="box">
-                                                    <label for="box" class="radio-label">Box</label>
-                                                </div>
-
-                                                <?php } ?>
-                                                <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                                                        ?>
-                                                <div class="ad-radio-button">
-                                                    <input class="radio" id="piece" value="piece" name="qua"
-                                                        type="radio" checked>
-                                                    <label for="piece" class="radio-label">Piece</label>
-                                                    &nbsp;&nbsp;
-                                                    <input class="radio" id="box" value="box" name="qua" type="radio">
-                                                    <label for="box" class="radio-label">Box</label>
-                                                </div>
-                                                <?php } ?>
-                                                <br />
-
-
-
-
-
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="checkbox">
-                                                <input id="free_items" name="free_items" value="free_items"
-                                                    type="checkbox">
-                                                <label for="free_items">Click
-                                                    For Free
-                                                    Items</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label fw-bold">Enter
-                                                    Quantity (<strong style="color: red;">Press
-                                                        Enter</strong>)</label>
-                                                <div class="form-group">
-
-                                                    <input class="form-control" class="" name="quantity" type="number"
-                                                        placeholder="Enter Quantity" id="quantity">
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label fw-bold">Total
-                                                    Available
-                                                    Quantity</label>
-                                                <input class="form-control" disabled class="" name="total_quantity"
-                                                    type="number" placeholder="Total Avaiable Quantity"
-                                                    id="total_quantity">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <h3>Amounts:</h3>
-
-                                            <div class="form-group">
-
-                                                <h6>
-                                                    Discount:
-                                                </h6>
-
-
-                                                <?php     if ($settings[0]['theme'] == "full_white") {
-                                                        ?>
-                                                <div class="splash-radio-button">
-                                                    <input id="discount_amount" name="discount" type="radio" checked="">
-                                                    <label for="discount_amount" class="radio-label">In
-                                                        Amount</label>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <input id="discount_percentage" name="discount" type="radio">
-                                                    <label for="discount_percentage" class="radio-label">In
-                                                        Percentage</label>
-                                                </div>
-
-
-
-
-                                                <?php } ?>
-                                                <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                                                        ?>
-                                                <div class="ad-radio-button">
-
-                                                    <input id="discount_amount" name="discount" type="radio" checked>
-                                                    <label for="discount_amount" class="radio-label">In
-                                                        Amount</label>
-
-                                                    <input id="discount_percentage" name="discount" type="radio">
-                                                    <label for="discount_percentage" class="radio-label">In
-                                                        Percentage</label>
-                                                </div>
-                                                <?php } ?>
-
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <input class="form-control" class="" name="discount" type="number"
-                                                    placeholder="Enter Discount" id="discount">
-                                                <label class="col-form-label">(<strong style="color: red;">Press
-                                                        Enter</strong>)</label>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <input class="form-control" class="" name="extra_discount" type="number"
-                                                    placeholder="Extra Discount" id="extra_discount">
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Amount</label>
-                                                <input class="form-control" disabled class="" name="total_amount"
-                                                    type="text" placeholder="Total Amount" id="total_amount">
-                                            </div>
-                                            <div class="form-group">
-
-                                                <button style="border-radius: 0pX;" id="wholeFormBtn"
-                                                    class="btn col-md-12 btn-success">Add
-                                                    Item</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <div class="card">
-
-                            <div class="card-body">
-
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="row mt-1">
-
-
-
-
-
-
-
-
-                                        <h3>Final Amounts:</h3>
-
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Total
-                                                    Amount</label>
-                                                <input class="form-control" class="" disabled name="final_amount"
-                                                    type="number" placeholder="Enter Final Amount" id="final_amount">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Discount</label>
-                                                <input class="form-control" class="" name="discount_in_amount"
-                                                    type="number" placeholder="Enter Discount In Amount"
-                                                    id="discount_in_amount">
-                                                <label class="col-form-label">(<strong style="color: red;">In
-                                                        Amount</strong>)</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Total
-                                                    Payable</label>
-                                                <input class="form-control" class="" disabled name="total_payable"
-                                                    type="number" placeholder="Enter Total Payable" id="total_payable">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Amount
-                                                    Received</label>
-                                                <input class="form-control" class="" name="amount_received"
-                                                    type="number" placeholder="Enter Amount Received"
-                                                    id="amount_received">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Payment
-                                                    type</label>
-
-                                                <select class="select2 form-control select-opt" name="payment_type"
-                                                    id="payment_type">
-
-                                                    <option value="cod">Cash on
-                                                        delivery
-                                                    </option>
-                                                    <option value="op">Online
-                                                        payment
-                                                    </option>
-
-
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Amount
-                                                    Return</label>
-                                                <input class="form-control" disabled class="" name="amount_return"
-                                                    type="number" placeholder="Enter Amount Return" id="amount_return">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Pending
-                                                    Amount</label>
-                                                <input class="form-control" disabled class="" name="pending_amount"
-                                                    type="number" placeholder="Enter Pending Amount"
-                                                    id="pending_amount">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Details</label>
-                                                <textarea rows="1" cols="1" class="form-control" name="details"
-                                                    id="details" placeholder="Enter Details"></textarea>
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <button id="clear_bill" style="border-radius: 0pX;"
-                                                    class="btn col-md-12 mb-3 btn-warning">Clear
-                                                    Bill</button>
-                                                <button id="pBill" name="pBill" style="border-radius: 0pX;"
-                                                    class="btn col-md-12  mb-3 btn-primary">Print
-                                                    Bill</button>
-                                                <button style="border-radius: 0pX;"
-                                                    class="btn col-md-12 btn-danger">Show
-                                                    Unpaid Bills</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -1333,8 +1035,9 @@ foreach ($bookers as $booker) {
 
             if ($("#invoice_number").val() == "") {
                 <?php
-                    $maxedInvoiceNumber = $pdo->customQuery("SELECT MAX(invoice_number) AS maxedInvoiceNumber FROM sales_2")[0]['maxedInvoiceNumber'] + 1;
-                    ?>
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
+FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
+?>
 
                 $("#invoice_number").val(+<?php echo $maxedInvoiceNumber ?>);
 
