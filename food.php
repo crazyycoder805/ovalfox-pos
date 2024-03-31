@@ -2,7 +2,7 @@
 
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php';  
-$categories = $pdo->read('categories');
+$categories = $pdo->read('categories', ['company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
 ?>
 
@@ -74,7 +74,7 @@ $categories = $pdo->read('categories');
 
                                     
                                     foreach ($categories as $ca) {
-                                        $product = $pdo->read('products', ['category_id' => $ca['id']]);
+                                        $product = $pdo->read('products', ['category_id' => $ca['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
                                         
                                     ?>
                                         <div style="height: 700px;"

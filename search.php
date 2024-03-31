@@ -9,13 +9,13 @@ if ($_POST['__FILE__'] == "search_sales_1") {
     $sales_1 = "";
 
     if (!empty($_POST["end_date"])) { 
-        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']} GROUP BY item_code");
+        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} GROUP BY item_code");
     } else if (empty($_POST["end_date"])) {
-        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at = '{$_POST['start_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']} GROUP BY item_code");
+        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at = '{$_POST['start_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} GROUP BY item_code");
     } else if (!empty($_POST["booker_name"]) && !empty($_POST['start_date'])) {
-        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at = '{$_POST['start_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']} AND booker_name = {$_POST["booker_name"]} GROUP BY item_code");
+        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at = '{$_POST['start_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND booker_name = {$_POST["booker_name"]} GROUP BY item_code");
     }else if (!empty($_POST["booker_name"]) && !empty($_POST['start_date']) && !empty($_POST['end_date'])) {
-        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']} AND '{$_POST['end_date']}' AND booker_name = {$_POST["booker_name"]} GROUP BY item_code");
+        $sales_1 = $pdo->customQuery("SELECT *, SUM(item_price) AS total_price FROM sales_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND '{$_POST['end_date']}' AND booker_name = {$_POST["booker_name"]} GROUP BY item_code");
     }
 ?>
 
@@ -67,17 +67,17 @@ foreach ($sales_1 as $sale_1) {
     $sales_2 = "";
 
 if (!empty($_POST["end_date"])) { 
-    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 } else if (empty($_POST["end_date"])) {
     $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at = '{$_POST['start_date']}'");
 } else if (!empty($_POST["booker_name"]) && !empty($_POST['start_date'])) {
-    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at = '{$_POST['start_date']}' AND booker_name = {$_POST["booker_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at = '{$_POST['start_date']}' AND booker_name = {$_POST["booker_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 }else if (!empty($_POST["booker_name"]) && !empty($_POST['start_date']) && !empty($_POST['end_date'])) {
-    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND booker_name = {$_POST["booker_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND booker_name = {$_POST["booker_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 }else if (!empty($_POST["customer_name"]) && !empty($_POST['start_date'])) {
-    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at = '{$_POST['start_date']}' AND customer_name = {$_POST["customer_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at = '{$_POST['start_date']}' AND customer_name = {$_POST["customer_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 }else if (!empty($_POST["customer_name"]) && !empty($_POST['start_date']) && !empty($_POST['end_date'])) {
-    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND customer_name = {$_POST["customer_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND customer_name = {$_POST["customer_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 }
 ?>
 
@@ -138,7 +138,7 @@ foreach ($sales_2 as $sale_2) {
 
 
 <?php } else if ($_POST['__FILE__'] == "search_purchase_1") { 
-    $purchases_1 = $pdo->customQuery("SELECT * FROM purchases_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $purchases_1 = $pdo->customQuery("SELECT * FROM purchases_1 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 ?>
 
 
@@ -198,7 +198,7 @@ foreach ($purchases_1 as $purchase_1) {
 
 
 <?php } else if ($_POST['__FILE__'] == "search_purchase_2") { 
-    $purchases_2 = $pdo->customQuery("SELECT * FROM purchases_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $purchases_2 = $pdo->customQuery("SELECT * FROM purchases_2 WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 ?>
 
 
@@ -248,12 +248,12 @@ foreach ($purchases_2 as $purchase_2) {
 
 
 <?php } else if ($_POST['__FILE__'] == "search_ledger") { 
-    $ledgers = $pdo->customQuery("SELECT * FROM ledger WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+    $ledgers = $pdo->customQuery("SELECT * FROM ledger WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 
     if (!empty($_POST["customer_name"]) && !empty($_POST['start_date'])) {
-        $ledgers = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM ledger WHERE created_at = '{$_POST['start_date']}' AND customer_name = {$_POST["customer_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+        $ledgers = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM ledger WHERE created_at = '{$_POST['start_date']}' AND customer_name = {$_POST["customer_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
     }else if (!empty($_POST["customer_name"]) && !empty($_POST['start_date']) && !empty($_POST['end_date'])) {
-        $ledgers = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM ledger WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND customer_name = {$_POST["customer_name"]} AND 'company_profile_id'= {$_SESSION['ovalfox_pos_cp_id']}");
+        $ledgers = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM ledger WHERE created_at BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND customer_name = {$_POST["customer_name"]} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
     }
 ?>
 

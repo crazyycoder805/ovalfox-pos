@@ -7,8 +7,8 @@
         header("location:404.php");
     
 }
-$bookers = $pdo->read("access", ['role_id'=>2]);
-$customers = $pdo->read("customers");
+$bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+$customers = $pdo->read("customers", ['company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
 ?>
 

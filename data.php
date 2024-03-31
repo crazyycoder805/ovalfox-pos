@@ -10,7 +10,7 @@ if ($_POST['__FILE__'] == "productSelect") {
     $product = $pdo->read("products", ['id' => $_POST['product'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($customer)) {
-        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5');
+        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' ORDER BY id DESC LIMIT 0, 5');
 
         foreach ($sales_2_last_rate as $sale1) {
             $data .= "
@@ -37,7 +37,7 @@ if ($_POST['__FILE__'] == "productSelect") {
     foreach ($sales_1 as $ss) {
         $all_over_qty[] = $ss['quantity'];
     }
-    $sumOfAllProduct = $pdo->read("sales_1", ["invoice_number" => $_POST['invoice_number']]);
+    $sumOfAllProduct = $pdo->read("sales_1", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $amountGrand = [];
     foreach ($sumOfAllProduct as $amount) {
         $amountGrand[] = $amount['amount'];
@@ -52,18 +52,19 @@ if ($_POST['__FILE__'] == "productSelect") {
         $key += 1;
         $html .= "
         <tr>
-    <td>{$key}</td>
+    <td style='font-size: 10px !important;'>{$key}</td>
 
-    <td id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
-    <td id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
-    <td id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
+    <td style='font-size: 10px !important;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
+    <td style='font-size: 10px !important;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+    <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
 
-    <td id='"."item_priceTabledData{$sale['id']}'>{$sale['item_price']}</td>
-    <td id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-    <td id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
-    <td id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
-
-    <td><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
+    <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' contenteditable='true'>{$sale['item_price']}</td>
+    <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
+    <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
+    <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
+    <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
+    <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$sale['amount']}</td>
+    <td style='font-size: 10px !important;'><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
 </tr>
         ";
@@ -85,10 +86,13 @@ echo json_encode($data);
 
 <?php
 } else if ($_POST['__FILE__'] == 'productAdd') {
-    $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !empty($_POST['customer_manual'])) && 
     !empty($_POST['booker_name']) && !empty($_POST['date']) && !empty($_POST['date']) && !empty($_POST['total_quantity']) && !empty($_POST['quantity']) 
     && (!empty($_POST['item_code_search']) || !empty($_POST['product_id']))) {
+        $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+
+        $billNumber = $pdo->customQuery("SELECT MAX(CAST(bill_number AS UNSIGNED)) AS billNumber,
+        company_profile_id, customer_name FROM sales_2 WHERE customer_name = '{$_POST['customer_name']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}")[0]['billNumber'] + 1;
 
         $customerId = "";
         $customer = "";
@@ -110,7 +114,7 @@ echo json_encode($data);
                 if ($pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                 'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 
-                'bill_number' => $_POST['bill_number'], 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0, 
+                'bill_number' => $billNumber, 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0, 
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"])) {
                     echo "Item added.";
                 } else {
@@ -128,7 +132,7 @@ echo json_encode($data);
             $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
             if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
                 $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
-                'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 'bill_number' => $_POST['bill_number'], 
+                'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 'bill_number' => $billNumber, 
                 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0,  
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"]);
             } else {
@@ -159,18 +163,31 @@ echo json_encode($data);
 
 <tr>
 
-    <td><?php echo $key; ?></td>
-    <td id='item_codeTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_code']; ?></td>
-    <td id='item_nameTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_name']; ?></td>
-    <td id='quantityTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['quantity']; ?></td>
+    <td style='font-size: 10px !important;'><?php echo $key; ?></td>
+    <td style='font-size: 10px !important;' id='item_codeTabledData<?php echo $sale['id'];?>'>
+        <?php echo $sale['item_code']; ?></td>
+    <td style='font-size: 10px !important;' id='item_nameTabledData<?php echo $sale['id'];?>'>
+        <?php echo $sale['item_name']; ?></td>
+    <td style='font-size: 10px !important;' id='quantityTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+        <?php echo $sale['quantity']; ?></td>
 
-    <td id='item_priceTabledData<?php echo $sale['id'];?>'><?php echo $sale['item_price']; ?></td>
-    <td id='amountTabledData<?php echo $sale['id'];?>'><?php echo $sale['amount']; ?></td>
-    <td id='discountTabledData<?php echo $sale['id'];?>' contenteditable='true'><?php echo $sale['discount']; ?></td>
-    <td id='extra_discountTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+    <td style='font-size: 10px !important;' id='item_priceTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+        <?php echo $sale['item_price']; ?></td>
+    <td style='font-size: 10px !important;' id='amountTabledData<?php echo $sale['id'];?>'>
+        <?php echo $sale['amount']; ?></td>
+    <td style='font-size: 10px !important;' id='discountTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+        <?php echo $sale['discount']; ?></td>
+    <td style='font-size: 10px !important;' id='extra_discountTabledData<?php echo $sale['id'];?>'
+        contenteditable='true'>
         <?php echo $sale['extra_discount']; ?></td>
+    <td style='font-size: 10px !important;' id='percentageTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+        <?php echo $sale['percentage']; ?></td>
+    <td style='font-size: 10px !important;' id='grandTotalTabledData<?php echo $sale['id'];?>'>
+        <?php echo $sale['amount']; ?></td>
 
-    <td><button class="btn btn-danger btn-sm" value="<?php echo $sale['id']; ?>" id="removeItem">Remove</button></td>
+
+    <td style='font-size: 10px !important;'><button class="btn btn-danger btn-sm" value="<?php echo $sale['id']; ?>"
+            id="removeItem">Remove</button></td>
 
 </tr>
 <?php } ?>
@@ -191,7 +208,7 @@ echo json_encode($data);
 
     $customer = $pdo->read("customers", ['id'=>$_POST['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     if (!empty($customer)) {
-        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' LIMIT 0, 5 ORDER ASC');
+        $sales_2_last_rate = $pdo->read("sales_1", ['customer_name'=> $customer[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ' ORDER BY id DESC LIMIT 0, 5');
 
         foreach ($sales_2_last_rate as $sale1) {
             $data .= "
@@ -217,14 +234,14 @@ echo json_encode($data);
     $totalAmount = $pr[0]['amount'];
     $productData = [$totalAmount];
     echo json_encode($productData);
-    $pdo->customQuery("DELETE FROM sales_1 WHERE id = {$_POST['salesId']}");
+    $pdo->customQuery("DELETE FROM sales_1 WHERE id = {$_POST['salesId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 ?>
 <?php } else if ($_POST['__FILE__'] == "deletePurchase") {
     $pr = $pdo->read("purchases_1", ['id' => $_POST['purchaseId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $totalAmount = $pr[0]['total_amount'];
     $productData = [$totalAmount];
     echo json_encode($productData);
-    $pdo->customQuery("DELETE FROM purchases_1 WHERE id = {$_POST['purchaseId']}");
+    $pdo->customQuery("DELETE FROM purchases_1 WHERE id = {$_POST['purchaseId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 ?>
 
 
@@ -292,18 +309,20 @@ echo json_encode($data);
     foreach ($sales_1 as $key => $sale) {
         $key += 1;
         $html .= "   <tr>
-        <td>{$key}</td>
+        <td style='font-size: 10px !important;'>{$key}</td>
 
-        <td id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
-        <td id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
-        <td id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
+        <td style='font-size: 10px !important;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
+        <td style='font-size: 10px !important;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+        <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
     
-        <td id='"."item_priceTabledData{$sale['id']}'>{$sale['item_price']}</td>
-        <td id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-        <td id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
-        <td id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
+        <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' contenteditable='true'>{$sale['item_price']}</td>
+        <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
+        <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
+        <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
+        <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
+        <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$sale['amount']}</td>
 
-        <td><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
+        <td style='font-size: 10px !important;'><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
     </tr>";
     }
@@ -325,7 +344,8 @@ echo json_encode($data);
     $pdo->create("ledger", ["payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], "recevied_amount" => $_POST['recevied_amount'],
     "details" => $_POST['details'], "payment_from" => $customer[0]['id'], "dr" => $_POST['pending_amount'], "cr" => $_POST['recevied_amount'], 
     "remaining_amount" => $_POST['final_amount'], "status" => $_POST['pending_amount'] != 0 || $_POST['pending_amount'] != "0" ? "Paid" : "Unpaid"]);
-    $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => $_POST['discount_in_amount'], 'final_amount' => $_POST['final_amount'], 
+    $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => $_POST['discount_in_amount'], 
+    'final_amount' => $_POST['final_amount'],'details' => $_POST['details'], 
     'recevied_amount' => $_POST['recevied_amount'], 'returned_amount' => $_POST['returned_amount'], 'pending_amount' => $_POST['pending_amount'], 
     "status" => $_POST['pending_amount'] == 0 || $_POST['pending_amount'] == "0" ? "Paid" : "Unpaid"]);
     
@@ -579,7 +599,7 @@ echo json_encode($data);
 ?>
 
 <?php } else if ($_POST['__FILE__'] == "customerData") {
-    $onecus = $pdo->read("sales_2", ['id' => $_POST['cusId']]);
+    $onecus = $pdo->read("sales_2", ['id' => $_POST['cusId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
             ?>
 <tr>
 
@@ -604,27 +624,52 @@ $id = $matches[0];
 
 
 if ($key == "quantity") {
-    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
-    $previousAmount = $selectedItem[0]['amount'];
+    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id], 
-    ['amount' => array_values($array)[0] * $selectedItem[0]['item_price'], 
+    ['amount' =>  (((array_values($array)[0] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'],
+    'grand_total' => (((array_values($array)[0] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'], 
     'quantity' => array_values($array)[0]]);
 
 } else if ($key == "discount") {
-    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
+    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id], 
-    ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 
+    ['amount' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - array_values($array)[0]) - $selectedItem[0]['extra_discount'],
+    'grand_total' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - array_values($array)[0]) - $selectedItem[0]['extra_discount'],
     'discount' => array_values($array)[0]]);
 
 } else if ($key == "extra_discount") {
-    $selectedItem = $pdo->read("sales_1", ['id' => $id]);
+    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id], 
-    ['amount' => $selectedItem[0]['quantity'] * $selectedItem[0]['item_price'] - array_values($array)[0], 
+    ['amount' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - array_values($array)[0],
+    'grand_total' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - array_values($array)[0], 
     'extra_discount' => array_values($array)[0]]);
+
+} else if ($key == "percentage") {
+    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $pdo->update("sales_1", ['id' => $id], 
+    ['amount' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty(array_values($array)[0]) ? array_values($array)[0] : 100)  - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'],
+    'grand_total' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty(array_values($array)[0]) ? array_values($array)[0] : 100)  - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'],
+    'percentage' => array_values($array)[0]]);
+
+} else if ($key == "item_price") {
+    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $pdo->update("sales_1", ['id' => $id], 
+    ['amount' => ((($selectedItem[0]['quantity'] * array_values($array)[0]) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'],
+    'grand_total' => ((($selectedItem[0]['quantity'] * array_values($array)[0]) / 100) * (!empty($selectedItem[0]['percentage']) ? $selectedItem[0]['percentage'] : 100) - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'], 
+    'item_price' => array_values($array)[0]]);
 
 }
 
 ?>
 
 
-<?php } ?>
+<?php } else if ($_POST['__FILE__'] == 'showCustomerData') { 
+    $customerSales2 = $pdo->read("sales_2", ['id' => $_POST['cusId']]);
+    foreach ($customerSales2 as $index => $cs) {
+        $index += 1;
+        $customer = $pdo->read("customers" , ['id' => $cs['customer_name']]);
+    ?>
+<td><?php echo $index; ?></td>
+<td><?php echo $customer[0]['name']; ?></td>
+<td><?php echo $cs['total_amount']; ?></td>
+<?php } } ?>

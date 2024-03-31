@@ -542,7 +542,7 @@ if (isset($_GET['edit_employee'])) {
                                                 <tbody>
                                                     <?php
                                                             foreach ($employees as $employee) {
-                                                                $designation2 = $pdo->read("designations", ['id' => $employee['designation_id']]);
+                                                                $designation2 = $pdo->read("designations", ['id' => $employee['designation_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
                                                             ?>
                                                     <tr>

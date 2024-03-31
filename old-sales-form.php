@@ -16,7 +16,6 @@ $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos
 $products = $pdo->read("products");
 
 
-    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['billNumber'] + 1;
 
 
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
@@ -58,174 +57,659 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
             </div>
         </div>
     </div>
-    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
-        aria-controls="offcanvasRight">Toggle right offcanvas</button>
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            ...
-        </div>
-    </div> -->
-    <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-        aria-controls="offcanvasScrolling">Enable body scrolling</button>
 
-    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="row">
-
-
-                <div class="col-md">
-                    <label class="col-form-label">Current
-                        Date</label>
-
-                    <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                        class="form-control" name="current_date" type="date" placeholder="Enter End Date"
-                        id="current_date">
-
-
-
-
-
-                </div>
-
-
-
+            <div class="logo-wrapper">
+                <a href="index.php" class="admin-logo">
+                    <img src="assets/images/ovalfox/logo.png" alt="" class="sp_logo">
+                    <img src="assets/images/ovalfox/icon.png" alt="" class="sp_mini_logo">
+                </a>
             </div>
-            <div class="row">
-
-                <div class="col-md">
-
-                    <div class="form-group">
+            <div class="side-menu-wrap">
+                <ul class="main-menu">
 
 
-                        <input class="form-control" class="" disabled name="customer_manual" type="text"
-                            id="customer_manual">
-                    </div>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d != 0) {
+            ?>
+                    <li>
+                        <a href="index.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Dashboard
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="index.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Dashboard
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
+            ?>
+                    <li>
+                        <a href="sales.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Sales
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="sales.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Sales
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
 
 
-                    <div class="checkbox">
-                        <input name="manual_customer" value="manual_customer" id="manual_customer" type="checkbox">
-                        <label for="manual_customer">Add Customer</label>
-                    </div>
-                </div>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
+            ?>
+                    <li>
+                        <a href="purchase.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Purchase
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="purchase.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Purchase
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->g) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->g != 0) {
+            ?>
+                    <li>
+                        <a href="gernel_expenses.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Gernel Expenses
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="gernel_expenses.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Gernel Expenses
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->l) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->l != 0) {
+            ?>
+                    <li>
+                        <a href="ledger.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Ledger
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="ledger.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Ledger
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->st != 0) {
+            ?>
+                    <li>
+                        <a href="store.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Stores
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="store.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Stores
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
+                    <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ds != 0) {
+            ?>
+                    <li>
+                        <a href="designations.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Designations
+                            </span>
+                        </a>
+                    </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                    <li>
+                        <a href="designations.php">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Designations
+                            </span>
+                        </a>
+                    </li>
+                    <?php } ?>
 
-            </div>
-            <div class="row">
-                <div class="col-md">
-
-                    <label class="col-form-label">Type</label>
-
-                    <select class="select2 form-control select-opt" name="type" id="type">
-                        <option></option>
-                        <option selected value="tr">
-                            Trade
-                            rate
-                        </option>
-                        <option value="wr">Wholesale
-                            rate
-                        </option>
-                        <option value="rf">Refund
-                        </option>
-
-                    </select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md">
-
-                    <div class="form-group">
-                        <label class="col-form-label">Customer
-                            Name</label>
-
-                        <select class="select2 form-control select-opt" name="customer_name" id="customer_name">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($customers as $customer) {
-
-?>
-                            <option value="<?php echo $customer['id']; ?>">
-                                <?php echo $customer['name']; ?>
-                            </option>
-
-
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Products
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pc != 0) {
+                    ?>
+                            <li>
+                                <a href="categories.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage categories
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="categories.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage categories
+                                    </span>
+                                </a>
+                            </li>
                             <?php } ?>
-                        </select>
-                    </div>
-
-
-                </div>
-
-
-            </div>
-            <div class="row">
-                <div class="col-md">
-                    <div class="form-group">
-
-                        <label class="col-form-label">Select
-                            Booker</label>
-                        <?php 
-if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
-?>
-                        <input class="form-control" disabled value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
-                            name="booker_name" id="booker_name">
-
-                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
-$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                        <select class="select2 form-control select-opt" name="booker_name" id="booker_name">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                            <option value="<?php echo $booker['id']; ?>">
-                                <?php echo $booker['username']; ?>
-                            </option>
-
-
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->p != 0) {
+                    ?>
+                            <li>
+                                <a href="products.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage products
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="products.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage products
+                                    </span>
+                                </a>
+                            </li>
                             <?php } ?>
-                        </select>
 
-                        <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
-$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
-?>
-
-                        <select class="select2 form-control select-opt" name="book" id="book">
-                            <option selected value="">
-                            </option>
-                            <?php
-
-foreach ($bookers as $booker) {
-
-?>
-                            <option value="<?php echo $booker['id']; ?>">
-                                <?php echo $booker['username']; ?>
-                            </option>
+                        </ul>
+                    </li>
 
 
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Customers
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c != 0) {
+                    ?>
+                            <li>
+                                <a href="customers.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage customers
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="customers.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage customers
+                                    </span>
+                                </a>
+                            </li>
                             <?php } ?>
-                        </select>
-                        <?php } ?>
+                        </ul>
+                    </li>
 
-                    </div>
-                </div>
+
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Expenses
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ec != 0) {
+                    ?>
+                            <li>
+                                <a href="expense_categories.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage expense category
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="expense_categories.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage expense category
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Suppliers
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ss != 0) {
+                    ?>
+                            <li>
+                                <a href="suppliers.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage suppliers
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="suppliers.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage suppliers
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Companies
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->cp != 0) {
+                    ?>
+                            <li>
+                                <a href="companies_profile.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage companies
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="companies_profile.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage companies
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Employees
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->em != 0) {
+                    ?>
+                            <li>
+                                <a href="employees.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage employees
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="employees.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage employees
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Login
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="users.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage users
+                                    </span>
+                                </a>
+                            </li>
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_access_of']->r) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->r != 0) {
+                    ?>
+                            <li>
+                                <a href="roles.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage roles
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                            <li>
+                                <a href="roles.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Manage roles
+                                    </span>
+                                </a>
+                            </li>
+                            <?php } ?>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);" class="">
+                            <span class="icon-menu feather-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" class="feather feather-home">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                            </span>
+                            <span class="menu-text">
+                                Reporting
+                            </span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="search_sales_1.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Sales 1
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="search_sales_2.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Sales 2
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="search_purchase_1.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Purchase 1
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="search_purchase_2.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Purchase 2
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="search_ledger.php">
+                                    <span class="icon-dash">
+                                    </span>
+                                    <span class="menu-text">
+                                        Ledger
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
+
         </div>
-    </div> -->
+    </div>
     <div class="page-wrapper">
         <div class="main-content">
 
@@ -239,661 +723,541 @@ foreach ($bookers as $booker) {
                 </form>
                 <?php } ?>
                 <div class="row">
-                    <div class="col-md">
+                    <div class="col-md-8-custom bg-success">
 
+                        <div class="d-flex flex-row">
+                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
+                                role="button" aria-controls="offcanvasExample">
+                                <i class="fa fa-arrow-left"></i> </a>
+                            <h6 class="mt-3">Next Invoice Number: <?php
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
+MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
+company_profile_id
+FROM 
+sales_2 
+WHERE 
+company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'
+")[0]['maxedInvoiceNumber'] + 1;
+echo $maxedInvoiceNumber;
 
-                        <div class="form-group">
-                            <a href="index.php" style="border-radius: 0pX;" class="btn mb-3 btn-danger">Back</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="card">
-
-                            <div class="card-body">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="card" style="overflow: scroll; height: 300px;">
-
-                                        <div class="card-body">
-
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                                <div class="row">
-                                                    <div class="col-md">
-                                                        <h3>Total items: <b id="total_items">0</b></h3>
-                                                        <h3>Total Quantity: <b id="total_quantity_added">0</b></h3>
-
-                                                        <table id="itemAddedtable"
-                                                            class="table table-striped table-bordered dt-responsive ">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-
-                                                                    <th>Item Code</th>
-
-                                                                    <th>Item Name</th>
-
-                                                                    <th>Quantity</th>
-                                                                    <th>Price</th>
-                                                                    <th>Total Amount</th>
-                                                                    <th>Discount</th>
-                                                                    <th>Extra discount</th>
-                                                                    <th>Remove</th>
-
-                                                                </tr>
-                                                            <tbody id="data">
-                                                            </tbody>
-                                                            </thead>
-
-                                                        </table>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
-                        </div>
-                        <div class="row">
-                            <div class="col-md" style="display: none;">
-                                <div class="form-group">
-                                    <label class="col-form-label">Item
-                                        Name</label>
-
-                                    <input class="form-control" disabled class="" name="item_name" type="text"
-                                        placeholder="Enter Item Name" id="item_name">
-
-                                </div>
-                            </div>
-
-
+?></h6>
                         </div>
                         <div class="row">
                             <div class="col-md">
-                                <div class="card">
-
-                                    <div class="card-body">
-                                        <h3>Item information:</h3>
-
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-
-
-                                            <div class="row mt-3">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Search
-                                                            Through
-                                                            Item Code</label>
-
-                                                        <input class="form-control" class="" name="item_code_search"
-                                                            type="text" placeholder="Search Through Item Code"
-                                                            id="item_code_search">
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-
-                                                        <label class="col-form-label">Product name</label>
-
-                                                        <select class="select2 form-control select-opt" name="product"
-                                                            id="product">
-                                                            <option selected value="">Select
-                                                                product
-                                                            </option>
-                                                            <?php
-
-foreach ($products as $product) {
-
-?>
-                                                            <option value="<?php echo $product['id']; ?>">
-                                                                <?php echo $product['product_name']; ?>
-                                                            </option>
-
-
-                                                            <?php } ?>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Last
-                                                            Rate</label>
-
-
-                                                        <select class="select2 form-control select-opt" name="last_rate"
-                                                            id="last_rate">
-                                                            <option disabled selected value="">
-                                                                Select last rate
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Unit
-                                                            Price</label>
-
-                                                        <input class="form-control" class="" name="unit_price"
-                                                            type="number" placeholder="Enter Unit Price"
-                                                            id="unit_price">
-                                                    </div>
+                                <div class="form-group d-flex flex-row">
 
 
 
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md" style="display: none;">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Item
-                                                            Code</label>
-
-                                                        <input class="form-control" disabled class="" name="item_code"
-                                                            type="text" placeholder="Enter Item Code" id="item_code">
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                        </div>
-
-
-
-
-
-                                    </div>
-
+                                    <input class="form-control-custom" class="" name="invoice_number" type="number"
+                                        placeholder="Enter Invoice No." id="invoice_number">
+                                    &nbsp;&nbsp;&nbsp;
+                                    <input
+                                        value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
+                                        class="form-control-custom" name="current_date" type="date"
+                                        placeholder="Enter End Date" id="current_date">
 
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md">
-
-                    <h3>Next Invoice Number: <?php
-$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
-FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
-echo $maxedInvoiceNumber;
-?></h3>
-
-                        <div class="form-group">
-                            <label class="col-form-label">Invoice
-                                No.</label>
-
-                            <input class="form-control" class=""
-                                name="invoice_number" type="number" placeholder="Enter Invoice No." id="invoice_number">
-
-                        </div>
-                        <div class="card">
-
-                            <div class="card-body">
-
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="row">
-
-
-                                        <div class="col-md">
-                                            <label class="col-form-label">Current
-                                                Date</label>
-
-                                            <input
-                                                value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                                                class="form-control" name="current_date" type="date"
-                                                placeholder="Enter End Date" id="current_date">
+                            <div class="col-md">
 
 
 
 
 
-                                        </div>
 
 
+                            </div>
+                            <div class="col-md">
 
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-
-
-                                                <input class="form-control" class="" disabled name="customer_manual"
-                                                    type="text" id="customer_manual">
-                                            </div>
+                                <div class="form-group">
 
 
-                                            <div class="checkbox">
-                                                <input name="manual_customer" value="manual_customer"
-                                                    id="manual_customer" type="checkbox">
-                                                <label for="manual_customer">Add Customer</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-
-                                            <label class="col-form-label">Type</label>
-
-                                            <select class="select2 form-control select-opt" name="type" id="type">
-                                                <option></option>
-                                                <option selected value="tr">
-                                                    Trade
-                                                    rate
-                                                </option>
-                                                <option value="wr">Wholesale
-                                                    rate
-                                                </option>
-                                                <option value="rf">Refund
-                                                </option>
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Customer
-                                                    Name</label>
-
-                                                <select class="select2 form-control select-opt" name="customer_name"
-                                                    id="customer_name">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
+                                    <select class="select2 form-control-custom select-opt" name="customer_name"
+                                        id="customer_name">
+                                        <option selected value="">
+                                            Select Customer Name
+                                        </option>
+                                        <?php
 
 foreach ($customers as $customer) {
 
 ?>
-                                                    <option value="<?php echo $customer['id']; ?>">
-                                                        <?php echo $customer['name']; ?>
-                                                    </option>
+                                        <option value="<?php echo $customer['id']; ?>">
+                                            <?php echo $customer['name']; ?>
+                                        </option>
 
 
-                                                    <?php } ?>
-                                                </select>
-                                            </div>
+                                        <?php } ?>
+                                    </select>
+                                </div>
 
 
-                                        </div>
+                            </div>
 
-                                        <div class="col-md">
-                                            <div class="form-group">
+                            <div class="col-md">
+                                <div class="form-group">
 
-                                                <label class="col-form-label">Select
-                                                    Booker</label>
-                                                <?php 
+                                    <?php 
 if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
 ?>
-                                                <input class="form-control" disabled
-                                                    value="<?php echo $_SESSION['ovalfox_pos_username']; ?>"
-                                                    name="booker_name" id="booker_name">
+                                    <input class="form-control-custom" disabled
+                                        value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
+                                        id="booker_name">
 
-                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
+                                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
-                                                <select class="select2 form-control select-opt" name="booker_name"
-                                                    id="booker_name">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
+                                    <select class="select2 form-control-custom select-opt" name="booker_name"
+                                        id="booker_name">
+                                        <option selected value="">
+                                            Select Booker
+                                        </option>
+                                        <?php
 
 foreach ($bookers as $booker) {
 
 ?>
-                                                    <option value="<?php echo $booker['id']; ?>">
-                                                        <?php echo $booker['username']; ?>
-                                                    </option>
+                                        <option value="<?php echo $booker['id']; ?>">
+                                            <?php echo $booker['username']; ?>
+                                        </option>
 
 
-                                                    <?php } ?>
-                                                </select>
+                                        <?php } ?>
+                                    </select>
 
-                                                <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
+                                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
 $bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
-                                                <select class="select2 form-control select-opt" name="book" id="book">
-                                                    <option selected value="">
-                                                    </option>
-                                                    <?php
+                                    <select class="select2 form-control-custom select-opt" name="book" id="book">
+                                        <option selected value="">
+                                        </option>
+                                        <?php
 
 foreach ($bookers as $booker) {
 
 ?>
-                                                    <option value="<?php echo $booker['id']; ?>">
-                                                        <?php echo $booker['username']; ?>
-                                                    </option>
+                                        <option value="<?php echo $booker['id']; ?>">
+                                            <?php echo $booker['username']; ?>
+                                        </option>
 
 
-                                                    <?php } ?>
-                                                </select>
-                                                <?php } ?>
+                                        <?php } ?>
+                                    </select>
+                                    <?php } ?>
 
-                                            </div>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+
+                                <div class="form-group">
+
+
+                                    <input class="form-control-custom" class="" disabled name="customer_manual"
+                                        type="text" id="customer_manual">
+                                </div>
+
+
+                                <div class="checkbox">
+                                    <input name="manual_customer" value="manual_customer" id="manual_customer"
+                                        type="checkbox">
+                                    <label for="manual_customer">Add Customer</label>
+                                </div>
+                            </div>
+                            <div class="col-md">
+
+
+                                <select class="select2 form-control-custom select-opt" name="type" id="type">
+                                    <option disabled>Select type</option>
+                                    <option selected value="tr">
+                                        Trade
+                                        rate
+                                    </option>
+                                    <option value="wr">Wholesale
+                                        rate
+                                    </option>
+                                    <option value="rf">Refund
+                                    </option>
+
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <input class="form-control-custom" class="" name="item_code_search" type="text"
+                                        placeholder="Search Through Item Code" id="item_code_search">
+
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+
+
+                                    <select class="select2 form-control-custom select-opt" name="product" id="product">
+                                        <option selected value="">Select
+                                            product
+                                        </option>
+                                        <?php
+
+foreach ($products as $product) {
+
+?>
+                                        <option value="<?php echo $product['id']; ?>">
+                                            <?php echo $product['product_name']; ?>
+                                        </option>
+
+
+                                        <?php } ?>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md">
+                                <div class="form-group">
+
+
+                                    <select class="select2 form-control-custom select-opt" name="last_rate"
+                                        id="last_rate">
+                                        <option disabled selected value="">
+                                            Select last rate
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+
+
+                                    <input class="form-control-custom" class="" name="unit_price" type="number"
+                                        placeholder="Enter Unit Price" id="unit_price">
                                 </div>
 
 
 
+                            </div>
+                        </div>
+                        <div class="row">
 
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <?php     if ($settings[0]['theme'] == "full_white") {
+                            ?>
+                                    <div class="d-flex flex-row">
+
+                                        <div class="splash-radio-button">
+                                            <input id="piece" name="qua" type="radio" value="piece" checked="">
+                                            <label for="piece" class="radio-label">Piece</label>
+                                            &nbsp;&nbsp;&nbsp;
+                                            <input id="box" name="qua" type="radio" value="box">
+                                            <label for="box" class="radio-label">Box</label>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;
+
+                                        <div class="checkbox mt-3">
+                                            <input id="free_items" name="free_items" value="free_items" type="checkbox">
+                                            <label for="free_items">Click
+                                                For Free
+                                                Items</label>
+                                        </div>
+                                    </div>
+
+                                    <?php } ?>
+                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                            ?>
+                                    <div class="ad-radio-button">
+                                        <input class="radio" id="piece" value="piece" name="qua" type="radio" checked>
+                                        <label for="piece" class="radio-label">Piece</label>
+                                        &nbsp;&nbsp;
+                                        <input class="radio" id="box" value="box" name="qua" type="radio">
+                                        <label for="box" class="radio-label">Box</label>
+                                    </div>
+
+
+                                    <?php } ?>
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="col-md">
+
+                                <div class="form-group">
+
+
+
+
+                                    <?php     if ($settings[0]['theme'] == "full_white") {
+                                                        ?>
+                                    <div class="splash-radio-button">
+                                        <input id="discount_amount" name="discount" type="radio" checked="">
+                                        <label for="discount_amount" class="radio-label">In
+                                            Amount</label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <label for="discount_percentage" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
+
+
+
+
+                                    <?php } ?>
+                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                                                        ?>
+                                    <div class="ad-radio-button">
+
+                                        <input id="discount_amount" name="discount" type="radio" checked>
+                                        <label for="discount_amount" class="radio-label">In
+                                            Amount</label>
+
+                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <label for="discount_percentage" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
+                                    <?php } ?>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+                            <div class="col-md">
+                                <div class="form-group">
+
+                                    <div class="form-group">
+
+                                        <input class="form-control-custom" class="" name="quantity" type="number"
+                                            placeholder="Enter Quantity" id="quantity">
+                                    </div>
+                                </div>
 
                             </div>
+                            <div class="col-md">
+                                <div class="form-group">
 
+                                    <input class="form-control-custom" disabled class="" name="total_quantity"
+                                        type="number" placeholder="Total Avaiable Quantity" id="total_quantity">
+                                </div>
+                            </div>
 
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <input class="form-control-custom" class="" name="discount" type="number"
+                                        placeholder="Enter Discount" id="discount">
+                                    <!-- <label class="col-form-label">(<strong style="color: red;">Press
+                                            Enter</strong>)</label> -->
+                                </div>
+
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+
+                                    <input class="form-control-custom" class="" name="extra_discount" type="number"
+                                        placeholder="Extra Discount" id="extra_discount">
+                                </div>
+
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <input class="form-control-custom" disabled class="" name="total_amount" type="text"
+                                        placeholder="Total Amount" id="total_amount">
+                                </div>
+                                <div class="form-group">
+
+                                    <button style="border-radius: 0pX;" id="wholeFormBtn"
+                                        class="btn col-md-12 btn-dark">Add
+                                        Item</button>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="card">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="card">
 
-                            <div class="card-body">
+                                    <div class="card-body">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="card" style="overflow: scroll; height: 300px;">
 
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="card-body">
 
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="d-flex flex-row">
+                                                                    <h3>Total items: <b id="total_items">0</b></h3>
+                                                                    &nbsp;&nbsp;&nbsp;
+                                                                    <h3>Total Quantity: <b
+                                                                            id="total_quantity_added">0</b></h3>
 
-                                    <h3>Quantity:</h3>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <?php     if ($settings[0]['theme'] == "full_white") {
-                                                        ?>
-                                                <div class="splash-radio-button">
-                                                    <input id="piece" name="qua" type="radio" value="piece" checked="">
-                                                    <label for="piece" class="radio-label">Piece</label>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <input id="box" name="qua" type="radio" value="box">
-                                                    <label for="box" class="radio-label">Box</label>
+                                                                </div>
+                                                                <table id="itemAddedtable"
+                                                                    class="table table-striped table-bordered dt-responsive ">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>#</th>
+
+                                                                            <th>Item Code</th>
+
+                                                                            <th>Item Name</th>
+
+                                                                            <th>Quantity</th>
+                                                                            <th>Price</th>
+                                                                            <th>Total Amount</th>
+                                                                            <th>Discount</th>
+                                                                            <th>Extra discount</th>
+                                                                            <th>%</th>
+
+                                                                            <th>Remove</th>
+
+                                                                        </tr>
+                                                                    <tbody id="data">
+                                                                    </tbody>
+                                                                    </thead>
+
+                                                                </table>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
                                                 </div>
 
-                                                <?php } ?>
-                                                <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                                                        ?>
-                                                <div class="ad-radio-button">
-                                                    <input class="radio" id="piece" value="piece" name="qua"
-                                                        type="radio" checked>
-                                                    <label for="piece" class="radio-label">Piece</label>
-                                                    &nbsp;&nbsp;
-                                                    <input class="radio" id="box" value="box" name="qua" type="radio">
-                                                    <label for="box" class="radio-label">Box</label>
-                                                </div>
-                                                <?php } ?>
-                                                <br />
-
-
-
-
-
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="checkbox">
-                                                <input id="free_items" name="free_items" value="free_items"
-                                                    type="checkbox">
-                                                <label for="free_items">Click
-                                                    For Free
-                                                    Items</label>
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label fw-bold">Enter
-                                                    Quantity (<strong style="color: red;">Press
-                                                        Enter</strong>)</label>
-                                                <div class="form-group">
-
-                                                    <input class="form-control" class="" name="quantity" type="number"
-                                                        placeholder="Enter Quantity" id="quantity">
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label fw-bold">Total
-                                                    Available
-                                                    Quantity</label>
-                                                <input class="form-control" disabled class="" name="total_quantity"
-                                                    type="number" placeholder="Total Avaiable Quantity"
-                                                    id="total_quantity">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <h3>Amounts:</h3>
-
-                                            <div class="form-group">
-
-                                                <h6>
-                                                    Discount:
-                                                </h6>
-
-
-                                                <?php     if ($settings[0]['theme'] == "full_white") {
-                                                        ?>
-                                                <div class="splash-radio-button">
-                                                    <input id="discount_amount" name="discount" type="radio" checked="">
-                                                    <label for="discount_amount" class="radio-label">In
-                                                        Amount</label>
-                                                    &nbsp;&nbsp;&nbsp;
-                                                    <input id="discount_percentage" name="discount" type="radio">
-                                                    <label for="discount_percentage" class="radio-label">In
-                                                        Percentage</label>
-                                                </div>
 
 
 
+                                </div>
+                                <div class="row">
+                                    <div class="col-md" style="display: none;">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Item
+                                                Name</label>
 
-                                                <?php } ?>
-                                                <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                                                        ?>
-                                                <div class="ad-radio-button">
-
-                                                    <input id="discount_amount" name="discount" type="radio" checked>
-                                                    <label for="discount_amount" class="radio-label">In
-                                                        Amount</label>
-
-                                                    <input id="discount_percentage" name="discount" type="radio">
-                                                    <label for="discount_percentage" class="radio-label">In
-                                                        Percentage</label>
-                                                </div>
-                                                <?php } ?>
-
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <input class="form-control" class="" name="discount" type="number"
-                                                    placeholder="Enter Discount" id="discount">
-                                                <label class="col-form-label">(<strong style="color: red;">Press
-                                                        Enter</strong>)</label>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <input class="form-control" class="" name="extra_discount" type="number"
-                                                    placeholder="Extra Discount" id="extra_discount">
-                                            </div>
+                                            <input class="form-control-custom" disabled class="" name="item_name"
+                                                type="text" placeholder="Enter Item Name" id="item_name">
 
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Amount</label>
-                                                <input class="form-control" disabled class="" name="total_amount"
-                                                    type="text" placeholder="Total Amount" id="total_amount">
-                                            </div>
-                                            <div class="form-group">
 
-                                                <button style="border-radius: 0pX;" id="wholeFormBtn"
-                                                    class="btn col-md-12 btn-success">Add
-                                                    Item</button>
-                                            </div>
-                                        </div>
-
-                                    </div>
 
                                 </div>
 
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="col-md bg-secondary text-white">
+                        <div class="row">
+                            <div class="col-md">
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Total
+                                        Amount</label>
+                                    <input class="form-control-custom" class="" disabled name="final_amount"
+                                        type="number" placeholder="Enter Final Amount" id="final_amount">
+                                </div>
+                            </div>
+                            <div class="col-md">
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Discount</label>
+                                    <input class="form-control-custom" class="" name="discount_in_amount" type="number"
+                                        placeholder="Enter Discount In Amount" id="discount_in_amount">
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="form-group">
+
+                                    <label class="col-form-label">Total
+                                        Payable</label>
+                                    <input class="form-control-custom" class="" disabled name="total_payable"
+                                        type="number" placeholder="Enter Total Payable" id="total_payable">
+                                </div>
                             </div>
                         </div>
-                        <div class="card">
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="form-group">
 
-                            <div class="card-body">
+                                    <label class="col-form-label">Amount
+                                        Received</label>
+                                    <input class="form-control-custom" class="" name="amount_received" type="number"
+                                        placeholder="Enter Amount Received" id="amount_received">
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label class="col-form-label">Payment
+                                        type</label>
 
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="row mt-1">
+                                    <select class="select2 form-control-custom select-opt" name="payment_type"
+                                        id="payment_type">
 
-
-
-
-
-
-
-
-                                        <h3>Final Amounts:</h3>
-
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Total
-                                                    Amount</label>
-                                                <input class="form-control" class="" disabled name="final_amount"
-                                                    type="number" placeholder="Enter Final Amount" id="final_amount">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-
-                                            <div class="form-group">
-                                                <label class="col-form-label">Discount</label>
-                                                <input class="form-control" class="" name="discount_in_amount"
-                                                    type="number" placeholder="Enter Discount In Amount"
-                                                    id="discount_in_amount">
-                                                <label class="col-form-label">(<strong style="color: red;">In
-                                                        Amount</strong>)</label>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Total
-                                                    Payable</label>
-                                                <input class="form-control" class="" disabled name="total_payable"
-                                                    type="number" placeholder="Enter Total Payable" id="total_payable">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md">
-                                            <div class="form-group">
-
-                                                <label class="col-form-label">Amount
-                                                    Received</label>
-                                                <input class="form-control" class="" name="amount_received"
-                                                    type="number" placeholder="Enter Amount Received"
-                                                    id="amount_received">
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Payment
-                                                    type</label>
-
-                                                <select class="select2 form-control select-opt" name="payment_type"
-                                                    id="payment_type">
-
-                                                    <option value="cod">Cash on
-                                                        delivery
-                                                    </option>
-                                                    <option value="op">Online
-                                                        payment
-                                                    </option>
+                                        <option value="cod">Cash on
+                                            delivery
+                                        </option>
+                                        <option value="op">Online
+                                            payment
+                                        </option>
 
 
-                                                </select>
-                                            </div>
-                                        </div>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label class="col-form-label">Amount
+                                        Return</label>
+                                    <input class="form-control-custom" disabled class="" name="amount_return"
+                                        type="number" placeholder="Enter Amount Return" id="amount_return">
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label class="col-form-label">Pending
+                                        Amount</label>
+                                    <input class="form-control-custom" disabled class="" name="pending_amount"
+                                        type="number" placeholder="Enter Pending Amount" id="pending_amount">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="form-group">
+                                    <label class="col-form-label">Details</label>
+                                    <textarea rows="1" cols="1" class="form-control-custom" name="details" id="details"
+                                        placeholder="Enter Details"></textarea>
+                                </div>
 
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Amount
-                                                    Return</label>
-                                                <input class="form-control" disabled class="" name="amount_return"
-                                                    type="number" placeholder="Enter Amount Return" id="amount_return">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Pending
-                                                    Amount</label>
-                                                <input class="form-control" disabled class="" name="pending_amount"
-                                                    type="number" placeholder="Enter Pending Amount"
-                                                    id="pending_amount">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div class="form-group">
-                                                <label class="col-form-label">Details</label>
-                                                <textarea rows="1" cols="1" class="form-control" name="details"
-                                                    id="details" placeholder="Enter Details"></textarea>
-                                            </div>
-
-                                            <div class="form-group">
-
-                                                <button id="clear_bill" style="border-radius: 0pX;"
-                                                    class="btn col-md-12 mb-3 btn-warning">Clear
-                                                    Bill</button>
-                                                <button id="pBill" name="pBill" style="border-radius: 0pX;"
-                                                    class="btn col-md-12  mb-3 btn-primary">Print
-                                                    Bill</button>
-                                                <button style="border-radius: 0pX;"
-                                                    class="btn col-md-12 btn-danger">Show
-                                                    Unpaid Bills</button>
-                                            </div>
-
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <button id="pBill" name="pBill" style="border-radius: 0pX;"
+                                        class="btn col-md-12 btn-primary">Print
+                                        Bill</button>
 
 
-
+                                    <button style="border-radius: 0pX;" class="btn col-md-12 btn-danger">Show
+                                        Unpaid Bills</button>
+                                    <button id="clear_bill" style="border-radius: 0pX;"
+                                        class="btn col-md-12 btn-warning">Clear
+                                        Bill</button>
                                 </div>
 
                             </div>
@@ -907,7 +1271,20 @@ foreach ($bookers as $booker) {
     </div>
 
 
+    <div class="row">
+        <div class="col-md" style="display: none;">
+            <div class="form-group">
+                <label class="col-form-label">Item
+                    Code</label>
 
+                <input class="form-control-custom" disabled class="" name="item_code" type="text"
+                    placeholder="Enter Item Code" id="item_code">
+
+            </div>
+        </div>
+
+
+    </div>
 
 
 
@@ -1338,13 +1715,19 @@ foreach ($bookers as $booker) {
 
             if ($("#invoice_number").val() == "") {
                 <?php
-$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
-FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
+MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
+company_profile_id
+FROM 
+sales_2 
+WHERE 
+company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber'] + 1;
 ?>
 
                 $("#invoice_number").val(+<?php echo $maxedInvoiceNumber ?>);
 
             }
+
 
             if ($("#type").val() == "rf") {
                 finalAmount -= +$("#total_amount").val();
@@ -1370,7 +1753,6 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
                     "discount": $("#discount").val(),
                     "discount_in_amount": discount.val(),
                     "extra_discount": $("#extra_discount").val(),
-                    "bill_number": +<?php echo $billNumber; ?>,
                     "total_amount": finalAmount,
                     "final_amount": $("#total_payable").val(),
                     "recevied_amount": $("#amount_received").val(),
@@ -1386,6 +1768,7 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
                 },
 
                 success: e => {
+                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');

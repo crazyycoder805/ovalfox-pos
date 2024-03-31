@@ -13,10 +13,9 @@ $error = "";
 $id = "";
 
 $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$products = $pdo->read("products");
+$products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
-    $billNumber = $pdo->customQuery("SELECT MAX(bill_number) AS billNumber FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['billNumber'] + 1;
 
 
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
@@ -28,36 +27,6 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
 <body>
     <?php require_once 'assets/includes/preloader.php'; ?>
-
-    <div class="modal fade modalCustomer" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title h4" id="myLargeModalLabel">Customer previous record</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table id="" class="table table-striped table-bordered dt-responsive ">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-
-                                <th>Customer Name</th>
-
-                            </tr>
-                        <tbody id="customerDataShow">
-                        </tbody>
-                        </thead>
-
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -724,38 +693,45 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                 </form>
                 <?php } ?>
                 <div class="row">
-                    <div class="col-md-8-custom bg-success">
+                    <div class="col-md-8-custom" style="background-color: rgb(135, 148, 153);">
 
                         <div class="d-flex flex-row">
                             <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
                                 role="button" aria-controls="offcanvasExample">
                                 <i class="fa fa-arrow-left"></i> </a>
                             <h6 class="mt-3">Next Invoice Number: <?php
-$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
-FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
+MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
+company_profile_id
+FROM 
+sales_2 
+WHERE 
+company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'
+")[0]['maxedInvoiceNumber'] + 1;
 echo $maxedInvoiceNumber;
+
 ?></h6>
                         </div>
                         <div class="row">
                             <div class="col-md">
-                                <div class="form-group">
+                                <div class="form-group d-flex flex-row">
 
 
 
                                     <input class="form-control" class="" name="invoice_number" type="number"
                                         placeholder="Enter Invoice No." id="invoice_number">
 
+
                                 </div>
                             </div>
                             <div class="col-md">
 
 
+
+
                                 <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
                                     class="form-control" name="current_date" type="date" placeholder="Enter End Date"
                                     id="current_date">
-
-
-
 
 
                             </div>
@@ -1093,18 +1069,32 @@ foreach ($products as $product) {
                                                                     class="table table-striped table-bordered dt-responsive ">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th>#</th>
+                                                                            <th style="font-size: 10px !important;">#
+                                                                            </th>
 
-                                                                            <th>Item Code</th>
+                                                                            <th style="font-size: 10px !important;">Item
+                                                                                Code</th>
 
-                                                                            <th>Item Name</th>
+                                                                            <th style="font-size: 10px !important;">Item
+                                                                                Name</th>
 
-                                                                            <th>Quantity</th>
-                                                                            <th>Price</th>
-                                                                            <th>Total Amount</th>
-                                                                            <th>Discount</th>
-                                                                            <th>Extra discount</th>
-                                                                            <th>Remove</th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Quantity</th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Price</th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Total Amount</th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Discount</th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Extra discount</th>
+                                                                            <th style="font-size: 10px !important;">%
+                                                                            </th>
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Grand Total</th>
+
+                                                                            <th style="font-size: 10px !important;">
+                                                                                Remove</th>
 
                                                                         </tr>
                                                                     <tbody id="data">
@@ -1259,9 +1249,54 @@ foreach ($products as $product) {
     </div>
 
 
+    <div class="row">
+        <div class="col-md" style="display: none;">
+            <div class="form-group">
+                <label class="col-form-label">Item
+                    Code</label>
+
+                <input class="form-control" disabled class="" name="item_code" type="text" placeholder="Enter Item Code"
+                    id="item_code">
+
+            </div>
+        </div>
+
+
+    </div>
 
 
 
+    <div class="modal fade modalCustomer" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title h4" id="myLargeModalLabel">Customer previous record</h5>
+                    <button type="button" id="customer-modal-close-btn" class="close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="" class="table table-striped table-bordered dt-responsive ">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+
+                                <th>Customer Name</th>
+                                <th>Total Amount</th>
+
+                            </tr>
+                        <tbody id="customerDataShow">
+                        </tbody>
+                        </thead>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Preview Setting Box -->
@@ -1690,13 +1725,19 @@ foreach ($products as $product) {
 
             if ($("#invoice_number").val() == "") {
                 <?php
-$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber
-FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0]['maxedInvoiceNumber'] + 1;
+$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
+MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
+company_profile_id
+FROM 
+sales_2 
+WHERE 
+company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber'] + 1;
 ?>
 
                 $("#invoice_number").val(+<?php echo $maxedInvoiceNumber ?>);
 
             }
+
 
             if ($("#type").val() == "rf") {
                 finalAmount -= +$("#total_amount").val();
@@ -1722,7 +1763,6 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
                     "discount": $("#discount").val(),
                     "discount_in_amount": discount.val(),
                     "extra_discount": $("#extra_discount").val(),
-                    "bill_number": +<?php echo $billNumber; ?>,
                     "total_amount": finalAmount,
                     "final_amount": $("#total_payable").val(),
                     "recevied_amount": $("#amount_received").val(),
@@ -1738,6 +1778,7 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
                 },
 
                 success: e => {
+                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -1892,7 +1933,7 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
                 type: "POST",
                 url: "data.php",
                 data: {
-                    '__FILE__': "Show",
+                    '__FILE__': "showCustomerData",
                     "cusId": e.target.value
                 },
                 success: e => {
@@ -1904,6 +1945,8 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
         });
 
         $(document).on("blur", "#itemAddedtable td", e => {
+
+
             $.ajax({
                 type: "POST",
                 url: "data.php",
@@ -1941,14 +1984,19 @@ FROM sales_2 WHERE 'company_profile_id' = {$_SESSION['ovalfox_pos_cp_id']}")[0][
             });
         });
 
-        $("#customer_name").on("change", e => {
-            $("#booker_name").focus();
-        });
+        $("#customer_name").on("input", e => {
 
-        $("#booker_name").on("change", e => {
+            $("#customer-modal-close-btn").focus();
+        });
+        $("#customer-modal-close-btn").on("click", e => {
+            $("#booker_name").focus();
+        })
+
+        $("#booker_name").on("input", e => {
+            console.log(1);
             $("#product").focus();
         });
-        $("#product").on("change", e => {
+        $("#product").on("input", e => {
             $("#unit_price").focus();
         });
         $("#unit_price").keydown(e => {

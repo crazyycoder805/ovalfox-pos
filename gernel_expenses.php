@@ -235,7 +235,7 @@ if (isset($_GET['edit_gernel_expense'])) {
                                                     <tbody>
                                                         <?php
                                                             foreach ($gernel_expenses as $gernel_expense) {
-                                                                $expense_category2 = $pdo->read("expense_categories", ['id' => $gernel_expense['expense_category_id']]);
+                                                                $expense_category2 = $pdo->read("expense_categories", ['id' => $gernel_expense['expense_category_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
                                                             ?>
                                                         <tr>
                                                             <td><?php echo $gernel_expense['id']; ?></td>

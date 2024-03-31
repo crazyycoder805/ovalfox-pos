@@ -56,7 +56,7 @@ $total_price = 0;
         <div style=" display: flex;
         justify-content: space-between;
         ">
-            <b>Bill To: <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?></b>
+            <b>Bill To: <?php echo $customers[0]['name']; ?></b>
             <table style="border-collapse: collapse;">
                 <thead>
                     <tr>
@@ -75,32 +75,43 @@ $total_price = 0;
         <table style="border-collapse: collapse;">
             <thead style="padding: 10px;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="padding-right: 20px; border-bottom: 1px solid black;">#</th>
-                    <th style="padding-right: 100px; border-bottom: 1px solid black;">Item Name</th>
-                    <th style="padding-right: 50px; border-bottom: 1px solid black;">Qty</th>
-                    <th style="padding-right: 100px; border-bottom: 1px solid black;">Price / Unit</th>
-                    <th style="border-bottom: 1px solid black;">Amount</th>
-                    <th style="border-bottom: 1px solid black;">Product Details</th>
+                    <th style="padding-right:8px; border-bottom: 1px solid black;">#</th>
+                    <th style="padding-right: 8px; border-bottom: 1px solid black;">ItemName</th>
+                    <th style="padding-right:8px; border-bottom: 1px solid black;">Qty</th>
+                    <th style="padding-right: 8px; border-bottom: 1px solid black;">Price/Unit</th>
+                    <th style="border-bottom: 1px solid black;padding-right:8px;">Amount</th>
+                    <th style="border-bottom: 1px solid black;padding-right:8px;">Discount</th>
+                    <th style="border-bottom: 1px solid black;padding-right:8px;">ExtraDiscount</th>
+                    <th style="border-bottom: 1px solid black;padding-right:8px;">%</th>
+                    <th style="border-bottom: 1px solid black;padding-right:8px;">G.Total</th>
+
+                    <th style="border-bottom: 1px solid black;">ProductDetails</th>
 
                 </tr>
             </thead>
             <tbody>
 
                 <?php 
-            foreach ($sales_1 as $sale) {
+            foreach ($sales_1 as $index => $sale) {
+                $index += 1;
                 $total_quantity += $sale['quantity'];
                 $total_price += $sale['amount'];
 
             ?>
                 <tr>
-                    <td style="padding-right: 20px; border-bottom: 1px solid black;"><?php echo $sale['id']; ?></td>
-                    <td style="padding-right: 100px; border-bottom: 1px solid black;"><?php echo $sale['item_name']; ?>
+                    <td style="border-bottom: 1px solid black;"><?php echo $index; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['item_name']; ?>
                     </td>
-                    <td style="padding-right: 50px; border-bottom: 1px solid black;"><?php echo $sale['quantity']; ?>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['quantity']; ?>
                     </td>
-                    <td style="padding-right: 100px; border-bottom: 1px solid black;">
+                    <td style="border-bottom: 1px solid black;">
                         <?php echo $sale['item_price']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['amount']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['discount']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['extra_discount']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['percentage']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo $sale['grand_total']; ?></td>
+
                     <td style="border-bottom: 1px solid black;"><?php echo $sales_2[0]['details']; ?></td>
 
                 </tr>
@@ -109,7 +120,7 @@ $total_price = 0;
                     <th style="border-bottom: 1px solid black;"></th>
                     <th style="text-align: left;border-bottom: 1px solid black;">Total</th>
                     <th style="text-align: left;border-bottom: 1px solid black;"><?php echo $total_quantity; ?></th>
-                    <th style="text-align: right;border-bottom: 1px solid black;" colspan="3">Rs
+                    <th style="text-align: right;border-bottom: 1px solid black;" colspan="7">Rs
                         <?php echo $total_price; ?></th>
                 </tr>
             </tbody>
@@ -124,7 +135,8 @@ $total_price = 0;
             <div style="width: 400px;">
                 <p> <b>Invoice Amount In Words:</b> <span id="aiw"></span> only</p>
 
-                <p> <b>Terms and Conditions:</b> <br /> <textarea style="border: 0px;" placeholder="Type..." name="" id="" cols="30" rows="10"></textarea></p>
+                <p> <b>Terms and Conditions:</b> <br /> <textarea style="border: 0px;" placeholder="Type..." name=""
+                        id="" cols="30" rows="10"></textarea></p>
 
 
             </div>
@@ -178,7 +190,8 @@ $total_price = 0;
                 justify-content: space-between;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Current Balance</span>
-                    Rs <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                    Rs
+                    <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
                 </div>
             </div>
 
@@ -293,7 +306,7 @@ $total_price = 0;
         }
         document.getElementById("aiw").textContent = convertNumberToWords(+<?php echo $total_price; ?>);
         // Examples
-        
+
     });
     </script>
 </body>
