@@ -131,12 +131,14 @@ echo json_encode($data);
         } else {
             $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
             if (empty($pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]))) {
-                $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
+                $pdo->create("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 'booker_name' => $_POST['booker_name'], 
                 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'discount' => 0, 'bill_number' => $billNumber, 
                 'total_amount' => $_POST['total_amount'], 'final_amount' => 0, 'recevied_amount' => 0,  
                 'returned_amount' => 0, 'pending_amount' => 0, 'status' => "Incomplete"]);
             } else {
-                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => $_POST['total_amount']]);
+                $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => 
+                $_POST['total_amount']]);
             }
     
     
@@ -664,12 +666,14 @@ if ($key == "quantity") {
 
 
 <?php } else if ($_POST['__FILE__'] == 'showCustomerData') { 
-    $customerSales2 = $pdo->read("sales_2", ['id' => $_POST['cusId']]);
+    $customerSales2 = $pdo->read("sales_2", ['customer_name' => $_POST['cusId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     foreach ($customerSales2 as $index => $cs) {
         $index += 1;
-        $customer = $pdo->read("customers" , ['id' => $cs['customer_name']]);
+        $customer = $pdo->read("customers" , ['id' => $cs['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     ?>
-<td><?php echo $index; ?></td>
-<td><?php echo $customer[0]['name']; ?></td>
-<td><?php echo $cs['total_amount']; ?></td>
+<tr>
+    <td><?php echo $index; ?></td>
+    <td><?php echo $customer[0]['name']; ?></td>
+    <td><?php echo $cs['total_amount']; ?></td>
+</tr>
 <?php } } ?>

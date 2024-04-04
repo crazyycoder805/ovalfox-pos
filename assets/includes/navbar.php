@@ -1,4 +1,3 @@
-
 <header class="header-wrapper main-header">
     <div class="header-inner-wrapper">
         <div class="header-right">
@@ -238,9 +237,18 @@
                         </div>
                     </div>
                 </div>
+                <?php 
+                $user = $pdo->read("access", ['id' => $_SESSION['ovalfox_pos_user_id']]);
+                ?>
                 <div class="user-info-wrapper header-links">
                     <a href="javascript:void(0);" class="user-info">
-                        <img src="assets/images/user.jpg" alt="" class="user-img">
+                        <?php 
+                                            if (!empty($user[0]['image'])) {
+                                            ?>
+                        <img class="user-img" alt="" src="assets/ovalfox/users/<?php echo $user[0]['image']; ?>">
+                        <?php } else { ?>
+                        <img class="user-img" alt="" src="assets/images/du.jpg">
+                        <?php } ?>
                         <div class="blink-animation">
                             <span class="blink-circle"></span>
                             <span class="main-circle"></span>
@@ -248,23 +256,24 @@
                     </a>
                     <div class="user-info-box">
                         <div class="drop-down-header">
-                            <h4>John Brown</h4>
-                            <p>UI | UX Designer</p>
+                            <h4><?php echo $user[0]['username']; ?></h4>
+                            <p>CLIENT</p>
                         </div>
                         <ul>
                             <li>
-                                <a href="profile.html">
+                                <a href="profile-edit.php">
                                     <i class="far fa-edit"></i> Edit Profile
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a href="setting.html">
                                     <i class="fas fa-cog"></i> Settings
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <form method="post">
-                                    <button  type="submit" name="logout" id="logout"  style="color: black !important;"><i class="fas fa-sign-out-alt"></i> logout</button>
+                                    <button type="submit" name="logout" id="logout" style="color: black !important;"><i
+                                            class="fas fa-sign-out-alt"></i> logout</button>
                                 </form>
                             </li>
                         </ul>

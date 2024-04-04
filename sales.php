@@ -1493,61 +1493,121 @@ foreach ($products as $product) {
         });
 
 
-        const calculateDiscount = (quantity, unitPrice, discountRate) => {
-            const discountedPrice = (unitPrice * quantity) - discountRate;
-            let totalNEW = +$("#quantity").val() * +unit_price.val();
+        function AmountToPer(discount, amount) {
+            return (discount / amount) * 100;
+        }
+        function PertToAmount(discount, amount) {
+            return (amount / 100) * discount;
+        }
 
-            const discountPercentage = totalNEW - ((unitPrice * quantity) / 100) * discountRate;
-            return {
-                discountedPrice: discountedPrice,
-                discountPercentage: discountPercentage
-            };
+        // const calculateDiscount = (quantity, unitPrice, discountRate) => {
+        //     const discountedPrice = (unitPrice * quantity) - discountRate;
+        //     let totalNEW = +$("#quantity").val() * +unit_price.val();
+
+        //     const discountPercentage = totalNEW - ((unitPrice * quantity) / 100) * discountRate;
+        //     return {
+        //         discountedPrice: discountedPrice,
+        //         discountPercentage: discountPercentage
+        //     };
+        // }
+        // const calculateExtraDiscount = (totalAmount, extraDiscountRate) => {
+        //     const extraDiscountedPrice = totalAmount - extraDiscountRate;
+        //     let totalNEW = +$("#quantity").val() * +unit_price.val();
+
+        //     const discountPercentage = totalNEW - (totalAmount / 100) * extraDiscountRate;
+
+        //     return {
+        //         extraDiscountedPrice: extraDiscountedPrice,
+        //         discountPercentage: discountPercentage,
+        //     };
+        // };
+
+
+
+        const calculateDiscount = (quantity, unitPrice, discountRate) => {
+            const discountedPrice = (quantity * unitPrice) - discountRate;
+            return discountedPrice;
         }
         const calculateExtraDiscount = (totalAmount, extraDiscountRate) => {
+
             const extraDiscountedPrice = totalAmount - extraDiscountRate;
-            let totalNEW = +$("#quantity").val() * +unit_price.val();
 
-            const discountPercentage = totalNEW - (totalAmount / 100) * extraDiscountRate;
-
-            return {
-                extraDiscountedPrice: extraDiscountedPrice,
-                discountPercentage: discountPercentage,
-            };
-        };;
+            return extraDiscountedPrice;
+        };
 
 
         let total_discount = 0;
 
+        // discount.on("input", e => {
+        //     const result = calculateDiscount(quantity.val(), unit_price.val(), discount.val());
+        //     total_amount.val(result.discountedPrice);
+        //     total_discount = result.discountedPrice;
+        //     extra_discount.val('');
+        // });
+        // extra_discount.on("input", e => {
+        //     const extraDiscountValue = parseInt(e.target.value || 0);
+        //     const total = parseInt(total_discount || 0);
+        //     const result = calculateExtraDiscount(total, extraDiscountValue);
+        //     total_amount.val(result.extraDiscountedPrice);
+        // });
+        // $("#discount_amount").on("click", e => {
+        //     const resultDis = AmountToPer(+discount.val(), +quantity.val() * +unit_price.val());
+        //     total_amount.val(resultDis);
+        // });
+        // $("#discount_percentage").on("click", e => {
+        //     const resultDis = PertToAmount(+discount.val(), +quantity.val() * +unit_price.val());
+        //     total_amount.val(resultDis);
+        // });
+
+
+
         discount.on("input", e => {
-            const result = calculateDiscount(quantity.val(), unit_price.val(), discount.val());
-            total_amount.val(result.discountedPrice);
-            total_discount = result.discountedPrice;
+            const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
+            total_discount = +result;
+            total_amount.val(+total_discount);
             extra_discount.val('');
         });
         extra_discount.on("input", e => {
             const extraDiscountValue = parseInt(e.target.value || 0);
-            const total = parseInt(total_discount || 0);
-            const result = calculateExtraDiscount(total, extraDiscountValue);
-            total_amount.val(result.extraDiscountedPrice);
+            const result = calculateExtraDiscount(+total_discount, +extraDiscountValue);
+            total_amount.val(+result);
         });
         $("#discount_amount").on("click", e => {
-            const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
-                .val());
-            const extraDiscountValue = parseInt(extra_discount.val() || 0);
-            const total = parseInt(total_discount || 0);
-            const result = calculateExtraDiscount(total, extraDiscountValue);
-            total_amount.val(result.extraDiscountedPrice);
+            const resultDis = PertToAmount(+discount.val(), +quantity.val() * +unit_price.val());
+            total_amount.val(resultDis);
         });
         $("#discount_percentage").on("click", e => {
-            const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
-                .val());
-            const extraDiscountValue = parseInt(extra_discount.val() || 0);
-            const total = parseInt(total_discount || 0);
-            const result = calculateExtraDiscount(total, extraDiscountValue);
-            total_amount.val(extra_discount.val() != 0 && extra_discount.val() != "" &&
-                extra_discount
-                .val() != null ? result.discountPercentage : resultDis.discountPercentage);
+            const resultDis = AmountToPer(+discount.val(), +quantity.val() * +unit_price.val());
+            total_amount.val(resultDis);
         });
+
+
+
+
+
+
+
+
+
+
+        // $("#discount_amount").on("click", e => {
+        //     const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
+        //         .val());
+        //     const extraDiscountValue = parseInt(extra_discount.val() || 0);
+        //     const total = parseInt(total_discount || 0);
+        //     const result = calculateExtraDiscount(total, extraDiscountValue);
+        //     total_amount.val(result.extraDiscountedPrice);
+        // });
+        // $("#discount_percentage").on("click", e => {
+        //     const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
+        //         .val());
+        //     const extraDiscountValue = parseInt(extra_discount.val() || 0);
+        //     const total = parseInt(total_discount || 0);
+        //     const result = calculateExtraDiscount(total, extraDiscountValue);
+        //     total_amount.val(extra_discount.val() != 0 && extra_discount.val() != "" &&
+        //         extra_discount
+        //         .val() != null ? result.discountPercentage : resultDis.discountPercentage);
+        // });
 
 
 
@@ -1778,7 +1838,6 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                 },
 
                 success: e => {
-                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -1863,7 +1922,17 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                 },
                 success: e => {
-                    location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
+                    <?php
+                    $user = $pdo->read("access", ['id' => $_SESSION['ovalfox_pos_user_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+                        if ($user[0]['printing_page_size'] == "large") {
+                        ?>
+                        location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
+                        <?php 
+                       } else if ($user[0]['printing_page_size'] == "small") {
+                        ?>
+                                                location.href = `printinvoice2.php?inv=${invoice_number.val()}`;
+
+                        <?php } ?>
                 }
             });
         });
@@ -1993,7 +2062,6 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
         })
 
         $("#booker_name").on("input", e => {
-            console.log(1);
             $("#product").focus();
         });
         $("#product").on("input", e => {

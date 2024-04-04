@@ -109,10 +109,10 @@ $total_price = 0;
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['amount']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['discount']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['extra_discount']; ?></td>
-                    <td style="border-bottom: 1px solid black;"><?php echo $sale['percentage']; ?></td>
-                    <td style="border-bottom: 1px solid black;"><?php echo $sale['grand_total']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo !empty($sale['amount']) ? $sale['amount'] : 0; ?></td>
 
-                    <td style="border-bottom: 1px solid black;"><?php echo $sales_2[0]['details']; ?></td>
+                    <td style="border-bottom: 1px solid black;"><?php echo !empty(trim($sales_2[0]['details'])) ? $sales_2[0]['details'] : "NULL"; ?></td>
 
                 </tr>
                 <?php } ?>
@@ -156,7 +156,7 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Dicount
                         (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
-                    Rs <?php echo $total_price; ?>
+                    Rs <?php $per = intval(($total_price / 100) * $sales_2[0]['discount'], 2); echo $per; ?>
                 </div>
                 <div style=" display: flex;
                 justify-content: space-between;
@@ -164,7 +164,7 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;"><b>Total</b></span>
                     <b>Rs
-                        <?php echo $sales_2[0]['final_amount'] != 0 && !empty($sales_2[0]['final_amount']) ? $sales_2[0]['final_amount'] : 0; ?></b>
+                        <?php echo $per; ?></b>
                 </div>
                 <br />
                 <div style=" display: flex;
@@ -181,7 +181,7 @@ $total_price = 0;
                 border-bottom: 1px solid black;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Balance</span>
-                    Rs <?php echo !empty($customers[0]['balance']) ? $sales_2[0]['final_amount'] : 0.00; ?>
+                    Rs <?php echo !empty($customers[0]['balance']) ? $customers[0]['balance'] : 0.00; ?>
                 </div>
                 <br />
 
@@ -191,7 +191,13 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Current Balance</span>
                     Rs
-                    <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                    <?php if (!empty($customers[0]['balance'])) {
+                        echo $per + $customers[0]['balance'];
+                        } else if(!empty($customers[0]['balance'])) {
+                            echo $customers[0]['balance'];
+                        } else {
+                            echo 0;
+                        } ?>
                 </div>
             </div>
 
@@ -304,7 +310,7 @@ $total_price = 0;
             // Remove trailing spaces
             return result.trim();
         }
-        document.getElementById("aiw").textContent = convertNumberToWords(+<?php echo $total_price; ?>);
+        document.getElementById("aiw").textContent = convertNumberToWords(+<?php echo $per; ?>);
         // Examples
 
     });

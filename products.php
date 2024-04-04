@@ -461,8 +461,8 @@ if (isset($_GET['edit_product'])) {
                                                                 src="assets/ovalfox/products/<?php echo $product['image']; ?>"
                                                                 alt="" /></td>
                                                         <td><?php echo $product['item_code']; ?></td>
-                                                        <td><?php echo $category2[0]['category']; ?></td>
-                                                        <td><?php echo $sub_category2[0]['sub_category']; ?>
+                                                        <td><?php echo !empty($category2[0]['category']) ? $category2[0]['category'] : 'no_category'; ?></td>
+                                                        <td><?php echo !empty($sub_category2[0]['sub_category']) ? $sub_category2[0]['sub_category'] : 'no_sub_category';; ?>
                                                         </td>
                                                         <td><?php echo $product['product_name']; ?></td>
                                                         <td><?php echo $product['product_details']; ?></td>
@@ -476,7 +476,7 @@ if (isset($_GET['edit_product'])) {
                                                         <td><?php echo $product['quantity_per_box']; ?>
                                                         </td>
                                                         <td><?php echo $product['total_quantity']; ?></td>
-                                                        <td><?php echo $store2[0]['store_name']; ?></td>
+                                                        <td><?php echo !empty($store2[0]['store_name']) ? $store2[0]['store_name'] : 'no_sotre_name';; ?></td>
                                                         <td><?php echo $product['row']; ?></td>
                                                         <td><?php echo $product['col']; ?></td>
                                                         <td><?php echo $product['low_stock_limit']; ?></td>

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "symfony/filesystem": "^7.0",
+        "shuchkin/simplexlsx": "^1.0"
+    }
+}
