@@ -942,12 +942,10 @@ public function createMulti($table, $data, $fileInputName = null, $imageColumns 
 
     public function __destruct()
     {
-        // Close the database connection when the object is destroyed
         $this->db = null;
     }
 }
 
-// Usage example:
 $dbHost = "localhost";
 $dbName = "ovalfoxpos";
 $dbUser = "root";

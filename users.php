@@ -19,7 +19,6 @@ $image_result = '';
 if (isset($_POST['add_user_btn'])) {
 
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
-        if ($pdo->validateInput($_POST['email'], 'email')) {
             if (!empty($_FILES['image']['name'])) {
                 $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
                 if ($image_result && $pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
@@ -41,15 +40,12 @@ if (isset($_POST['add_user_btn'])) {
                 }
             }
             
-        } else {
-            $error = "Invalid Email.";
-        }
+        
     } else {
         $error = "All fields must be filled.";
     }
 } else if (isset($_POST['edit_user_btn'])) {
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
-        if ($pdo->validateInput($_POST['email'], 'email')) {
                 if (!empty($_FILES['image']['name'])) {
                     $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
                     
@@ -74,9 +70,7 @@ if (isset($_POST['add_user_btn'])) {
                
                 }
                 
-        } else {
-            $error = "Invalid Email.";
-        }
+       
     } else {
         $error = "All fields must be filled.";
     }
@@ -212,7 +206,7 @@ if (isset($_GET['edit_user'])) {
                                                         <label for="email" class="col-form-label">Email</label>
                                                         <input
                                                             value="<?php echo isset($_GET['edit_user']) ? $id[0]['email'] : null; ?>"
-                                                            class="form-control" name="email" type="text"
+                                                            class="form-control" name="email" type="email"
                                                             placeholder="Enter email" id="email">
                                                     </div>
                                                     <div class="form-group mb-3">
