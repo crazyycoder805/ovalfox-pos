@@ -21,7 +21,7 @@ $(document).ready(function() {
     $('#example9').DataTable();
 
     $("#customer_name").select2();
-    $("#booker_name").select2();
+    $(".booker-select").select2();
 
     $("#product").select2();
     $("#item_names").select2();

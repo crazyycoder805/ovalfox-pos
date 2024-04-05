@@ -3,6 +3,10 @@
 require_once 'assets/includes/head.php';
 ?>
 <?php 
+if (isset($_SESSION['ovalfox_pos_access_of']->pe) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pe == 0) {
+    header("location:404.php");
+
+}
 $user = $pdo->read("access", ['id' => $_SESSION['ovalfox_pos_user_id']]);
 $success = "";
 $error = "";

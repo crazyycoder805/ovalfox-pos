@@ -13,18 +13,29 @@ if (isset($_POST['username'])) {
         $user = $pdo->read('access', ['username'=>$_POST['username'], 'password'=>$_POST['password'], 'company_profile_id'=>$_POST['organization']]);
         
         if (!empty($user)) {
-            $_SESSION['ovalfox_pos_user_id'] = $user[0]['id'];
-            $company = $pdo->read("companies_profile", ['id'=>$_POST['organization']]);
-            $_SESSION['ovalfox_pos_cp_id'] = $company[0]['id'];
-            $_SESSION['ovalfox_pos_username'] = $user[0]['username'];
-            $_SESSION['ovalfox_pos_role_id'] = $user[0]['role_id'];
-            $_SESSION['ovalfox_pos_email'] = $user[0]['email'];
-            
-            if ($user[0]['role_id'] == 3) {
-                $_SESSION['ovalfox_pos_access_of'] = json_decode($user[0]['access_of']);
+            $comps = $pdo->read("companies_profile", ['id' => $user[0]['company_profile_id']]);
+
+            if (date("Y-m-d") >= $comps[0]['expiry']) {
+                $error = "Profile trial is expired. please purchase subscription to proccess further.";
+
+            } else {
+                $company = $pdo->read("companies_profile", ['id'=>$_POST['organization']]);
+
+                $_SESSION['ovalfox_pos_user_id'] = $user[0]['id'];
+                $_SESSION['ovalfox_pos_cp_id'] = $company[0]['id'];
+                $_SESSION['ovalfox_pos_username'] = $user[0]['username'];
+                $_SESSION['ovalfox_pos_role_id'] = $user[0]['role_id'];
+                $_SESSION['ovalfox_pos_email'] = $user[0]['email'];
+                
+                if ($user[0]['role_id'] == 3) {
+                    $_SESSION['ovalfox_pos_access_of'] = json_decode($user[0]['access_of']);
+    
+                }
+                header('location:index.php');
+                
 
             }
-            header('location:index.php');
+            
         } else {
             $error = "User does'nt exsit";
         }
@@ -60,26 +71,7 @@ if (isset($_POST['username'])) {
 
                             <h2><span class="primary">Hello,</span>Welcome!</h2>
                             <p>Please Enter Your Details Below to Continue</p>
-                            <div class="row">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
-                                    <?php
-                        if (!empty($success)) {
-                        ?>
-                                    <div class="alert alert-success alert-dismissible fade show">
-                                        <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
-                                        <?php echo $success; ?>
-                                    </div>
-                                    <?php } else if (!empty($error)) { ?>
-                                    <div class="alert alert-danger alert-dismissible fade show">
-                                        <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
-                                        <?php echo $error; ?>
-                                    </div>
-
-                                    <?php } ?>
-
-                                </div>
-                            </div>
                             <div class="ad-auth-form">
                                 <div class="ad-auth-feilds mb-30">
                                     <div class="form-group s-opt">
@@ -140,7 +132,26 @@ if (isset($_POST['username'])) {
                                 <button type="submit" href="javascript:void(0);"
                                     class="ad-btn ad-login-member">Login</button>
                             </div>
+                            <div class="row">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 
+                                    <?php
+                        if (!empty($success)) {
+                        ?>
+                                    <div class="alert alert-success alert-dismissible fade show">
+                                        <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
+                                        <?php echo $success; ?>
+                                    </div>
+                                    <?php } else if (!empty($error)) { ?>
+                                    <div class="alert alert-danger alert-dismissible fade show">
+                                        <button type="button" class="close" data-bs-dismiss="alert">&times;</button>
+                                        <?php echo $error; ?>
+                                    </div>
+
+                                    <?php } ?>
+
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

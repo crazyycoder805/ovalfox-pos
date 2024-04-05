@@ -687,6 +687,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                 <?php 
                     if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
                     ?>
+
                 <form method="post">
                     <button type="submit" name="logout" id="logout" style="color: black !important;"><i
                             class="fas fa-sign-out-alt"></i> logout</button>
@@ -696,9 +697,14 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                     <div class="col-md-8-custom" style="background-color: rgb(135, 148, 153);">
 
                         <div class="d-flex flex-row">
+                            <?php 
+                    if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] != "2") {
+                    ?>
+
                             <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
                                 role="button" aria-controls="offcanvasExample">
                                 <i class="fa fa-arrow-left"></i> </a>
+                            <?php } ?>
                             <h6 class="mt-3">Next Invoice Number: <?php
 $maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
 MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
@@ -768,7 +774,7 @@ foreach ($customers as $customer) {
                                     <?php 
 if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
 ?>
-                                    <input class="form-control" disabled
+                                    <input type="text" class="form-control" disabled
                                         value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
                                         id="booker_name">
 
@@ -776,7 +782,8 @@ if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] 
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
-                                    <select class="select2 form-control select-opt" name="booker_name" id="booker_name">
+                                    <select class="select2 booker-select form-control select-opt" name="booker_name"
+                                        id="booker_name">
                                         <option selected value="">
                                             Select Booker
                                         </option>
@@ -794,10 +801,11 @@ foreach ($bookers as $booker) {
                                     </select>
 
                                     <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
-$bookers = $pdo->read("access", ['role_id' => '3', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
-                                    <select class="select2 form-control select-opt" name="book" id="book">
+                                    <select class="select2 booker-select form-control select-opt" name="booker_name"
+                                        id="booker_name">
                                         <option selected value="">
                                         </option>
                                         <?php
@@ -1063,7 +1071,17 @@ foreach ($products as $product) {
                                                                     &nbsp;&nbsp;&nbsp;
                                                                     <h3>Total Quantity: <b
                                                                             id="total_quantity_added">0</b></h3>
+                                                                    &nbsp;&nbsp;&nbsp;
+                                                                    <div id="pass_sales_div" hidden>
+                                                                        <label for="password_sales_1"
+                                                                            style="padding-top: 8px;">Enter password to
+                                                                            delete items:</label>
+                                                                        &nbsp;&nbsp;&nbsp;
 
+                                                                        <input type="text" id="password_sales_1"
+                                                                            name="password_sales_1"
+                                                                            placeholder="Enter password" />
+                                                                    </div>
                                                                 </div>
                                                                 <table id="itemAddedtable"
                                                                     class="table table-striped table-bordered dt-responsive ">
@@ -1496,6 +1514,7 @@ foreach ($products as $product) {
         function AmountToPer(discount, amount) {
             return (discount / amount) * 100;
         }
+
         function PertToAmount(discount, amount) {
             return (amount / 100) * discount;
         }
@@ -1895,6 +1914,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                             $("#customer_manual").prop("disabled", true);
                             $("#manual_customer").prop("disabled", true);
+                            $("#pass_sales_div").removeAttr("hidden");
                         }
                     });
                 }
@@ -1926,13 +1946,13 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                     $user = $pdo->read("access", ['id' => $_SESSION['ovalfox_pos_user_id'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
                         if ($user[0]['printing_page_size'] == "large") {
                         ?>
-                        location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
-                        <?php 
+                    location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
+                    <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
-                                                location.href = `printinvoice2.php?inv=${invoice_number.val()}`;
+                    location.href = `printinvoice2.php?inv=${invoice_number.val()}`;
 
-                        <?php } ?>
+                    <?php } ?>
                 }
             });
         });
@@ -2113,6 +2133,32 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
             if (e.keyCode == 13) {
 
                 $("#pBill").focus();
+            }
+        });
+
+        $("#password_sales_1").keydown(e => {
+            if (e.keyCode == 13) {
+                $.ajax({
+                    type: "POST",
+                    url: "data.php",
+                    data: {
+                        "__FILE__": "productFetch",
+                        "password_sales_1": $("#invoice_number")
+                            .val(),
+
+                    },
+                    success: e => {
+                        const product = JSON.parse(e);
+                        $("#data").html(product[0]);
+                        $("#total_items").text(product[1]);
+                        $("#total_quantity_added").text(product[
+                            2]);
+                        finalAmount = product[3];
+
+                        $("#final_amount").val(product[
+                            3]);
+                    }
+                });
             }
         });
     });

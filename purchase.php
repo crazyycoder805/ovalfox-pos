@@ -3,7 +3,10 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
+if (isset($_SESSION['ovalfox_pos_access_of']->pc) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pc == 0) {
+    header("location:404.php");
 
+}
 $success = "";
 $error = "";
 $id = "";

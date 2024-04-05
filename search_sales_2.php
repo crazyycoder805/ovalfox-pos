@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-  if (isset($_SESSION['ovalfox_pos_access_of']->st) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->st == 0) {
+  if (isset($_SESSION['ovalfox_pos_access_of']->sr2) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->sr2 == 0) {
         header("location:404.php");
     
 }

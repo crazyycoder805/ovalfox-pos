@@ -260,11 +260,21 @@
                             <p>CLIENT</p>
                         </div>
                         <ul>
+                            <?php 
+            if (isset($_SESSION['ovalfox_pos_access_of']->pe) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pe != 0) {
+            ?>
                             <li>
                                 <a href="profile-edit.php">
                                     <i class="far fa-edit"></i> Edit Profile
                                 </a>
                             </li>
+                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+                                <li>
+                                <a href="profile-edit.php">
+                                    <i class="far fa-edit"></i> Edit Profile
+                                </a>
+                            </li>
+                                <?php } ?>
                             <!-- <li>
                                 <a href="setting.html">
                                     <i class="fas fa-cog"></i> Settings

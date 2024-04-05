@@ -4,7 +4,7 @@
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
 
-if (isset($_SESSION['ovalfox_pos_access_of']->cp) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->cp == 0) {
+if ($_SESSION['ovalfox_pos_role_id'] != 4) {
         header("location:404.php");
     
 }
@@ -19,23 +19,22 @@ $image_result = '';
 
 if (isset($_POST['add_company_btn'])) {
 
-    if (!empty($_POST['company_name']) && !empty($_POST['registration_id']) && !empty($_POST['tax_no']) && !empty($_POST['phone1']) && !empty($_POST['phone2']) && !empty($_POST['address']) && !empty($_POST['email'])) {
-        if ($pdo->validateInput($_POST['email'], 'email')) {
+    if (!empty($_POST['company_name']) && !empty($_POST['expiry']) && !empty($_POST['registration_id']) && !empty($_POST['tax_no']) && !empty($_POST['phone1']) && !empty($_POST['phone2']) && !empty($_POST['address']) && !empty($_POST['email'])) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
                     if (!empty($_FILES['image']['name'])) {
                         $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
     
-                        if ($image_result && $pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
-                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
+                        if ($image_result && $pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'expiry' => $_POST['expiry'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
+                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'password_sales_1' => $_POST['password_sales_1'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                             $success = "Company added.";
                                          header("Location:{$name}");
                         } else {
                             $error = "Something went wrong.";
                         }
                     } else {
-                        if ($pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
-                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                        if ($pdo->create("companies_profile", ['company_name' => $_POST['company_name'], 'expiry' => $_POST['expiry'], 'registration_id' => $_POST['registration_id'], 'tax_no' => $_POST['tax_no'], 
+                        'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'password_sales_1' => $_POST['password_sales_1'], 'email' => $_POST['email']])) {
                             $success = "Company added.";
                                          header("Location:{$name}");
                         } else {
@@ -48,14 +47,12 @@ if (isset($_POST['add_company_btn'])) {
             } else {
                 $error = "Invalid Phone1.";
             }
-        } else {
-            $error = "Invalid Email.";
-        }
+        
     } else {
         $error = "All fields must be filled.";
     }
 } else if (isset($_POST['edit_company_btn'])) {
-    if (!empty($_POST['company_name']) && !empty($_POST['registration_id']) && !empty($_POST['tax_no']) && !empty($_POST['phone1']) && !empty($_POST['phone2']) && !empty($_POST['address']) && !empty($_POST['email'])) {
+    if (!empty($_POST['company_name']) && !empty($_POST['expiry']) && !empty($_POST['registration_id']) && !empty($_POST['tax_no']) && !empty($_POST['phone1']) && !empty($_POST['phone2']) && !empty($_POST['address']) && !empty($_POST['email'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
@@ -63,7 +60,7 @@ if (isset($_POST['add_company_btn'])) {
                         $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
         
                         if ($image_result && $pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'expiry' => $_POST['expiry'], 'password_sales_1' => $_POST['password_sales_1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
                         'image' => $image_result['filename']])) {
                             $success = "Company updated.";
                                          header("Location:{$name}");
@@ -72,7 +69,7 @@ if (isset($_POST['add_company_btn'])) {
                         }
                     } else {
                         if ($pdo->update("companies_profile", ['id' => $_GET['edit_company']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'expiry' => $_POST['expiry'], 'password_sales_1' => $_POST['password_sales_1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company updated.";
                                          header("Location:{$name}");
                         } else {
@@ -166,7 +163,8 @@ if (isset($_GET['edit_company'])) {
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="image" class="col-form-label">Company profile image</label>
+                                                        <label for="image" class="col-form-label">Company profile
+                                                            image</label>
                                                         <input class="form-control" name="image" type="file" id="image">
 
                                                         <?php 
@@ -247,7 +245,27 @@ if (isset($_GET['edit_company'])) {
                                                     </div>
 
                                                 </div>
-
+                                                <div class="row">
+                                                    <div class="col-md">
+                                                        <div class="form-group">
+                                                            <label for="address" class="col-form-label">Company Expiry
+                                                                Date</label>
+                                                            <input
+                                                                value="<?php echo isset($_GET['edit_company']) ? $id[0]['expiry'] : null; ?>"
+                                                                class="form-control" name="expiry" type="date"
+                                                                placeholder="Enter Company Expiry" id="expiry">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md">
+                                                        <div class="form-group">
+                                                            <label for="address" class="col-form-label">Password for sales 1 (Optional)</label>
+                                                            <input
+                                                                value="<?php echo isset($_GET['edit_company']) ? $id[0]['password_sales_1'] : null; ?>"
+                                                                class="form-control" name="password_sales_1" type="text"
+                                                                placeholder="Enter Password for sales 1" id="password_sales_1">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-md">
                                                         <div class="form-group">
@@ -271,6 +289,8 @@ if (isset($_GET['edit_company'])) {
                                                     <thead>
                                                         <tr>
                                                             <th>#</th>
+                                                            <th>Expiry</th>
+
                                                             <th>Image</th>
 
                                                             <th>Company name</th>
@@ -280,6 +300,8 @@ if (isset($_GET['edit_company'])) {
                                                             <th>Phone 2</th>
                                                             <th>Address</th>
                                                             <th>Email</th>
+                                                            <th>Expiry</th>
+                                                            <th>Password</th>
 
                                                             <th>Created at</th>
                                                             <th>Actions</th>
@@ -293,6 +315,8 @@ if (isset($_GET['edit_company'])) {
                                                             ?>
                                                         <tr>
                                                             <td><?php echo $company['id']; ?></td>
+                                                            <td><?php echo $company['expiry']; ?></td>
+
                                                             <td><img width="100" height="50"
                                                                     src="assets/ovalfox/companies_profile/<?php echo $company['image']; ?>"
                                                                     alt="" /></td>
@@ -303,6 +327,8 @@ if (isset($_GET['edit_company'])) {
                                                             <td><?php echo $company['phone2']; ?></td>
                                                             <td><?php echo $company['address']; ?></td>
                                                             <td><?php echo $company['email']; ?></td>
+                                                            <td><?php echo $company['expiry']; ?></td>
+                                                            <td><?php echo $company['password_sales_1']; ?></td>
 
                                                             <td><?php echo $company['created_at']; ?></td>
                                                             <td>

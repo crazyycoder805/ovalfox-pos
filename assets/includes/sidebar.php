@@ -82,7 +82,7 @@
 
 
             <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
+            if (isset($_SESSION['ovalfox_pos_access_of']->prc) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->prc != 0) {
             ?>
             <li>
                 <a href="purchase.php">
@@ -558,6 +558,16 @@
                             </span>
                         </a>
                     </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) { ?>
+                    <li>
+                        <a href="roles.php">
+                            <span class="icon-dash">
+                            </span>
+                            <span class="menu-text">
+                                Manage roles
+                            </span>
+                        </a>
+                    </li>
                     <?php } ?>
 
 
@@ -584,8 +594,17 @@
                             </span>
                         </a>
                     </li>
+                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) { ?>
+                    <li>
+                        <a href="users.php">
+                            <span class="icon-dash">
+                            </span>
+                            <span class="menu-text">
+                                Manage users
+                            </span>
+                        </a>
+                    </li>
                     <?php } ?>
-
                 </ul>
             </li>
             <li>

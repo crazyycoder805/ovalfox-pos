@@ -67,6 +67,7 @@ if (isset($_POST['add_role_btn'])) {
         $gernel_expenses = isset($_POST['gernel_expenses']) && $_POST['gernel_expenses'] != null ? $_POST['gernel_expenses'] : 0;
         $ledger = isset($_POST['ledger']) && $_POST['ledger'] != null ? $_POST['ledger'] : 0;
         $stores = isset($_POST['stores']) && $_POST['stores'] != null ? $_POST['stores'] : 0;
+        $purchase = isset($_POST['prc']) && $_POST['prc'] != null ? $_POST['prc'] : 0;
 
         $designations = isset($_POST['designations']) && $_POST['designations'] != null ? $_POST['designations'] : 0;
         $product_categories = isset($_POST['product_categories']) && $_POST['product_categories'] != null ? $_POST['product_categories'] : 0;
@@ -77,9 +78,17 @@ if (isset($_POST['add_role_btn'])) {
         $companies = isset($_POST['companies']) && $_POST['companies'] != null ? $_POST['companies'] : 0;
         $employees = isset($_POST['employees']) && $_POST['employees'] != null ? $_POST['employees'] : 0;
         $roles = isset($_POST['roles']) && $_POST['roles'] != null ? $_POST['roles'] : 0;
+        $users = isset($_POST['users']) && $_POST['users'] != null ? $_POST['users'] : 0;
+        $sales_1 = isset($_POST['sales_1']) && $_POST['sales_1'] != null ? $_POST['sales_1'] : 0;
+        $sales_2 = isset($_POST['sales_2']) && $_POST['sales_2'] != null ? $_POST['sales_2'] : 0;
+        $purchase_1 = isset($_POST['purchase_1']) && $_POST['purchase_1'] != null ? $_POST['purchase_1'] : 0;
+        $purchase_2 = isset($_POST['purchase_2']) && $_POST['purchase_2'] != null ? $_POST['purchase_2'] : 0;
+        $ledger_report = isset($_POST['lgr']) && $_POST['lgr'] != null ? $_POST['lgr'] : 0;
+        $profile_eidt = isset($_POST['lgr']) && $_POST['pe'] != null ? $_POST['pe'] : 0;
+
         $rolesAll = json_encode(["d"=>$dashboard, "s"=>$sales, "g"=>$gernel_expenses, "l"=>$ledger, "st"=>$stores, 
         "ds"=>$designations, "pc"=>$product_categories, "p"=>$products, "c"=>$customers, "ec"=>$expense_category, "ss"=>$suppliers,
-        "cp"=>$companies, "em"=>$employees, "r"=>$roles]);
+        "cp"=>$companies, "em"=>$employees, "pe"=>$profile_eidt, "r"=>$roles, "us"=>$users, "prc"=>$purchase, "sr1"=>$sales_1, "sr2"=>$sales_2, "pr1"=>$sales_1, "pr2"=>$purchase_2, "lgr"=>$ledger_report]);
         if ($pdo->update("access", ['id'=>$_POST['username']], ['access_of' => $rolesAll])) {
             $success = "Roles added.";
                                   header("Location:{$name}");
@@ -246,79 +255,227 @@ if (isset($_GET['edit_role'])) {
                                                         </select>
                                                     </div>
                                                     <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->d != 0 ? "checked" : null; ?>
+                                                                        value="dashboard" id="dashboard"
+                                                                        name="dashboard" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="dashboard">Dashboard</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->s != 0 ? "checked" : null; ?>
+                                                                        value="sales" id="sales" name="sales"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="sales">Sales</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->g != 0 ? "checked" : null; ?>
+                                                                        value="gernel_expenses" id="gernel_expenses"
+                                                                        name="gernel_expenses" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="gernel_expenses">Gernel Expenses</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->l != 0 ? "checked" : null; ?>
+                                                                        value="ledger" id="ledger" name="ledger"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="ledger">Ledger</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->st != 0 ? "checked" : null; ?>
+                                                                        value="stores" id="stores" name="stores"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="stores">Stores</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->ds != 0 ? "checked" : null; ?>
+                                                                        value="designations" id="designations"
+                                                                        name="designations" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="designations">Designations</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->pc != 0 ? "checked" : null; ?>
+                                                                        value="product_categories"
+                                                                        id="product_categories"
+                                                                        name="product_categories" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="product_categories">Product
+                                                                        Categories</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->p != 0 ? "checked" : null; ?>
+                                                                        value="products" id="products" name="products"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="products">Products</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->d != 0 ? "checked" : null; ?> value="dashboard" id="dashboard"
-                                                                name="dashboard" type="checkbox">
-                                                            <label for="dashboard">Dashboard</label>
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->c != 0 ? "checked" : null; ?>
+                                                                        value="customers" id="customers"
+                                                                        name="customers" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="customers">Customers</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->ec != 0 ? "checked" : null; ?>
+                                                                        value="expense_category" id="expense_category"
+                                                                        name="expense_category" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="expense_category">Expenses
+                                                                        Category</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->ss != 0 ? "checked" : null; ?>
+                                                                        value="suppliers" id="suppliers"
+                                                                        name="suppliers" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="suppliers">Suppliers</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->cp != 0 ? "checked" : null; ?>
+                                                                        value="companies" id="companies"
+                                                                        name="companies" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="companies">Companies</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->s != 0 ? "checked" : null; ?> value="sales" id="sales" name="sales"
-                                                                type="checkbox">
-                                                            <label for="sales">Sales</label>
+
+                                                        <div class="row">
+                                                            <div class="col-md">
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->em != 0 ? "checked" : null; ?>
+                                                                        value="employees" id="employees"
+                                                                        name="employees" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="employees">Employees</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->r != 0 ? "checked" : null; ?>
+                                                                        value="roles" id="roles" name="roles"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="roles">Roles</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->us != 0 ? "checked" : null; ?>
+                                                                        value="users" id="users" name="users"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="users">Users</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->sr1 != 0 ? "checked" : null; ?>
+                                                                        value="sales_1" id="sales_1" name="sales_1"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="sales_1">Sales 1</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->g != 0 ? "checked" : null; ?> value="gernel_expenses" id="gernel_expenses"
-                                                                name="gernel_expenses" type="checkbox">
-                                                            <label for="gernel_expenses">Gernel Expenses</label>
+
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->sr2 != 0 ? "checked" : null; ?>
+                                                                        value="sales_2" id="sales_2" name="sales_2"
+                                                                        type="checkbox">
+                                                                    <label style="font-size: 10px;" for="sales_2">Sales 2</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->pr1 != 0 ? "checked" : null; ?>
+                                                                        value="purchase_1" id="purchase_1"
+                                                                        name="purchase_1" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="purchase_1">Purchases 1</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->pr2 != 0 ? "checked" : null; ?>
+                                                                        value="purchase_2" id="purchase_2"
+                                                                        name="purchase_2" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="purchase_2">Purchases 2</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->lgr != 0 ? "checked" : null; ?>
+                                                                        value="lgr" id="lgr" name="lgr" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="lgr">Legder Report</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->l != 0 ? "checked" : null; ?> value="ledger" id="ledger" name="ledger"
-                                                                type="checkbox">
-                                                            <label for="ledger">Ledger</label>
+                                                        <div class="row">
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->prc != 0 ? "checked" : null; ?>
+                                                                        value="prc" id="prc" name="prc" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="prc">Purchase</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md">
+                                                                <div class="checkbox">
+                                                                    <input
+                                                                        <?php echo isset($_GET['update_role']) && $rolesA->pe != 0 ? "checked" : null; ?>
+                                                                        value="pe" id="pe" name="pe" type="checkbox">
+                                                                    <label style="font-size: 10px;" for="pe">Profile Edit</label>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->st != 0 ? "checked" : null; ?> value="stores" id="stores" name="stores"
-                                                                type="checkbox">
-                                                            <label for="stores">Stores</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->ds != 0 ? "checked" : null; ?> value="designations" id="designations"
-                                                                name="designations" type="checkbox">
-                                                            <label for="designations">Designations</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->pc != 0 ? "checked" : null; ?> value="product_categories"
-                                                                id="product_categories" name="product_categories"
-                                                                type="checkbox">
-                                                            <label for="product_categories">Product Categories</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->p != 0 ? "checked" : null; ?> value="products" id="products"
-                                                                name="products" type="checkbox">
-                                                            <label for="products">Products</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->c != 0 ? "checked" : null; ?> value="customers" id="customers"
-                                                                name="customers" type="checkbox">
-                                                            <label for="customers">Customers</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->ec != 0 ? "checked" : null; ?> value="expense_category"
-                                                                id="expense_category" name="expense_category"
-                                                                type="checkbox">
-                                                            <label for="expense_category">Expenses Category</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->ss != 0 ? "checked" : null; ?> value="suppliers" id="suppliers"
-                                                                name="suppliers" type="checkbox">
-                                                            <label for="suppliers">Suppliers</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->cp != 0 ? "checked" : null; ?> value="companies" id="companies"
-                                                                name="companies" type="checkbox">
-                                                            <label for="companies">Companies</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->em != 0 ? "checked" : null; ?> value="employees" id="employees"
-                                                                name="employees" type="checkbox">
-                                                            <label for="employees">Employees</label>
-                                                        </div>
-                                                        <div class="checkbox">
-                                                            <input <?php echo isset($_GET['update_role']) && $rolesA->r != 0 ? "checked" : null; ?> value="roles" id="roles" name="roles"
-                                                                type="checkbox">
-                                                            <label for="roles">Roles</label>
-                                                        </div>
+
                                                     </div>
 
                                                     <table id="example9"

@@ -64,7 +64,7 @@ if ($_POST['__FILE__'] == "productSelect") {
     <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
     <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
     <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$sale['amount']}</td>
-    <td style='font-size: 10px !important;'><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
+    <td style='font-size: 10px !important;'><button class='btn btn-danger sales-btn-remove btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
 </tr>
         ";
@@ -188,7 +188,7 @@ echo json_encode($data);
         <?php echo $sale['amount']; ?></td>
 
 
-    <td style='font-size: 10px !important;'><button class="btn btn-danger btn-sm" value="<?php echo $sale['id']; ?>"
+    <td style='font-size: 10px !important;'><button class="btn btn-danger btn-sm sales-btn-remove" value="<?php echo $sale['id']; ?>"
             id="removeItem">Remove</button></td>
 
 </tr>
@@ -324,7 +324,7 @@ echo json_encode($data);
         <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
         <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$sale['amount']}</td>
 
-        <td style='font-size: 10px !important;'><button class='btn btn-danger btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
+        <td style='font-size: 10px !important;'><button class='btn btn-danger sales-btn-remove btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button></td>
 
     </tr>";
     }

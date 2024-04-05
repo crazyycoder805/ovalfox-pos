@@ -3,7 +3,7 @@
 <html lang="zxx">
 <?php require_once 'assets/includes/head.php'; ?>
 <?php
-if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c == 0) {
+if (isset($_SESSION['ovalfox_pos_access_of']->us) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->us == 0) {
         header("location:404.php");
     
 }
@@ -12,6 +12,7 @@ $error = "";
 $id = "";
 
 $users = $pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$roles = $pdo->read("roles", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 $image_result = '';
 
@@ -19,9 +20,18 @@ $image_result = '';
 if (isset($_POST['add_user_btn'])) {
 
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
+        $idset = 0;
+
+        if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) {
+            $idset = $_POST['company_id_select'];
+
+        } else if (isset($_SESSION['ovalfox_pos_role_id']) && ($_SESSION['ovalfox_pos_role_id'] == 1 || $_SESSION['ovalfox_pos_role_id'] == 3)) {
+            $idset = $_SESSION['ovalfox_pos_cp_id'];
+
+        }
             if (!empty($_FILES['image']['name'])) {
                 $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
-                if ($image_result && $pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                if ($image_result && $pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$idset, 
                 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
                     $success = "User added.";
                                           header("Location:{$name}");
@@ -30,7 +40,7 @@ if (isset($_POST['add_user_btn'])) {
                     $error = "Something went wrong.";
                 }
             } else {
-                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                if ($pdo->create("access", ['username' => $_POST['username'], 'company_profile_id'=>$idset , 
                 'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
                     $success = "User added.";
                                           header("Location:{$name}");
@@ -46,11 +56,20 @@ if (isset($_POST['add_user_btn'])) {
     }
 } else if (isset($_POST['edit_user_btn'])) {
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['role_id_choose']) && !empty($_POST['email'])) {
+        $idset = 0;
+
+        if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) {
+            $idset = $_POST['company_id_select'];
+
+        } else if (isset($_SESSION['ovalfox_pos_role_id']) && ($_SESSION['ovalfox_pos_role_id'] == 1 || $_SESSION['ovalfox_pos_role_id'] == 3)) {
+            $idset = $_SESSION['ovalfox_pos_cp_id'];
+
+        }
                 if (!empty($_FILES['image']['name'])) {
                     $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
                     
                     if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 
-                    'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'image' => $image_result['filename']])) {
+                    'password' => $_POST['password'], 'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'company_profile_id'=>$idset, 'image' => $image_result['filename']])) {
                         $success = "User updated.";
                                               header("Location:{$name}");
 
@@ -60,7 +79,7 @@ if (isset($_POST['add_user_btn'])) {
                
                 } else {
                     if ($pdo->update("access", ['id' => $_GET['edit_user']], ['username' => $_POST['username'], 'password' => $_POST['password'], 
-                    'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email']])) {
+                    'role_id' => $_POST['role_id_choose'], 'email' => $_POST['email'], 'company_profile_id'=>$idset])) {
                         $success = "User updated.";
                                               header("Location:{$name}");
 
@@ -196,7 +215,13 @@ if (isset($_GET['edit_user'])) {
                                                             </option>
                                                             <option value="2">Booker</option>
                                                             <option value="3">Operator</option>
-
+                                                            <?php 
+                                                            foreach ($roles as $index => $role) {
+                                                                $index += 4;
+                                                            ?>
+                                                            <option value="<?php echo $index; ?>">
+                                                                <?php echo $role['name']; ?></option>
+                                                            <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -219,56 +244,86 @@ if (isset($_GET['edit_user'])) {
                                                 </div>
 
 
-                                                <table id="example1"
-                                                    class="table table-striped table-bordered dt-responsive">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Profile image</th>
-                                                            <th>Username</th>
-                                                            <th>Role</th>
-                                                            <th>Email</th>
 
-                                                            <th>Created at</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <?php
+                                            </div>
+                                            <?php 
+                                            if ($_SESSION['ovalfox_pos_role_id'] == 4) {
+                                                $allcmp = $pdo->read("companies_profile");
+                                            ?>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="col-md">
+
+                                                        <div class="form-group">
+                                                            <label class="col-form-label">Role ID</label>
+
+                                                            <select class="select2 form-control select-opt"
+                                                                name="company_id_select" id="company_id_select">
+                                                                <?php 
+                                                                foreach ($allcmp as $cm) {
+                                                                    
+                                                                ?>
+                                                                <option value="<?php echo $cm['id']; ?>">
+                                                                    <?php echo $cm['company_name']; ?></option>
+                                                                <?php } ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <table id="example1"
+                                                        class="table table-striped table-bordered dt-responsive">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>#</th>
+                                                                <th>Profile image</th>
+                                                                <th>Username</th>
+                                                                <th>Role</th>
+                                                                <th>Email</th>
+
+                                                                <th>Created at</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
                                                             foreach ($users as $user) {
 
 
                                                             ?>
-                                                        <tr>
-                                                            <td><?php echo $user['id']; ?></td>
-                                                            <td><img width="100" height="50"
-                                                                    src="assets/ovalfox/users/<?php echo $user['image']; ?>"
-                                                                    alt="" /></td>
+                                                            <tr>
+                                                                <td><?php echo $user['id']; ?></td>
+                                                                <td><img width="100" height="50"
+                                                                        src="assets/ovalfox/users/<?php echo $user['image']; ?>"
+                                                                        alt="" /></td>
 
-                                                            <td><?php echo $user['username']; ?></td>
-                                                            <td><?php echo $user['role_id']; ?></td>
-                                                            <td><?php echo $user['email']; ?></td>
+                                                                <td><?php echo $user['username']; ?></td>
+                                                                <td><?php echo $user['role_id']; ?></td>
+                                                                <td><?php echo $user['email']; ?></td>
 
 
-                                                            <td><?php echo $user['created_at']; ?></td>
-                                                            <td>
-                                                                <a class="text-success"
-                                                                    href="users.php?edit_user=<?php echo $user['id']; ?>">
-                                                                    <i class="fa fa-edit"></i>
-                                                                </a>
-                                                                &nbsp;&nbsp;&nbsp;
-                                                                <a class="text-danger"
-                                                                    href="users.php?delete_user=<?php echo $user['id']; ?>">
-                                                                    <i class="fa fa-trash"></i>
-                                                                </a>
-                                                            </td>
+                                                                <td><?php echo $user['created_at']; ?></td>
+                                                                <td>
+                                                                    <a class="text-success"
+                                                                        href="users.php?edit_user=<?php echo $user['id']; ?>">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </a>
+                                                                    &nbsp;&nbsp;&nbsp;
+                                                                    <a class="text-danger"
+                                                                        href="users.php?delete_user=<?php echo $user['id']; ?>">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </a>
+                                                                </td>
 
-                                                        </tr>
-                                                        <?php } ?>
-                                                    </tbody>
-                                                </table>
+                                                            </tr>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-
                                         </div>
 
                                     </form>
