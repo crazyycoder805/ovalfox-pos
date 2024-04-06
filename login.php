@@ -26,7 +26,7 @@ if (isset($_POST['username'])) {
                 $_SESSION['ovalfox_pos_username'] = $user[0]['username'];
                 $_SESSION['ovalfox_pos_role_id'] = $user[0]['role_id'];
                 $_SESSION['ovalfox_pos_email'] = $user[0]['email'];
-                
+                $_SESSION['ovalfox_pos_cp_sales_1_password'] = $company[0]['password_sales_1'];
                 if ($user[0]['role_id'] == 3) {
                     $_SESSION['ovalfox_pos_access_of'] = json_decode($user[0]['access_of']);
     

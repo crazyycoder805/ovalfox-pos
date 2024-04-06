@@ -205,12 +205,14 @@ $total_price = 0;
                             <th style="text-align: start;" id="table-info-first-th-child" style="">
                                 <?php echo date("Y-m-d"); ?> <span id="time"></span></th>
                             <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
+
                             <th><?php echo $sales_2[0]['status']; ?></th>
 
                         </tr>
                         <tr>
                             <th style="text-align: start;">Booker : <?php echo $_SESSION['ovalfox_pos_username']; ?>
                             </th>
+                            
                             <th style="text-align: center;padding-left: 40px;">Name: <?php echo $customers[0]['name'];?></th>
 
                         </tr>
@@ -224,14 +226,16 @@ $total_price = 0;
                 </table>
                 <table id="table-data-product" style="" border="1">
                     <thead>
-                        <th>SR</th>
-                        <th>Qty</th>
-                        <th>Description</th>
-                        <th>Rate</th>
-                        <th>Total</th>
-                        <th>Dis</th>
-                        <th>%</th>
-                        <th>G.Total</th>
+                        <th style="text-align: center;font-size: 10px;">SR</th>
+                        <th style="text-align: center;font-size: 10px;">Qty</th>
+                        <th style="text-align: center;font-size: 10px;">Description</th>
+                        <th style="text-align: center;font-size: 10px;">Rate</th>
+                        <th style="text-align: center;font-size: 10px;">Total</th>
+                        <th style="text-align: center;font-size: 10px;">Dis</th>
+                        <th style="text-align: center;font-size: 10px;">Ex.Dis</th>
+
+                        <th style="text-align: center;font-size: 10px;">%</th>
+                        <th style="text-align: center;font-size: 10px;">G.Total</th>
 
                     </thead>
                     <tbody>
@@ -244,19 +248,21 @@ $total_price = 0;
 
                 ?>
                         <tr>
-                            <td><?php echo $index; ?></td>
-                            <td><?php echo $sale['quantity']; ?>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $index; ?></td>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['quantity']; ?>
                             </td>
-                            <td><?php echo $sale['item_name']; ?>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['item_name']; ?>
                             </td>
 
 
-                            <td>
+                            <td style="text-align: center;font-size: 10px;">
                                 <?php echo $sale['item_price']; ?></td>
-                            <td><?php echo $sale['amount']; ?></td>
-                            <td><?php echo $sale['discount']; ?></td>
-                            <td><?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
-                            <td><?php echo $sale['amount']; ?></td>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['amount']; ?></td>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['discount']; ?></td>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['extra_discount']; ?></td>
+
+                            <td style="text-align: center;font-size: 10px;"><?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
+                            <td style="text-align: center;font-size: 10px;"><?php echo $sale['amount']; ?></td>
 
 
                         </tr>
@@ -267,6 +273,7 @@ $total_price = 0;
                 <div id="footer-outer" style="">
                     <div style="">
                         <h4>Items: <?php echo $total_quantity; ?></h4>
+                        <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
                         <p> <b>Terms and Conditions:</b> <br /> <textarea style="font-size: 12px;" placeholder="Type..."

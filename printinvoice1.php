@@ -63,6 +63,9 @@ $total_price = 0;
                         <th>Invoice No. : <?php echo $sales_2[0]['invoice_number']; ?></th>
                     </tr>
                     <tr>
+                        <th>Bill No. : <?php echo $sales_2[0]['bill_number']; ?></th>
+                    </tr>
+                    <tr>
                         <th>Date : <?php echo date("Y-m-d"); ?></th>
                     </tr>
                     <tr>
