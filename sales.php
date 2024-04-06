@@ -1117,13 +1117,13 @@ foreach ($products as $product) {
                         <div class="row">
 
 
-                            <div class="col-md">
+                            <div class="col-md-1">
                                 <div class="form-group">
 
                                     <div class="form-group">
 
-                                        <input class="form-control" class="" name="quantity" type="number"
-                                            placeholder="Enter Quantity" id="quantity">
+                                        <input style="font-size: 10px;" class="form-control" class="" name="quantity"
+                                            type="number" placeholder="Enter Quantity" id="quantity">
                                     </div>
                                 </div>
 
@@ -1156,7 +1156,7 @@ foreach ($products as $product) {
                             <div class="col-md">
                                 <div class="form-group">
                                     <input class="form-control" disabled class="" name="total_amount" type="text"
-                                        placeholder="Total Amount" id="total_amount">
+                                        placeholder="Grand Total Amount" id="total_amount">
                                 </div>
                                 <div class="form-group">
 
@@ -1279,12 +1279,13 @@ foreach ($products as $product) {
                                         placeholder="Enter Final Amount" id="final_amount">
                                 </div>
                             </div>
+                           
                             <div class="col-md">
 
                                 <div class="form-group">
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
-                                        placeholder="Enter Discount In Amount" id="discount_in_amount">
+                                        placeholder="Total" id="discount_in_amount">
 
                                 </div>
                             </div>

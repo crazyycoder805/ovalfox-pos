@@ -373,26 +373,25 @@ echo json_encode($data);
         <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$gt}</td>
 
         <td style='font-size: 10px !important;'>
-  <div style='position: relative;' class='container-cus'>
-  <div style='
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%; /* Adjust width and height as needed */
-  height: 100%;
-  color: red;
-  text-align: center;
-
-  background-color: rgba(0, 0, 0, 1); /* Semi-transparent black overlay */
-  ' class='overlay-cus'>
-  LOCKED
-  </div>
-  <div class='content-cus'>
-  <button class='btn btn-danger sales-btn-remove btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button>
-  </div>
-</div>
-
-  </td>
+        <div style='position: relative;' class='container-cus'>
+        <div style='
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%; /* Adjust width and height as needed */
+        height: 100%;
+        color: red;
+        text-align: center;
+              background-color: rgba(0, 0, 0, 1); /* Semi-transparent black overlay */
+        ' class='overlay-cus'>
+        LOCKED
+        </div>
+        <div class='content-cus'>
+        <button class='sales-btn-remove btn-sm' value='{$sale['id']}' id='removeItem'>Remove</button>
+        </div>
+      </div>
+      
+        </td>
 
     </tr>";
     }
@@ -711,7 +710,7 @@ if ($key == "quantity") {
 } else if ($key == "percentage") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id], 
-    ['grand_total' => (!empty(array_values($array)[0]) ? ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) : 0) - (((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty(array_values($array)[0]) ? array_values($array)[0] : 100)  - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount']),
+    ['grand_total' => (!empty(array_values($array)[0]) ? ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - (((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty(array_values($array)[0]) ? array_values($array)[0] : 100)  - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount']) : (((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) / 100) * (!empty(array_values($array)[0]) ? array_values($array)[0] : 100)  - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'])),
     'percentage' => array_values($array)[0]]);
 
 } else if ($key == "item_price") {
