@@ -1131,6 +1131,13 @@ foreach ($products as $product) {
                             <div class="col-md">
                                 <div class="form-group">
 
+                                    <input class="form-control" disabled class="" name="taaup" type="number"
+                                        placeholder="Total Amount" id="taaup">
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-group">
+
                                     <input class="form-control" disabled class="" name="total_quantity" type="number"
                                         placeholder="Total Avaiable Quantity" id="total_quantity">
                                 </div>
@@ -1279,7 +1286,7 @@ foreach ($products as $product) {
                                         placeholder="Enter Final Amount" id="final_amount">
                                 </div>
                             </div>
-                           
+
                             <div class="col-md">
 
                                 <div class="form-group">
@@ -1541,24 +1548,31 @@ foreach ($products as $product) {
             }
         });
 
-
-        $("#item_code_search").keydown(e => {
+        let prevVal = "";
+        $("#item_code_search").keydown(target => {
             document.getElementById("product").selectedIndex = 0;
 
-            if (e.keyCode == 13) {
-                if (e.target.value != "") {
+            if (target.keyCode == 13) {
+                if (target.target.value != "") {
                     $.ajax({
                         type: "POST",
                         url: "data.php",
                         data: {
                             '__FILE__': "productSelectItemCode",
-                            product: e.target.value,
+                            product: target.target.value,
                             "customer_name": $("#manual_customer").is(":checked") == true ?
                                 $("#customer_manual").val() : $("#customer_name").val(),
                         },
                         success: e => {
-                            quantityAdd++
+
+
                             const product = JSON.parse(e);
+                            if (target.target.value == prevVal) {
+                                quantityAdd++;
+                            } else {
+                                quantityAdd = 1;
+
+                            }
                             totalQuan = product[3];
 
                             item_code.val(product[0]);
@@ -1576,13 +1590,16 @@ foreach ($products as $product) {
                                     "#quantity").val() * +quantity_per_box));
                                 total_amount.val((+$("#quantity").val() * +
                                     quantity_per_box) * +unit_price.val());
+                                $("#taaup").val((+$("#quantity").val() * +
+                                    quantity_per_box) * +unit_price.val());
                             } else if (toggleValue == "piece") {
                                 total_quantity.val(totalQuan - quantity.val());
                                 total_amount.val(+$("#quantity").val() * +unit_price.val());
-
+                                $("#taaup").val(+$("#quantity").val() * +unit_price.val());
                             }
                             unit_price.focus();
                             initialQuantity = totalQuan;
+                            prevVal = target.target.value;
                         }
                     });
                 }
@@ -1596,6 +1613,7 @@ foreach ($products as $product) {
             if ($("#type").val() == "rf") {
                 $("#total_quantity").val(+initialQuantity + +$("#quantity").val());
                 total_amount.val(+e.target.value * +unit_price.val());
+                $("#taaup").val(+e.target.value * +unit_price.val());
 
             } else {
                 if (toggleValue == "piece") {
@@ -1607,6 +1625,8 @@ foreach ($products as $product) {
                     }
                     $("#total_quantity").val(+initialQuantity - +$("#quantity").val());
                     total_amount.val(+e.target.value * +unit_price.val());
+                    $("#taaup").val(+e.target.value * +unit_price.val());
+
                 } else if (toggleValue == "box") {
                     if (+e.target.value > box_quantity) {
                         alert(
@@ -1617,6 +1637,8 @@ foreach ($products as $product) {
                     $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * +
                         quantity_per_box));
                     total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
+                    $("#taaup").val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
+
                 }
             }
 
@@ -1699,20 +1721,28 @@ foreach ($products as $product) {
             const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
             total_discount = +result;
             total_amount.val(+total_discount);
+            // $("#taaup").val(+total_discount);
+
             extra_discount.val('');
         });
         extra_discount.on("input", e => {
             const extraDiscountValue = parseInt(e.target.value || 0);
             const result = calculateExtraDiscount(+total_discount, +extraDiscountValue);
             total_amount.val(+result);
+            // $("#taaup").val(+result);
+
         });
         $("#discount_amount").on("click", e => {
             const resultDis = PertToAmount(+discount.val(), +quantity.val() * +unit_price.val());
             total_amount.val(resultDis);
+            // $("#taaup").val(resultDis);
+
         });
         $("#discount_percentage").on("click", e => {
             const resultDis = AmountToPer(+discount.val(), +quantity.val() * +unit_price.val());
             total_amount.val(resultDis);
+            // $("#taaup").val(resultDis);
+
         });
 
 
@@ -1874,6 +1904,8 @@ foreach ($products as $product) {
             discount.val('');
             extra_discount.val('');
             $("#total_amount").val('');
+            $("#taaup").val('');
+
             quantityAdd = 0;
 
             $("#total_quantity").val(initialQuantity);
@@ -1908,6 +1940,8 @@ foreach ($products as $product) {
                         $("#amount_return").val(+product[1][0]['returned_amount']);
                         $("#pending_amount").val(+product[1][0]['pending_amount']);
                         $("#quantity").focus();
+                        $("#pass_sales_div").removeAttr("hidden");
+
                     }
                 });
             }
@@ -1958,6 +1992,8 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                     "discount_in_amount": discount.val(),
                     "extra_discount": $("#extra_discount").val(),
                     "total_amount": finalAmount,
+                    "taaup": $("#taaup").val(),
+
                     "final_amount": $("#total_payable").val(),
                     "recevied_amount": $("#amount_received").val(),
                     "returned_amount": $("#amount_return").val(),
@@ -1979,6 +2015,8 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                     quantity.val('');
                     discount.val('');
                     total_quantity.val('');
+                    $("#taaup").val('');
+
                     $("#extra_dsicount").val('');
                     $("#product").focus();
 
@@ -2161,14 +2199,14 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                 },
                 success: runtimeTableDataEditE => {
 
+                    console.log(runtimeTableDataEditE);
 
                     $.ajax({
                         type: "POST",
                         url: "data.php",
                         data: {
                             "__FILE__": "productFetch",
-                            "invoice_number": $("#invoice_number")
-                                .val(),
+                            "invoice_number": $("#invoice_number").val(),
 
                         },
                         success: e => {
