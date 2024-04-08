@@ -20,7 +20,8 @@ if (isset($_POST['user_update'])) {
                 if (!empty($_FILES['image']['name'])) {
                     $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
     
-                    if ($image_result && $pdo->update("access", ['id' => $_SESSION['ovalfox_pos_user_id']], ['email' => $_POST['email'], 'printing_page_size' => $_POST['printing_page_size'], 'image' => $image_result['filename']])) {
+                    if ($image_result && $pdo->update("access", ['id' => $_SESSION['ovalfox_pos_user_id']], ['email' => $_POST['email'], 
+                    'printing_page_size' => $_POST['printing_page_size'], 'image' => $image_result['filename']])) {
                         $success = "Profile updated.";
                             session_unset();
                             session_destroy();
@@ -61,7 +62,7 @@ if (isset($_POST['user_update'])) {
                         $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
         
                         if ($image_result && $pdo->update("companies_profile", ['id' => $_SESSION['ovalfox_pos_cp_id']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
                         'image' => $image_result['filename']])) {
                             $success = "Company updated.";
                                          session_unset();
@@ -72,7 +73,7 @@ if (isset($_POST['user_update'])) {
                         }
                     } else {
                         if ($pdo->update("companies_profile", ['id' => $_SESSION['ovalfox_pos_cp_id']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company updated.";
                                          session_unset();
                         session_destroy();
@@ -340,6 +341,11 @@ if (isset($_POST['user_update'])) {
                                     <div class="col-md">
                                         <textarea name="address" id="address" class="form-control" cols="30"
                                             rows="10"><?php echo $company[0]['address']; ?></textarea>
+
+                                    </div>
+                                    <div class="col-md">
+                                        <textarea name="terms_cond" id="terms_cond" class="form-control" cols="30"
+                                            rows="10"><?php echo $company[0]['terms_cond']; ?></textarea>
 
                                     </div>
                                 </div>

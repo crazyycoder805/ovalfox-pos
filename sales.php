@@ -1413,8 +1413,8 @@ foreach ($products as $product) {
 
                 <div class="modal-header">
                     <h5 class="modal-title h4" id="myLargeModalLabel">Customer previous record</h5>
-                    <button type="button" id="customer-modal-close-btn" class="close" data-bs-dismiss="modal"
-                        aria-label="Close">
+                    <button type="button" id="customer-modal-close-btn" name="customer-modal-close-btn" class="close"
+                        data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
@@ -1648,13 +1648,13 @@ foreach ($products as $product) {
         });
 
 
-        function AmountToPer(discount, amount) {
-            return (discount / amount) * 100;
-        }
+        // function AmountToPer(discount, amount) {
+        //     return (discount / amount) * 100;
+        // }
 
-        function PertToAmount(discount, amount) {
-            return (amount / 100) * discount;
-        }
+        // function PertToAmount(discount, amount) {
+        //     return (+$("#quantity").val() * +$("#unit_price").val()) - ;
+        // }
 
         // const calculateDiscount = (quantity, unitPrice, discountRate) => {
         //     const discountedPrice = (unitPrice * quantity) - discountRate;
@@ -1681,8 +1681,13 @@ foreach ($products as $product) {
 
 
         const calculateDiscount = (quantity, unitPrice, discountRate) => {
-            const discountedPrice = (quantity * unitPrice) - discountRate;
-            return discountedPrice;
+            const discountedPrice = ((quantity * unitPrice) - discountRate);
+            let percentage = (quantity * unitPrice) - ((quantity * unitPrice) / 100) * discountRate;
+
+            return {
+                discountedPrice,
+                percentage
+            };
         }
         const calculateExtraDiscount = (totalAmount, extraDiscountRate) => {
 
@@ -1719,7 +1724,7 @@ foreach ($products as $product) {
 
         discount.on("input", e => {
             const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
-            total_discount = +result;
+            total_discount = +result.discountedPrice;
             total_amount.val(+total_discount);
             // $("#taaup").val(+total_discount);
 
@@ -1733,14 +1738,19 @@ foreach ($products as $product) {
 
         });
         $("#discount_amount").on("click", e => {
-            const resultDis = PertToAmount(+discount.val(), +quantity.val() * +unit_price.val());
-            total_amount.val(resultDis);
+            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
+                "#discount").val());
+            total_amount.val(resultDis.discountedPrice);
+            $("#extra_discount").val('');
             // $("#taaup").val(resultDis);
 
         });
         $("#discount_percentage").on("click", e => {
-            const resultDis = AmountToPer(+discount.val(), +quantity.val() * +unit_price.val());
-            total_amount.val(resultDis);
+            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
+                "#discount").val());
+            total_amount.val(resultDis.percentage);
+            $("#extra_discount").val('');
+
             // $("#taaup").val(resultDis);
 
         });
@@ -2234,7 +2244,8 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
             $("#booker_name").focus();
         })
 
-        $("#booker_name").on("input", e => {
+        $(document).on("change", "#booker_name", e => {
+            console.log(e.target.value);
             $("#product").focus();
         });
         $("#product").on("input", e => {
@@ -2289,11 +2300,12 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
             }
         });
 
-        $("#password_sales_1").keydown(e => {
-            if (e.keyCode == 13) {
-                if (e.target.value == "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
-                    $(".overlay-cus").prop("hidden", true);
-                }
+        $("#password_sales_1").on("change", e => {
+            if (e.target.value == "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
+                $(".overlay-cus").prop("hidden", true);
+            } else {
+                $(".overlay-cus").prop("hidden", false);
+
             }
         });
     });
