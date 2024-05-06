@@ -1292,7 +1292,7 @@ foreach ($products as $product) {
                                 <div class="form-group">
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
-                                        placeholder="Total" id="discount_in_amount">
+                                        placeholder="Enter Discount" id="discount_in_amount">
 
                                 </div>
                             </div>
@@ -1426,6 +1426,9 @@ foreach ($products as $product) {
 
                                 <th>Customer Name</th>
                                 <th>Total Amount</th>
+                                <th>Date</th>
+
+                                <th>Action</th>
 
                             </tr>
                         <tbody id="customerDataShow">
@@ -1549,61 +1552,60 @@ foreach ($products as $product) {
         });
 
         let prevVal = "";
-        $("#item_code_search").keydown(target => {
+        $("#item_code_search").on("change", target => {
             document.getElementById("product").selectedIndex = 0;
 
-            if (target.keyCode == 13) {
-                if (target.target.value != "") {
-                    $.ajax({
-                        type: "POST",
-                        url: "data.php",
-                        data: {
-                            '__FILE__': "productSelectItemCode",
-                            product: target.target.value,
-                            "customer_name": $("#manual_customer").is(":checked") == true ?
-                                $("#customer_manual").val() : $("#customer_name").val(),
-                        },
-                        success: e => {
+            if (target.target.value != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "data.php",
+                    data: {
+                        '__FILE__': "productSelectItemCode",
+                        product: target.target.value,
+                        "customer_name": $("#manual_customer").is(":checked") == true ?
+                            $("#customer_manual").val() : $("#customer_name").val(),
+                    },
+                    success: e => {
 
 
-                            const product = JSON.parse(e);
-                            if (target.target.value == prevVal) {
-                                quantityAdd++;
-                            } else {
-                                quantityAdd = 1;
+                        const product = JSON.parse(e);
+                        if (target.target.value == prevVal) {
+                            quantityAdd++;
+                        } else {
+                            quantityAdd = 1;
 
-                            }
-                            totalQuan = product[3];
-
-                            item_code.val(product[0]);
-                            unit_price.val(product[1]);
-                            item_name.val(product[2]);
-
-                            quantity.val(quantityAdd);
-                            total_quantity.val(totalQuan - quantity.val());
-                            $("#last_rate").html(product[4]);
-                            total_quantity_is = product[5];
-                            box_quantity = product[6];
-                            quantity_per_box = product[7];
-                            if (toggleValue == "box") {
-                                $("#total_quantity").val(+total_quantity_is - (+$(
-                                    "#quantity").val() * +quantity_per_box));
-                                total_amount.val((+$("#quantity").val() * +
-                                    quantity_per_box) * +unit_price.val());
-                                $("#taaup").val((+$("#quantity").val() * +
-                                    quantity_per_box) * +unit_price.val());
-                            } else if (toggleValue == "piece") {
-                                total_quantity.val(totalQuan - quantity.val());
-                                total_amount.val(+$("#quantity").val() * +unit_price.val());
-                                $("#taaup").val(+$("#quantity").val() * +unit_price.val());
-                            }
-                            unit_price.focus();
-                            initialQuantity = totalQuan;
-                            prevVal = target.target.value;
                         }
-                    });
-                }
+                        totalQuan = product[3];
+
+                        item_code.val(product[0]);
+                        unit_price.val(product[1]);
+                        item_name.val(product[2]);
+
+                        quantity.val(quantityAdd);
+                        total_quantity.val(totalQuan - quantity.val());
+                        $("#last_rate").html(product[4]);
+                        total_quantity_is = product[5];
+                        box_quantity = product[6];
+                        quantity_per_box = product[7];
+                        if (toggleValue == "box") {
+                            $("#total_quantity").val(+total_quantity_is - (+$(
+                                "#quantity").val() * +quantity_per_box));
+                            total_amount.val((+$("#quantity").val() * +
+                                quantity_per_box) * +unit_price.val());
+                            $("#taaup").val((+$("#quantity").val() * +
+                                quantity_per_box) * +unit_price.val());
+                        } else if (toggleValue == "piece") {
+                            total_quantity.val(totalQuan - quantity.val());
+                            total_amount.val(+$("#quantity").val() * +unit_price.val());
+                            $("#taaup").val(+$("#quantity").val() * +unit_price.val());
+                        }
+                        unit_price.focus();
+                        initialQuantity = totalQuan;
+                        prevVal = target.target.value;
+                    }
+                });
             }
+
         });
 
 
@@ -1734,6 +1736,7 @@ foreach ($products as $product) {
             const extraDiscountValue = parseInt(e.target.value || 0);
             const result = calculateExtraDiscount(+total_discount, +extraDiscountValue);
             total_amount.val(+result);
+            $("#discount_amount").prop("checked", true);
             // $("#taaup").val(+result);
 
         });
@@ -1921,40 +1924,39 @@ foreach ($products as $product) {
             $("#total_quantity").val(initialQuantity);
 
         });
-        $("#invoice_number").keydown(e => {
-            if (e.keyCode == 13) {
-                $.ajax({
-                    type: "POST",
-                    url: "data.php",
-                    data: {
-                        "in": e.target.value,
+        $("#invoice_number").on("change", e => {
+            $.ajax({
+                type: "POST",
+                url: "data.php",
+                data: {
+                    "in": e.target.value,
 
-                        "__FILE__": "loadInvoice",
+                    "__FILE__": "loadInvoice",
 
-                    },
-                    success: e => {
-                        const product = JSON.parse(e);
-                        finalAmount = +product[1][0]['total_amount'];
-                        totalPayable = +product[1][0]['final_amount'];
+                },
+                success: e => {
+                    const product = JSON.parse(e);
+                    finalAmount = +product[1][0]['total_amount'];
+                    totalPayable = +product[1][0]['final_amount'];
 
-                        $("#data").html(product[0]);
-                        $("#total_items").text(product[2]);
-                        $("#total_quantity_added").text(product[3]);
+                    $("#data").html(product[0]);
+                    $("#total_items").text(product[2]);
+                    $("#total_quantity_added").text(product[3]);
 
-                        $("#final_amount").val(+product[1][0]['total_amount']);
-                        $("#discount_in_amount").val(+product[1][0]['discount']);
-                        $("#total_payable").val(+product[1][0]['final_amount']);
-                        $("#amount_received").val(+product[1][0][
-                            'recevied_amount'
-                        ]);
-                        $("#amount_return").val(+product[1][0]['returned_amount']);
-                        $("#pending_amount").val(+product[1][0]['pending_amount']);
-                        $("#quantity").focus();
-                        $("#pass_sales_div").removeAttr("hidden");
+                    $("#final_amount").val(+product[1][0]['total_amount']);
+                    $("#discount_in_amount").val(+product[1][0]['discount']);
+                    $("#total_payable").val(+product[1][0]['final_amount']);
+                    $("#amount_received").val(+product[1][0][
+                        'recevied_amount'
+                    ]);
+                    $("#amount_return").val(+product[1][0]['returned_amount']);
+                    $("#pending_amount").val(+product[1][0]['pending_amount']);
+                    $("#quantity").focus();
+                    $("#pass_sales_div").removeAttr("hidden");
 
-                    }
-                });
-            }
+                }
+            });
+
         });
 
 
@@ -2078,6 +2080,10 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                             $("#customer_manual").prop("disabled", true);
                             $("#manual_customer").prop("disabled", true);
                             $("#pass_sales_div").removeAttr("hidden");
+                            quantity.prop("disabled", false);
+                            discount.prop("disabled", false);
+                            extra_discount.prop("disabled", false);
+                            $("#total_amount").prop("disabled", false);
                         }
                     });
                 }
@@ -2120,11 +2126,12 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
             });
         });
         $('#free_items').change(function() {
-            quantityAdd = 0;
             $("#total_quantity").val(initialQuantity);
 
             if ($(this).is(':checked')) {
-                quantity.val('');
+                quantityAdd = 1;
+
+                quantity.val(1);
                 discount.val('');
                 extra_discount.val('');
                 $("#total_amount").val('');
@@ -2133,6 +2140,8 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                 extra_discount.prop("disabled", true);
                 $("#total_amount").prop("disabled", true);
             } else {
+                quantityAdd = 0;
+                quantity.val('');
 
                 quantity.prop("disabled", false);
                 discount.prop("disabled", false);
@@ -2245,7 +2254,6 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
         })
 
         $(document).on("change", "#booker_name", e => {
-            console.log(e.target.value);
             $("#product").focus();
         });
         $("#product").on("input", e => {
@@ -2308,6 +2316,60 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
             }
         });
+
+        function openPopup(urlUp) {
+            // Specify the URL and window properties
+            var url = urlUp; // Replace with your URL
+            var windowName = "Customer Data Print";
+            var windowFeatures = "width=600,height=400";
+
+            // Open the popup window
+            window.open(url, windowName, windowFeatures);
+        }
+        $(document).on("click", "#printCustomer", e => {
+            <?php if ($user[0]['printing_page_size'] == "large") {
+                        ?>
+            openPopup(`printinvoice1.php?inv=${$(e.target).data("cus")}`);
+            <?php 
+                       } else if ($user[0]['printing_page_size'] == "small") {
+                        ?>
+            openPopup(`printinvoice2.php?inv=${$(e.target).data("cus")}`);
+
+            <?php } ?>
+        });
+
+        $(document).on("click", "#editCustomer", e => {
+            $.ajax({
+                type: "POST",
+                url: "data.php",
+                data: {
+                    "in": $(e.target).data("cus"),
+
+                    "__FILE__": "loadInvoice",
+
+                },
+                success: e => {
+                    const product = JSON.parse(e);
+                    finalAmount = +product[1][0]['total_amount'];
+                    totalPayable = +product[1][0]['final_amount'];
+
+                    $("#data").html(product[0]);
+                    $("#total_items").text(product[2]);
+                    $("#total_quantity_added").text(product[3]);
+
+                    $("#final_amount").val(+product[1][0]['total_amount']);
+                    $("#discount_in_amount").val(+product[1][0]['discount']);
+                    $("#total_payable").val(+product[1][0]['final_amount']);
+                    $("#amount_received").val(+product[1][0][
+                        'recevied_amount'
+                    ]);
+                    $("#amount_return").val(+product[1][0]['returned_amount']);
+                    $("#pending_amount").val(+product[1][0]['pending_amount']);
+                    $("#quantity").focus();
+                    $("#pass_sales_div").removeAttr("hidden");
+                }
+            });
+        })
     });
     </script>
 

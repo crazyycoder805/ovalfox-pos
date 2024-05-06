@@ -287,8 +287,9 @@ $total_price = 0;
                         <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
-                        <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 12px;" placeholder="Type..."
-                                name="" id="terms-cond" cols="22" rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
+                        <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 12px;"
+                                placeholder="Type..." name="" id="terms-cond" cols="22"
+                                rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
 
 
                     </div>
@@ -341,35 +342,34 @@ $total_price = 0;
 
 
         </div>
+        <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
+        <div style="width: 100%;border-bottom: 1px solid black;"></div>
     </div>
     <!-- <button id="downloadBtn">Download as PDF</button> -->
 
-    <!-- <script src="assets/js/jquery.min.js"></script> -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script> -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/print.js"></script>
 
     <script>
-    // Examples
-    // document.getElementById('downloadBtn').addEventListener('click', function() {
-    //     // Set your page options here
-    //     const options = {
-    //         filename: 'your_document.pdf', // Name of the PDF file
-    //         image: {
-    //             type: 'jpeg',
-    //             quality: 0.98
-    //         }, // Quality and type of images
-    //         html2canvas: {
-    //             scale: 2
-    //         }, // Scale of HTML content
-    //         jsPDF: {
-    //             unit: 'in',
-    //             format: 'letter',
-    //             orientation: 'portrait'
-    //         } // Page settings
-    //     };
+    const options = {
+        filename: 'small_inv.pdf',
+        image: {
+            type: 'jpeg',
+            quality: 0.98
+        },
+        html2canvas: {
+            scale: 2
+        },
+        jsPDF: {
+            unit: 'in',
+            format: 'a6',
+            orientation: 'portrait'
+        }
+    };
 
-    //     // Convert HTML to PDF
-    //     html2pdf().from(document.body).set(options).save();
-    // });
+    html2pdf().from(document.body).set(options).save();
+
+
     var currentTime = new Date();
 
     // Get the current hour, minute, and second

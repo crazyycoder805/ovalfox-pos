@@ -101,9 +101,7 @@ public function update($table, $conditions = [], $data = [], $fileInputName = nu
     // If image extension columns are provided, add them to the query
     if ($imageData !== null && is_array($imageExtensionColumns)) {
         foreach ($imageExtensionColumns as $column) {
-
             $data[$column] = $_FILES[$fileInputName]["type"];
-
         }
     }
 
@@ -136,8 +134,8 @@ public function update($table, $conditions = [], $data = [], $fileInputName = nu
     }
 
     if ($stmt->execute()) {
-        $rowCount = $stmt->rowCount();
-        return $rowCount > 0 ? 1 : 0; // Return 1 if rows were affected, otherwise 0
+        // Return the last updated ID
+        return $this->db->lastInsertId();
     } else {
         return 0; // Data not updated
     }

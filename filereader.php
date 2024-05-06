@@ -50,7 +50,20 @@ if ($xlsx = SimpleXLSX::parse($filePath)) {
 
 // }
 foreach (removeEmptyValues($rows) as $key => $value) {
-     $pdo->create("products", ['product_name' => !empty($value['product_name']) ?  $value['product_name'] : "no_product_name", 'item_code' => !empty($value['item_code']) ?  $value['item_code'] : "no_product_item_code", 'total_quantity' => !empty($value['total_quantity']) ?  $value['total_quantity'] : "no_product_quantity", 'trade_unit_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 'company_profile_id' => 1]);
+     $pdo->create("products", [
+    'item_code' => !empty($value['item_code']) ?  $value['item_code'] : "no_product_item_code",'category_id' => 2
+     ,'sub_category_id' => 2, 
+     'product_name' => !empty($value['product_name']) ?  $value['product_name'] : "no_product_name", 'product_details' => "Grocery", 
+     'purchase_per_unit_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 
+     'purchase_per_box_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 
+     'whole_sale_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 
+     'trade_box_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 
+     'trade_unit_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0,
+     'whole_sale_box_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0,
+     'quantity_per_box' => !empty($value['total_quantity']) ?  $value['total_quantity'] : "no_product_quantity",
+     'box_quantity' => !empty($value['total_quantity']) ?  $value['total_quantity'] : "no_product_quantity",
+     'total_quantity' => !empty($value['total_quantity']) ?  $value['total_quantity'] : "no_product_quantity", 
+     'company_profile_id' => 2]);
     // echo "<pre>";
     // print_r($value['trade_unit_price']);
 }

@@ -112,10 +112,13 @@ $total_price = 0;
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['amount']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['discount']; ?></td>
                     <td style="border-bottom: 1px solid black;"><?php echo $sale['extra_discount']; ?></td>
-                    <td style="border-bottom: 1px solid black;"><?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
-                    <td style="border-bottom: 1px solid black;"><?php echo !empty($sale['amount']) ? $sale['amount'] : 0; ?></td>
+                    <td style="border-bottom: 1px solid black;">
+                        <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
+                    <td style="border-bottom: 1px solid black;">
+                        <?php echo !empty($sale['grand_total']) ? $sale['grand_total'] : 0; ?></td>
 
-                    <td style="border-bottom: 1px solid black;"><?php echo !empty(trim($sales_2[0]['details'])) ? $sales_2[0]['details'] : "NULL"; ?></td>
+                    <td style="border-bottom: 1px solid black;">
+                        <?php echo !empty(trim($sales_2[0]['details'])) ? $sales_2[0]['details'] : "NULL"; ?></td>
 
                 </tr>
                 <?php } ?>
@@ -138,8 +141,8 @@ $total_price = 0;
             <div style="width: 400px;">
                 <p> <b>Invoice Amount In Words:</b> <span id="aiw"></span> only</p>
 
-                <p> <b>Terms and Conditions:</b> <br /> <textarea style="border: 0px;" placeholder="Type..." name=""
-                        id="" cols="30" rows="10"></textarea></p>
+                <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="border: 0px;" placeholder="Type..." name=""
+                        id="" cols="30" rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
 
 
             </div>
@@ -167,7 +170,7 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;"><b>Total</b></span>
                     <b>Rs
-                        <?php echo $per; ?></b>
+                        <?php echo $total_price - $per; ?></b>
                 </div>
                 <br />
                 <div style=" display: flex;
