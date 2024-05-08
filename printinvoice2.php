@@ -32,7 +32,7 @@ $total_price = 0;
     <style>
     @media print {
         @page {
-            size: Postcard;
+            size: A6;
         }
     }
 
@@ -186,6 +186,7 @@ $total_price = 0;
 
 
 <body>
+    <br /><br />
     <div id="main" style="">
         <div id="main-inner" style="">
             <h6 id="content" style="text-align: end;"></h6>
