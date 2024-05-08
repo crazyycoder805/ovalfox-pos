@@ -17,7 +17,7 @@ if (isset($_POST['user_update'])) {
     if (!empty($_POST['email']) && !empty($_POST['printing_page_size'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
             if (!$pdo->isDataInsertedUpdate("access", ['email' => $_POST['email']])) {
-                if (!empty($_FILES['image']['name'])) {
+                if (!empty($_FILES['image']['tmp_name'])) {
                     $image_result = $pdo2->upload('image', 'assets/ovalfox/users');
     
                     if ($image_result && $pdo->update("access", ['id' => $_SESSION['ovalfox_pos_user_id']], ['email' => $_POST['email'], 
@@ -58,11 +58,13 @@ if (isset($_POST['user_update'])) {
         if ($pdo->validateInput($_POST['email'], 'email')) {
             if ($pdo->validateInput($_POST['phone1'], 'phone')) {
                 if ($pdo->validateInput($_POST['phone2'], 'phone')) {
-                    if (!empty($_FILES['image']['name'])) {
+                    if ($pdo->validateInput($_POST['phone3'], 'phone')) {
+
+                    if (!empty($_FILES['image']['tmp_name'])) {
                         $image_result = $pdo2->upload('image', 'assets/ovalfox/companies_profile');
         
                         if ($image_result && $pdo->update("companies_profile", ['id' => $_SESSION['ovalfox_pos_cp_id']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'phone3' => $_POST['phone3'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email'], 
                         'image' => $image_result['filename']])) {
                             $success = "Company updated.";
                                          session_unset();
@@ -73,7 +75,7 @@ if (isset($_POST['user_update'])) {
                         }
                     } else {
                         if ($pdo->update("companies_profile", ['id' => $_SESSION['ovalfox_pos_cp_id']], ['company_name' => $_POST['company_name'], 'registration_id' => $_POST['registration_id'], 
-                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
+                        'tax_no' => $_POST['tax_no'], 'phone1' => $_POST['phone1'], 'phone2' => $_POST['phone2'], 'phone3' => $_POST['phone3'], 'terms_cond' => $_POST['terms_cond'], 'address' => $_POST['address'], 'email' => $_POST['email']])) {
                             $success = "Company updated.";
                                          session_unset();
                         session_destroy();
@@ -82,6 +84,9 @@ if (isset($_POST['user_update'])) {
                             $error = "Something went wrong. or can't update this because no changes was found";
                         }
                     }
+                } else {
+                    $error = "Invalid Phone3.";
+                }
                 } else {
                     $error = "Invalid Phone2.";
                 }
@@ -188,7 +193,8 @@ if (isset($_POST['user_update'])) {
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Printing page size</label>
-                                        <select class="form-control btn-square form-btn" name="printing_page_size" id="printing_page_size">
+                                        <select class="form-control btn-square form-btn" name="printing_page_size"
+                                            id="printing_page_size">
                                             <?php 
                                                         $sizes = ['small', 'medium', 'large'];
                                                         foreach ($sizes as $printing_page_size) {
@@ -202,7 +208,7 @@ if (isset($_POST['user_update'])) {
 
                                             <?php } ?>
                                         </select>
-                                        
+
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Email-Address</label>
@@ -328,15 +334,24 @@ if (isset($_POST['user_update'])) {
                                             <label class="form-label">Phone 2</label>
                                             <input id="phone2" name="phone2" class="form-control"
                                                 value="<?php echo $company[0]['phone2']; ?>" type="text"
-                                                placeholder="Company Registration ID" data-bs-original-title=""
-                                                title="">
+                                                placeholder="Company Phone 2" data-bs-original-title="" title="">
                                         </div>
                                     </div>
 
 
 
                                 </div>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div class="mb-3">
 
+                                            <label class="form-label">Phone 3</label>
+                                            <input id="phone3" name="phone3" class="form-control"
+                                                value="<?php echo $company[0]['phone3']; ?>" type="text"
+                                                placeholder="Company Phone 3" data-bs-original-title="" title="">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md">
                                         <textarea name="address" id="address" class="form-control" cols="30"

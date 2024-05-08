@@ -134,12 +134,13 @@ public function update($table, $conditions = [], $data = [], $fileInputName = nu
     }
 
     if ($stmt->execute()) {
-        // Return the last updated ID
-        return $this->db->lastInsertId();
+        // Return the number of affected rows
+        return $stmt->rowCount();
     } else {
         return 0; // Data not updated
     }
 }
+
 
 
 
