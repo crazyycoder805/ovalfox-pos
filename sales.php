@@ -2142,7 +2142,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                     <?php } ?>
                 },
-
+                
             });
         });
         $('#free_items').change(function() {
@@ -2226,7 +2226,8 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
         });
 
         $(document).on("blur", "#itemAddedtable td", e => {
-            let target = e;
+
+
             $.ajax({
                 type: "POST",
                 url: "data.php",
@@ -2256,10 +2257,6 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                             $("#final_amount").val(product[
                                 3]);
-                            if (/percentageTabledData/.test(target.target.id)) {
-                                console.log($($(target.target).prev().prev()).blur())
-                            }
-
                         }
                     });
 
