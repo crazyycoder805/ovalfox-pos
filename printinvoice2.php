@@ -48,7 +48,9 @@ $total_price = 0;
 
     }
 
-    #main {}
+    #main {
+        padding-left: 3px;
+    }
 
 
     #main-inner {
@@ -192,7 +194,7 @@ $total_price = 0;
     <div id="main" style="">
         <div id="main-inner" style="">
             <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
-            <h6 class="content" style="text-align: end;"></h6>
+            <h6 class="content" style="text-align: center;"></h6>
             <h1 id="company_name" style="">
                 <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
             </h1>

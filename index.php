@@ -63,7 +63,7 @@ $today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => da
                             <div class="breadcrumb-list">
                                 <ul>
                                     <li class="breadcrumb-link">
-                                        <a href="index-2.html"><i class="fas fa-home mr-2"></i>Dashboard</a>
+                                        <a href="index.php"><i class="fas fa-home mr-2"></i>Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-link active">Admin</li>
                                 </ul>
