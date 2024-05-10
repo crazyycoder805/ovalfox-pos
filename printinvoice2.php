@@ -24,6 +24,7 @@ if (!isset($invoice_number) || empty($invoice_number)) {
 $sales_1 = $pdo->read('sales_1', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 $total_quantity = 0;
 $total_price = 0;
@@ -34,6 +35,7 @@ $total_price = 0;
         @page {
             size: A6;
         }
+
     }
 
     * {
@@ -189,7 +191,8 @@ $total_price = 0;
     <br /><br />
     <div id="main" style="">
         <div id="main-inner" style="">
-            <h6 id="content" style="text-align: end;"></h6>
+            <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
+            <h6 class="content" style="text-align: end;"></h6>
             <h1 id="company_name" style="">
                 <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
             </h1>
@@ -202,6 +205,7 @@ $total_price = 0;
             <p id="whatsapp" style="">WA:
                 <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
                 <?php echo !empty($company['phone2']) ?  '- - '. $company['phone2'] : ""; ?>
+                <?php echo !empty($company['phone3']) ?  '- - '. $company['phone3'] : ""; ?>
             </p>
             <div id="table-info">
                 <div style="border: 1px solid black;">
@@ -210,23 +214,24 @@ $total_price = 0;
 
                             <tr>
                                 <th style="text-align: start;" id="table-info-first-th-child" style="">
-                                    <?php echo date("Y-m-d"); ?> <span id="time"></span></th>
+                                    <?php echo $sales_2[0]['created_at'] ?></th>
                                 <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
 
-                                <th><?php echo $sales_2[0]['status']; ?></th>
+                                <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>
 
                             </tr>
                             <tr>
-                                <th style="text-align: start;">Booker : <?php echo $_SESSION['ovalfox_pos_username']; ?>
+                                <th style="text-align: start;">Booker : <?php echo $booker[0]['username']; ?>
                                 </th>
 
-                                <th style="text-align: center;padding-left: 40px;">Name:
+                                <th style="text-align: center;">Name:
                                     <?php echo $customers[0]['name'];?></th>
 
                             </tr>
                             <tr>
-                                <th style="text-align: start;">Add : Gulpur</th>
-                                <th style="text-align: start;padding-left: 50px;">Phone: 03411141098</th>
+                                <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
+                                </th>
+                                <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
 
                             </tr>
                         </thead>
@@ -244,6 +249,7 @@ $total_price = 0;
 
                             <th style="text-align: center;font-size: 10px;">%</th>
                             <th style="text-align: center;font-size: 10px;">G.Total</th>
+                            <th style="text-align: center;font-size: 10px;">Details</th>
 
                         </thead>
                         <tbody>
@@ -275,6 +281,8 @@ $total_price = 0;
                                 <td style="text-align: center;font-size: 10px;">
                                     <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
                                 <td style="text-align: center;font-size: 10px;"><?php echo $sale['grand_total']; ?></td>
+                                <td style="text-align: center;font-size: 10px;"><?php echo $sales_2[0]['details']; ?>
+                                </td>
 
 
                             </tr>
@@ -306,7 +314,7 @@ $total_price = 0;
 
                                 (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
                             <span id="discount-total-price" style="">Rs
-                                <?php $per = intval(($total_price / 100) * $sales_2[0]['discount'], 2); echo $per; ?></span>
+                                <?php $per = ($total_price) * (1 - ($sales_2[0]['discount'] / 100)); echo $per; ?></span>
                         </div>
                         <div id="total-box" style="">
                             <span id="total-text" style=""><b>Total</b></span>
@@ -386,19 +394,14 @@ $total_price = 0;
     const time = `${hours}:${minutes}:${seconds} ${period}`;
     document.getElementById("time").textContent = time;
 
-    window.addEventListener('beforeprint', function() {
-        // Calculate number of pages
-        var printContent = document.getElementById(
-            'content'); // Assuming 'content' is the ID of the element to be printed
-        var printStyle = window.getComputedStyle(printContent);
-        var contentHeight = printContent.offsetHeight; // Height of the content element
-        var dpi = 96; // default assumed DPI
-        var pageWidth = 4.1 * dpi; // Custom page width (4.1 inches)
-        var pages = Math.ceil(contentHeight / pageWidth);
+    function addPageNumbers() {
+        var pageNumbers = document.querySelectorAll('.content');
+        pageNumbers.forEach(function(pageNumber, index) {
+            pageNumber.textContent = 'Page: ' + (index + 1);
+        });
+    }
 
-        // Add page number information to the print content
-        printContent.innerHTML += `Page: 1 of ${pages}`;
-    });
+    window.onload = addPageNumbers;
     </script>
 </body>
 

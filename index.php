@@ -19,26 +19,27 @@ if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_i
         header("location:404.php");
     
 }
-
-
-
-
-$total_users = count($pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+// Done
 $total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
-$total_employees = count($pdo->read("employees", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
-$sales_2_today = $pdo->read("sales_2", ['created_at'=>date("Y-m-d"), 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+// Done
+$today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND created_at >= '".date("Y-m-d 00:00:00")."' AND created_at <= '".date("Y-m-d 23:59:59")."'"));
+// Done
+$total_sales = count($pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+
 $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$today_sales = count($sales_2_today);
-$total_sales = count($sales_2);
-
 $total_amount = [];
-$revenue = $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
-foreach ($revenue as $re) {
+foreach ($sales_2 as $re) {
     $total_amount[] = $re['total_amount'];
 }
 
-$amount = array_sum($total_amount);
+$total_amount = array_sum($total_amount);
+
+$today_sales = count($pdo->read("sales_2", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$today_purchase = count($pdo->read("purchases_2", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+
+
 ?>
 
 <body>
@@ -159,7 +160,7 @@ $amount = array_sum($total_amount);
                                     </svg>
                                 </div>
                                 <div class="icon-info-text">
-                                    <h5 class="ad-title">Happy Customers</h5>
+                                    <h5 class="ad-title">Customers</h5>
                                     <h4 class="ad-card-title"><?php echo $total_customers; ?></h4>
                                 </div>
                             </div>
@@ -179,7 +180,7 @@ $amount = array_sum($total_amount);
                                 </div>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title">Daily Orders</h5>
-                                    <h4 class="ad-card-title"><?php echo $today_sales; ?></h4>
+                                    <h4 class="ad-card-title"><?php echo $today_orders; ?></h4>
                                 </div>
                             </div>
                         </div>
@@ -235,13 +236,156 @@ $amount = array_sum($total_amount);
                                 </div>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title">Total Revenue</h5>
-                                    <h4 class="ad-card-title"><?php echo $amount; ?></h4>
+                                    <h4 class="ad-card-title"><?php echo $total_amount; ?></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="card ad-info-card">
+                            <div class="card-body dd-flex align-items-center">
+                                <div class="icon-info">
+                                    <svg enable-background="new 0 0 64 64" viewBox="0 0 64 64"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path
+                                                d="m28 60c4.962 0 9-4.038 9-9s-4.038-9-9-9-9 4.038-9 9 4.038 9 9 9zm0-16c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7z" />
+                                            <path
+                                                d="m26 53h-2c0 1.654 1.346 3 3 3v1h2v-1c1.654 0 3-1.346 3-3s-1.346-3-3-3v-2c.551 0 1 .449 1 1h2c0-1.654-1.346-3-3-3v-1h-2v1c-1.654 0-3 1.346-3 3s1.346 3 3 3v2c-.551 0-1-.449-1-1zm0-4c0-.551.449-1 1-1v2c-.551 0-1-.449-1-1zm3 3c.551 0 1 .449 1 1s-.449 1-1 1z" />
+                                            <path
+                                                d="m62 29h-9v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-18v-5h3c3.86 0 7-3.14 7-7 0-.552-.448-1-1-1h-4c-1.958 0-3.728.81-5 2.11v-5.169c4.493-.5 8-4.317 8-8.941v-2c0-.552-.448-1-1-1-3.483 0-6.505 1.993-8 4.896-1.495-2.903-4.517-4.896-8-4.896-.552 0-1 .448-1 1v2c0 4.624 3.507 8.441 8 8.941v5.169c-1.272-1.3-3.042-2.11-5-2.11h-4c-.552 0-1 .448-1 1 0 3.86 3.14 7 7 7h3v5h-18v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-1c-.552 0-1 .448-1 1v5h-3c-.552 0-1 .448-1 1v3h-3c-.552 0-1 .448-1 1v22c0 .552.448 1 1 1h52c.552 0 1-.448 1-1v-3h3c.552 0 1-.448 1-1v-5h3c.552 0 1-.448 1-1v-22c0-.552-.448-1-1-1zm-5-13.899v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm-9 0h2.899c-.464 2.279-2.485 4-4.899 4h-2.899c.464-2.279 2.484-4 4.899-4zm-10 4c-2.415 0-4.435-1.721-4.899-4h2.899c2.415 0 4.435 1.721 4.899 4zm11-18.929v.929c0 3.521-2.612 6.442-6 6.929v-.929c0-3.521 2.612-6.442 6-6.929zm-14 .929v-.929c3.388.487 6 3.408 6 6.929v.929c-3.388-.487-6-3.408-6-6.929zm-8 11.101v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm46 43h-50v-20h50zm4-4h-2v-17c0-.552-.448-1-1-1h-47v-2h50zm4-6h-2v-15c0-.552-.448-1-1-1h-47v-4h50z" />
+                                            <path
+                                                d="m6 59h12v-2h-11v-12h11v-2h-12c-.552 0-1 .448-1 1v14c0 .552.448 1 1 1z" />
+                                            <path
+                                                d="m51 58v-14c0-.552-.448-1-1-1h-12v2h11v12h-11v2h12c.552 0 1-.448 1-1z" />
+                                            <path
+                                                d="m46 54c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1h-6c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1zm-5-4h4v2h-4z" />
+                                            <path
+                                                d="m10 48c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1h6c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1zm5 4h-4v-2h4z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="icon-info-text">
+                                    <h5 class="ad-title">Today sales</h5>
+                                    <h4 class="ad-card-title"><?php echo $today_sales; ?></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="card ad-info-card">
+                            <div class="card-body dd-flex align-items-center">
+                                <div class="icon-info">
+                                    <svg enable-background="new 0 0 64 64" viewBox="0 0 64 64"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path
+                                                d="m28 60c4.962 0 9-4.038 9-9s-4.038-9-9-9-9 4.038-9 9 4.038 9 9 9zm0-16c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7z" />
+                                            <path
+                                                d="m26 53h-2c0 1.654 1.346 3 3 3v1h2v-1c1.654 0 3-1.346 3-3s-1.346-3-3-3v-2c.551 0 1 .449 1 1h2c0-1.654-1.346-3-3-3v-1h-2v1c-1.654 0-3 1.346-3 3s1.346 3 3 3v2c-.551 0-1-.449-1-1zm0-4c0-.551.449-1 1-1v2c-.551 0-1-.449-1-1zm3 3c.551 0 1 .449 1 1s-.449 1-1 1z" />
+                                            <path
+                                                d="m62 29h-9v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-18v-5h3c3.86 0 7-3.14 7-7 0-.552-.448-1-1-1h-4c-1.958 0-3.728.81-5 2.11v-5.169c4.493-.5 8-4.317 8-8.941v-2c0-.552-.448-1-1-1-3.483 0-6.505 1.993-8 4.896-1.495-2.903-4.517-4.896-8-4.896-.552 0-1 .448-1 1v2c0 4.624 3.507 8.441 8 8.941v5.169c-1.272-1.3-3.042-2.11-5-2.11h-4c-.552 0-1 .448-1 1 0 3.86 3.14 7 7 7h3v5h-18v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-1c-.552 0-1 .448-1 1v5h-3c-.552 0-1 .448-1 1v3h-3c-.552 0-1 .448-1 1v22c0 .552.448 1 1 1h52c.552 0 1-.448 1-1v-3h3c.552 0 1-.448 1-1v-5h3c.552 0 1-.448 1-1v-22c0-.552-.448-1-1-1zm-5-13.899v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm-9 0h2.899c-.464 2.279-2.485 4-4.899 4h-2.899c.464-2.279 2.484-4 4.899-4zm-10 4c-2.415 0-4.435-1.721-4.899-4h2.899c2.415 0 4.435 1.721 4.899 4zm11-18.929v.929c0 3.521-2.612 6.442-6 6.929v-.929c0-3.521 2.612-6.442 6-6.929zm-14 .929v-.929c3.388.487 6 3.408 6 6.929v.929c-3.388-.487-6-3.408-6-6.929zm-8 11.101v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm46 43h-50v-20h50zm4-4h-2v-17c0-.552-.448-1-1-1h-47v-2h50zm4-6h-2v-15c0-.552-.448-1-1-1h-47v-4h50z" />
+                                            <path
+                                                d="m6 59h12v-2h-11v-12h11v-2h-12c-.552 0-1 .448-1 1v14c0 .552.448 1 1 1z" />
+                                            <path
+                                                d="m51 58v-14c0-.552-.448-1-1-1h-12v2h11v12h-11v2h12c.552 0 1-.448 1-1z" />
+                                            <path
+                                                d="m46 54c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1h-6c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1zm-5-4h4v2h-4z" />
+                                            <path
+                                                d="m10 48c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1h6c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1zm5 4h-4v-2h4z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="icon-info-text">
+                                    <h5 class="ad-title">Today purchase</h5>
+                                    <h4 class="ad-card-title"><?php echo $today_purchase; ?></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="card ad-info-card">
+                            <div class="card-body dd-flex align-items-center">
+                                <div class="icon-info">
+                                    <svg enable-background="new 0 0 64 64" viewBox="0 0 64 64"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path
+                                                d="m28 60c4.962 0 9-4.038 9-9s-4.038-9-9-9-9 4.038-9 9 4.038 9 9 9zm0-16c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7z" />
+                                            <path
+                                                d="m26 53h-2c0 1.654 1.346 3 3 3v1h2v-1c1.654 0 3-1.346 3-3s-1.346-3-3-3v-2c.551 0 1 .449 1 1h2c0-1.654-1.346-3-3-3v-1h-2v1c-1.654 0-3 1.346-3 3s1.346 3 3 3v2c-.551 0-1-.449-1-1zm0-4c0-.551.449-1 1-1v2c-.551 0-1-.449-1-1zm3 3c.551 0 1 .449 1 1s-.449 1-1 1z" />
+                                            <path
+                                                d="m62 29h-9v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-18v-5h3c3.86 0 7-3.14 7-7 0-.552-.448-1-1-1h-4c-1.958 0-3.728.81-5 2.11v-5.169c4.493-.5 8-4.317 8-8.941v-2c0-.552-.448-1-1-1-3.483 0-6.505 1.993-8 4.896-1.495-2.903-4.517-4.896-8-4.896-.552 0-1 .448-1 1v2c0 4.624 3.507 8.441 8 8.941v5.169c-1.272-1.3-3.042-2.11-5-2.11h-4c-.552 0-1 .448-1 1 0 3.86 3.14 7 7 7h3v5h-18v-4.08c3.387-.488 6-3.401 6-6.92v-4c0-.552-.448-1-1-1-2.548 0-4.775 1.373-6 3.413-1.225-2.04-3.452-3.413-6-3.413-.552 0-1 .448-1 1v4c0 3.519 2.613 6.432 6 6.92v4.08h-1c-.552 0-1 .448-1 1v5h-3c-.552 0-1 .448-1 1v3h-3c-.552 0-1 .448-1 1v22c0 .552.448 1 1 1h52c.552 0 1-.448 1-1v-3h3c.552 0 1-.448 1-1v-5h3c.552 0 1-.448 1-1v-22c0-.552-.448-1-1-1zm-5-13.899v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm-9 0h2.899c-.464 2.279-2.485 4-4.899 4h-2.899c.464-2.279 2.484-4 4.899-4zm-10 4c-2.415 0-4.435-1.721-4.899-4h2.899c2.415 0 4.435 1.721 4.899 4zm11-18.929v.929c0 3.521-2.612 6.442-6 6.929v-.929c0-3.521 2.612-6.442 6-6.929zm-14 .929v-.929c3.388.487 6 3.408 6 6.929v.929c-3.388-.487-6-3.408-6-6.929zm-8 11.101v2.899c0 2.415-1.721 4.435-4 4.899v-2.899c0-2.415 1.721-4.435 4-4.899zm-10 2.899v-2.899c2.279.464 4 2.485 4 4.899v2.899c-2.279-.464-4-2.484-4-4.899zm46 43h-50v-20h50zm4-4h-2v-17c0-.552-.448-1-1-1h-47v-2h50zm4-6h-2v-15c0-.552-.448-1-1-1h-47v-4h50z" />
+                                            <path
+                                                d="m6 59h12v-2h-11v-12h11v-2h-12c-.552 0-1 .448-1 1v14c0 .552.448 1 1 1z" />
+                                            <path
+                                                d="m51 58v-14c0-.552-.448-1-1-1h-12v2h11v12h-11v2h12c.552 0 1-.448 1-1z" />
+                                            <path
+                                                d="m46 54c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1h-6c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1zm-5-4h4v2h-4z" />
+                                            <path
+                                                d="m10 48c-.552 0-1 .448-1 1v4c0 .552.448 1 1 1h6c.552 0 1-.448 1-1v-4c0-.552-.448-1-1-1zm5 4h-4v-2h4z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="icon-info-text">
+                                    <h5 class="ad-title">Today gernel expenses</h5>
+                                    <h4 class="ad-card-title"><?php echo $today_gernel_expenses; ?></h4>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!-- Revanue Status Start -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12">
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <h4 class="has-btn">Current Orders <span></span></h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-xl-12 col-lg-12 col-md-12">
+                                        <table id="example1" class="table table-striped table-bordered dt-responsive ">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Inv number</th>
+                                                    <th>Status</th>
+
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                            foreach ($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND created_at >= '".date("Y-m-d 00:00:00")."' AND created_at <= '".date("Y-m-d 23:59:59")."'") as $index => $order) {
+                                                                $index += 1;
+                                                            ?>
+                                                <tr>
+                                                    <td><?php echo $index; ?></td>
+                                                    <td><?php echo $order['invoice_number']; ?></td>
+
+                                                    <td><?php echo $order['status']; ?></td>
+
+                                                    <td>
+                                                        <a class="text-success"
+                                                            href="sales.php?inv_num=<?php echo $order['invoice_number']; ?>">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+
+                                                    </td>
+
+                                                </tr>
+                                                <?php } ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         <div class="card chart-card">
@@ -256,14 +400,15 @@ $amount = array_sum($total_amount);
                                         </div>
                                     </div>
 
-                                
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- Products Orders Start -->
-                
+
                 <?php require_once 'assets/includes/footer.php'; ?>
             </div>
         </div>

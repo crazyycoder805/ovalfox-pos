@@ -839,8 +839,10 @@ echo $maxedInvoiceNumber;
 
 
                                     <label class="col-form-label">Inv number</label>
-                                    <input class="form-control" class="" name="invoice_number" type="number"
-                                        placeholder="Enter Invoice No." id="invoice_number">
+                                    <input class="form-control" class=""
+                                        value="<?php echo isset($_GET['inv_num']) ? $_GET['inv_num'] : ""; ?>"
+                                        name="invoice_number" type="number" placeholder="Enter Invoice No."
+                                        id="invoice_number">
 
 
                                 </div>
@@ -1140,84 +1142,19 @@ foreach ($products as $product) {
                         <div class="row">
 
                             <div class="col-md">
-                                <div class="form-group">
-                                    <?php     if ($settings[0]['theme'] == "full_white") {
-?>
-                                    <div class="d-flex flex-row">
-
-                                        <div class="splash-radio-button">
-                                            <input id="piece" name="qua" type="radio" value="piece" checked="">
-                                            <label for="piece" class="radio-label">Piece</label>
-                                            &nbsp;&nbsp;&nbsp;
-                                            <input id="box" name="qua" type="radio" value="box">
-                                            <label for="box" class="radio-label">Box</label>
-                                        </div>
-                                        &nbsp;&nbsp;&nbsp;
-
-                                        <div class="checkbox mt-3">
-                                            <input id="free_items" name="free_items" value="free_items" type="checkbox">
-                                            <label for="free_items">Click
-                                                For Free
-                                                Items</label>
-                                        </div>
-                                    </div>
-
-                                    <?php } ?>
-                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-?>
-                                    <div class="ad-radio-button">
-                                        <input class="radio" id="piece" value="piece" name="qua" type="radio" checked>
-                                        <label for="piece" class="radio-label">Piece</label>
-                                        &nbsp;&nbsp;
-                                        <input class="radio" id="box" value="box" name="qua" type="radio">
-                                        <label for="box" class="radio-label">Box</label>
-                                    </div>
-
-
-                                    <?php } ?>
-
-
-
-
-
-                                </div>
-                            </div>
-                            <div class="col-md">
 
                                 <div class="form-group">
 
 
 
-
-                                    <?php     if ($settings[0]['theme'] == "full_white") {
-                            ?>
-                                    <div class="splash-radio-button">
-                                        <input id="discount_amount" name="discount" type="radio" checked="">
-                                        <label for="discount_amount" class="radio-label">In
-                                            Amount</label>
-                                        &nbsp;&nbsp;&nbsp;
-                                        <input id="discount_percentage" name="discount" type="radio">
-                                        <label for="discount_percentage" class="radio-label">In
-                                            Percentage</label>
+                                    <div class="checkbox mt-3">
+                                        <input id="free_items" name="free_items" value="free_items" type="checkbox">
+                                        <label for="free_items">Click
+                                            For Free
+                                            Items</label>
                                     </div>
 
 
-
-
-                                    <?php } ?>
-                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                            ?>
-                                    <div class="ad-radio-button">
-
-                                        <input id="discount_amount" name="discount" type="radio" checked>
-                                        <label for="discount_amount" class="radio-label">In
-                                            Amount</label>
-
-                                        <input id="discount_percentage" name="discount" type="radio">
-                                        <label for="discount_percentage" class="radio-label">In
-                                            Percentage</label>
-                                    </div>
-                                    <?php } ?>
 
 
                                 </div>
@@ -1234,6 +1171,35 @@ foreach ($products as $product) {
 
                                         <input style="font-size: 10px;" class="form-control" class="" name="quantity"
                                             type="number" placeholder="Enter Quantity" id="quantity">
+                                        <?php     if ($settings[0]['theme'] == "full_white") {
+?>
+                                        <div class="d-flex flex-row">
+
+                                            <div class="splash-radio-button">
+                                                <input id="piece" name="qua" type="radio" value="piece" checked="">
+                                                <label for="piece" class="radio-label">Piece</label>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <input id="box" name="qua" type="radio" value="box">
+                                                <label for="box" class="radio-label">Box</label>
+                                            </div>
+
+                                        </div>
+
+                                        <?php } ?>
+                                        <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+?>
+                                        <div class="ad-radio-button">
+                                            <input class="radio" id="piece" value="piece" name="qua" type="radio"
+                                                checked>
+                                            <label for="piece" class="radio-label">Piece</label>
+                                            &nbsp;&nbsp;
+                                            <input class="radio" id="box" value="box" name="qua" type="radio">
+                                            <label for="box" class="radio-label">Box</label>
+                                        </div>
+
+
+                                        <?php } ?>
+
                                     </div>
                                 </div>
 
@@ -1265,6 +1231,38 @@ foreach ($products as $product) {
                                         placeholder="Enter Discount" id="discount">
                                     <!-- <label class="col-form-label">(<strong style="color: red;">Press
                 Enter</strong>)</label> -->
+                                    <?php     if ($settings[0]['theme'] == "full_white") {
+                            ?>
+                                    <div class="splash-radio-button">
+                                        <input id="discount_amount" name="discount" type="radio" checked="">
+                                        <label for="discount_amount" class="radio-label">In
+                                            Amount</label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <label for="discount_percentage" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
+
+
+
+
+                                    <?php } ?>
+                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                            ?>
+                                    <div class="ad-radio-button">
+
+                                        <input id="discount_amount" name="discount" type="radio" checked>
+                                        <label for="discount_amount" class="radio-label">In
+                                            Amount</label>
+
+                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <label for="discount_percentage" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
+                                    <?php } ?>
+
+
+
                                 </div>
 
                             </div>
@@ -1312,7 +1310,35 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
                                         placeholder="Enter Discount" id="discount_in_amount">
+                                    <?php     if ($settings[0]['theme'] == "full_white") {
+                            ?>
+                                    <div class="splash-radio-button">
+                                        <input id="discount_amount2" name="discount" type="radio" checked="">
+                                        <label for="discount_amount2" class="radio-label">In
+                                            Amount</label>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <input id="discount_percentage2" name="discount" type="radio">
+                                        <label for="discount_percentage2" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
 
+
+
+
+                                    <?php } ?>
+                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
+                            ?>
+                                    <div class="ad-radio-button">
+
+                                        <input id="discount_amount2" name="discount" type="radio" checked>
+                                        <label for="discount_amount2" class="radio-label">In
+                                            Amount</label>
+
+                                        <input id="discount_percentage2" name="discount" type="radio">
+                                        <label for="discount_percentage2" class="radio-label">In
+                                            Percentage</label>
+                                    </div>
+                                    <?php } ?>
                                 </div>
                             </div>
 
@@ -1467,8 +1493,6 @@ foreach ($products as $product) {
     <?php require_once 'assets/includes/javascript.php'; ?>
     <script>
     $(document).ready(() => {
-        const error = $("#error");
-        const success = $("#success");
 
         const item_code = $("#item_code");
         const invoice_number = $("#invoice_number");
@@ -1489,7 +1513,48 @@ foreach ($products as $product) {
 
         current_date.val(formattedDate);
         let initialQuantity = 0;
+        <?php 
+            if (isset($_GET['inv_num'])) {
+
+            
+            ?>
+        $.ajax({
+            type: "POST",
+            url: "data.php",
+            data: {
+                "in": <?php echo $_GET['inv_num']; ?>,
+
+                "__FILE__": "loadInvoice",
+
+            },
+            success: e => {
+                const product = JSON.parse(e);
+                finalAmount = +product[1][0]['total_amount'];
+                totalPayable = +product[1][0]['final_amount'];
+
+                $("#data").html(product[0]);
+                $("#total_items").text(product[2]);
+                $("#total_quantity_added").text(product[3]);
+
+                $("#final_amount").val(+product[1][0]['total_amount']);
+                $("#discount_in_amount").val(+product[1][0]['discount']);
+                $("#total_payable").val(+product[1][0]['final_amount']);
+                $("#amount_received").val(+product[1][0][
+                    'recevied_amount'
+                ]);
+                $("#amount_return").val(+product[1][0]['returned_amount']);
+                $("#pending_amount").val(+product[1][0]['pending_amount']);
+                $("#quantity").focus();
+                $("#pass_sales_div").removeAttr("hidden");
+            }
+        });
+
+
+
+        <?php } else { ?>
         $("#customer_name").focus();
+
+        <?php } ?>
         let quantityAdd = 0;
         let totalQuan = 0;
         let productId = 0;
@@ -1705,7 +1770,7 @@ foreach ($products as $product) {
 
         const calculateDiscount = (quantity, unitPrice, discountRate) => {
             const discountedPrice = ((quantity * unitPrice) - discountRate);
-            let percentage = (quantity * unitPrice) - ((quantity * unitPrice) / 100) * discountRate;
+            let percentage = (quantity * unitPrice) * (1 - (discountRate / 100));
 
             return {
                 discountedPrice,
@@ -1782,11 +1847,6 @@ foreach ($products as $product) {
 
 
 
-
-
-
-
-
         // $("#discount_amount").on("click", e => {
         //     const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
         //         .val());
@@ -1819,6 +1879,19 @@ foreach ($products as $product) {
             $("#pending_amount").val('');
 
         });
+
+
+        $("#discount_amount2").on("click", e => {
+            $("#total_payable").val(+finalAmount - +$("#discount_in_amount").val());
+
+
+        });
+        $("#discount_percentage2").on("click", e => {
+
+            $("#total_payable").val((finalAmount) * (1 - (+$("#discount_in_amount").val() / 100)));
+        });
+
+
 
         $("#amount_received").on("input", e => {
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
@@ -2040,6 +2113,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                 },
 
                 success: e => {
+                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -2142,7 +2216,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                     <?php } ?>
                 },
-                
+
             });
         });
         $('#free_items').change(function() {
@@ -2226,7 +2300,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
         });
 
         $(document).on("blur", "#itemAddedtable td", e => {
-
+            let target = e;
 
             $.ajax({
                 type: "POST",
@@ -2250,6 +2324,7 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                         success: e => {
                             const product = JSON.parse(e);
                             $("#data").html(product[0]);
+                            let html = product[0];
                             $("#total_items").text(product[1]);
                             $("#total_quantity_added").text(product[
                                 2]);
@@ -2257,6 +2332,16 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                             $("#final_amount").val(product[
                                 3]);
+                            var regexPattern =
+                                /<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/;
+                            
+                            var matches = html.match(regexPattern);
+                            if (target.target.id.match(/percentageTabledData\d*/)) {
+                                $(document).find(`#${$(matches[0]).attr("id")}`)
+                                    .focus();
+                                $("#unit_price").focus();
+                            }
+
                         }
                     });
 

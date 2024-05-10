@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
-
+    <style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+    </style>
 </head>
 
 
@@ -40,6 +45,9 @@ $total_price = 0;
    margin: 0 auto;
    padding: 20px;
    box-sizing: border-box;">
+        <h6 style="text-align: center" id="time"></h6>
+        <h6 style="text-align: center">Date : <?php echo date("Y-m-d"); ?></h6>
+
         <h1 style="text-align: center;"><?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
         </h1>
         <p style="text-align: center;">Address: <?php echo !empty($company['address']) ? $company['address'] : ""; ?>,
@@ -66,10 +74,10 @@ $total_price = 0;
                         <th>Bill No. : <?php echo $sales_2[0]['bill_number']; ?></th>
                     </tr>
                     <tr>
-                        <th>Date : <?php echo date("Y-m-d"); ?></th>
+                        <th>Date & Time : <?php echo $sales_2[0]['created_at']; ?></th>
                     </tr>
                     <tr>
-                        <th id="time"></th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>
@@ -98,7 +106,7 @@ $total_price = 0;
             foreach ($sales_1 as $index => $sale) {
                 $index += 1;
                 $total_quantity += $sale['quantity'];
-                $total_price += $sale['amount'];
+                $total_price += $sale['grand_total'];
 
             ?>
                 <tr>
@@ -141,8 +149,8 @@ $total_price = 0;
             <div style="width: 400px;">
                 <p> <b>Invoice Amount In Words:</b> <span id="aiw"></span> only</p>
 
-                <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="border: 0px;" placeholder="Type..." name=""
-                        id="" cols="30" rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
+                <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="border: 0px;" placeholder="Type..."
+                        name="" id="" cols="30" rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
 
 
             </div>
@@ -162,7 +170,8 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Dicount
                         (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
-                    Rs <?php $per = intval(($total_price / 100) * $sales_2[0]['discount'], 2); echo $per; ?>
+                    Rs <?php $per = ($total_price) * (1 - ($sales_2[0]['discount'] / 100)); echo $per; ?></span>
+
                 </div>
                 <div style=" display: flex;
                 justify-content: space-between;
@@ -197,13 +206,8 @@ $total_price = 0;
                 ">
                     <span style="text-align: left;padding-left: 30px;">Current Balance</span>
                     Rs
-                    <?php if (!empty($customers[0]['balance'])) {
-                        echo $per + $customers[0]['balance'];
-                        } else if(!empty($customers[0]['balance'])) {
-                            echo $customers[0]['balance'];
-                        } else {
-                            echo 0;
-                        } ?>
+                    <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+
                 </div>
             </div>
 
@@ -231,38 +235,46 @@ $total_price = 0;
         document.getElementById("time").textContent = time;
 
 
-
         function convertNumberToWords(number) {
-            // Handle invalid input (negative numbers or decimals)
-            if (number < 0 || !Number.isInteger(number)) {
-                return 'Invalid input: Please enter a non-negative integer.';
+            // Handle invalid input (negative numbers)
+            if (number < 0) {
+                return 'Invalid input: Please enter a non-negative number.';
             }
 
+            // Split number into integer and decimal parts
+            var integerPart = Math.floor(number);
+            var decimalPart = Math.round((number - integerPart) * 100); // Consider two decimal places
+
+            // Convert integer part
+            var integerWords = convertIntegerToWords(integerPart);
+
+            // Convert decimal part
+            var decimalWords = convertDecimalToWords(decimalPart);
+
+            // Combine integer and decimal parts
+            var result = integerWords.trim();
+            if (decimalWords) {
+                result += ' point ' + decimalWords;
+            }
+
+            return result;
+        }
+
+        function convertIntegerToWords(number) {
             // Handle numbers exceeding the range supported by the function
             if (number >= 1000000000000) { // Limit to 12 digits
                 return 'Number too large: The function currently supports up to 12-digit integers.';
             }
 
-            // Define an array of words for single digits
-            var ones = [
-                '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'
-            ];
-
-            // Define an array of words for teens (10-19)
-            var teens = [
-                'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+            // Define arrays for number words
+            var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+            var teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
                 'eighteen', 'nineteen'
             ];
-
-            // Define an array of words for multiples of ten (20-90)
-            var tens = [
-                '', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
-            ];
-
-            // Define an array of words for larger denominations (thousands, millions, billions)
+            var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
             var denominations = ['', 'thousand', 'million', 'billion'];
 
-            // Initialize variables to store the result string and the remaining number
+            // Initialize variables
             let result = '';
             let remaining = number;
 
@@ -274,49 +286,63 @@ $total_price = 0;
                 var part = Math.floor(remaining / Math.pow(1000, i));
                 remaining %= Math.pow(1000, i);
 
-                // Handle numbers larger than 999 for each denomination
-                if (part > 999) {
+                // Convert part to words
+                if (part > 0) {
+                    let convertedPart = '';
+
                     // Convert hundreds place
-                    var hundreds = convertNumberToWords(part).trim();
-                    if (hundreds) {
-                        result += `${hundreds} hundred ${denomination} `;
+                    if (part >= 100) {
+                        convertedPart += `${ones[Math.floor(part / 100)]} hundred `;
+                        part %= 100;
                     }
-                } else {
-                    // Convert hundreds, tens, and ones places
+
+                    // Convert tens and ones places
+                    if (part >= 20) {
+                        convertedPart += `${tens[Math.floor(part / 10)]} `;
+                        part %= 10;
+                    } else if (part >= 10) {
+                        convertedPart += `${teens[part - 10]} `;
+                        part = 0;
+                    }
+
                     if (part > 0) {
-                        let convertedPart = '';
+                        convertedPart += `${ones[part]} `;
+                    }
 
-                        // Handle hundreds place
-                        if (part >= 100) {
-                            convertedPart += `${ones[Math.floor(part / 100)]} hundred `;
-                            part %= 100;
-                        }
-
-                        // Handle tens and ones places
-                        if (part >= 20) {
-                            convertedPart += `${tens[Math.floor(part / 10)]} `;
-                            part %= 10;
-                        } else if (part >= 10) {
-                            convertedPart += `${teens[part - 10]} `;
-                            part = 0;
-                        }
-
-                        if (part > 0) {
-                            convertedPart += `${ones[part]} `;
-                        }
-
-                        // Add converted part with denomination (except for zero)
-                        if (convertedPart.trim()) {
-                            result += `${convertedPart.trim()} ${denomination} `;
-                        }
+                    // Add converted part with denomination (except for zero)
+                    if (convertedPart.trim()) {
+                        result += `${convertedPart.trim()} ${denomination} `;
                     }
                 }
             }
 
-            // Remove trailing spaces
             return result.trim();
         }
-        document.getElementById("aiw").textContent = convertNumberToWords(+<?php echo $per; ?>);
+
+        function convertDecimalToWords(number) {
+            // Handle zero decimal part
+            if (number === 0) {
+                return 'zero';
+            }
+
+            // Define arrays for number words
+            var ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+            var teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+                'eighteen', 'nineteen'
+            ];
+            var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+            // Convert two-digit decimal number to words
+            if (number >= 20) {
+                return `${tens[Math.floor(number / 10)]} ${ones[number % 10]}`;
+            } else if (number >= 10) {
+                return `${teens[number - 10]}`;
+            } else {
+                return `${ones[number]}`;
+            }
+        }
+
+        document.getElementById("aiw").textContent = convertNumberToWords(+<?php echo $total_price - $per; ?>);
         // Examples
 
     });

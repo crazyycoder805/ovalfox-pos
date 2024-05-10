@@ -33,20 +33,14 @@ $(document).ready(function() {
 });
 </script>
 
+
+<?php 
+if ($name == "index.php") {
+?>
 <script src="assets/js/apexchart/apexcharts.min.js"></script>
 <script src="assets/js/apexchart/chart.js"></script>
 
 <?php 
-$sales_1 = $pdo->read("sales_1", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$total_sales = count($sales_1) + count($sales_2);
-
-$purchases_1 = $pdo->read("purchases_1", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$purchases_2 = $pdo->read("purchases_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-$total_purchase = count($purchases_1) + count($purchases_2);
-
-$gernel_expenses = count($pdo->read("gernel_expenses", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
-
 
 ?>
 <script>
@@ -54,33 +48,54 @@ $(document).ready(e => {
     function chartL() {
         var options = {
             chart: {
-                width: 360,
-                type: 'pie',
+                width: 1000,
+                type: 'bar',
                 fontFamily: 'Poppins, sans-serif',
                 toolbar: {
-                    show: false
+                    show: true
                 },
                 zoom: {
-                    enabled: false
+                    enabled: true
                 },
             },
-            labels: ['Sales', 'Purchase', 'Gernel Expenses'],
-            series: [+<?php echo $total_sales; ?>, +<?php echo $total_purchase; ?>, +
-                <?php echo $gernel_expenses; ?>
-            ],
-            responsive: [{
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200,
-                    },
-                    legend: {
-                        position: 'bottom'
+            plotOptions: {
+                bar: {
+                    horizontal: false // Set to true if you want horizontal bars
+                }
+            },
+            dataLabels: {
+                enabled: true // If you want data labels, set this to true
+            },
+            xaxis: {
+                categories: ['Customers', 'Today orders', 'Total sales'
+                , 'Total revenue'
+                , 'Today sales'
+                , 'Today purchase'
+                , 'Today gernel expenses'
+                ], // X-axis labels
+                labels: {
+                    style: {
+                        colors: '#000000' // Black color for labels
                     }
                 }
-            }],
-            colors: ['#1b4962', '#ffa000', '#00a3ff']
-        }
+            },
+            yaxis: {
+                title: {
+                    text: 'Value' // Y-axis label
+                }
+            },
+            colors: ['#1b4962', '#1b4962', '#1b4962'], // Blue color for bars
+            series: [{
+                name: 'Value',
+                data: [<?php echo $total_customers; ?>, <?php echo $today_orders; ?>,
+                    <?php echo $total_sales; ?>,
+                    <?php echo $total_amount; ?>,
+                    <?php echo $today_sales; ?>,
+                    <?php echo $today_purchase; ?>,
+                    <?php echo $today_gernel_expenses; ?>
+                ]
+            }]
+        };
 
         var chart = new ApexCharts(
             document.querySelector("#chartL"),
@@ -92,6 +107,8 @@ $(document).ready(e => {
 
     chartL();
 
+
+
     <?php 
     
     if ($_SERVER['SCRIPT_NAME'] == '/ovalfoxpos/food.php') {
@@ -101,6 +118,7 @@ $(document).ready(e => {
     $(this).toggleClass('checked');
     <?php } ?>
 
-    
+
 });
 </script>
+<?php } ?>
