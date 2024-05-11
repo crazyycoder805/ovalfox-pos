@@ -11,7 +11,6 @@ $user = $pdo->read("access", ['id' => $_SESSION['ovalfox_pos_user_id']]);
 $success = "";
 $error = "";
 
-
 $image_result = '';
 if (isset($_POST['user_update'])) {
     if (!empty($_POST['email']) && !empty($_POST['printing_page_size'])) {

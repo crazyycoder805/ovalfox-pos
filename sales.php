@@ -2058,14 +2058,14 @@ foreach ($products as $product) {
 
             if ($("#invoice_number").val() == "") {
                 <?php
-$maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
-MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
-company_profile_id
-FROM 
-sales_2 
-WHERE 
-company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber'] + 1;
-?>
+                    $maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
+                    MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
+                    company_profile_id
+                    FROM 
+                    sales_2 
+                    WHERE 
+                    company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber'] + 1;
+                    ?>
 
                 $("#invoice_number").val(+<?php echo $maxedInvoiceNumber ?>);
 
@@ -2113,7 +2113,6 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
                 },
 
                 success: e => {
-                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -2298,8 +2297,15 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
             })
 
         });
+        $(document).on('keydown', "#itemAddedtable td", e => {
+            if (e.keyCode == 13) {
+                $("#unit_price").focus();
+            }
+        });
+        let focusSet = false;
 
         $(document).on("blur", "#itemAddedtable td", e => {
+            focusSet = false;
             let target = e;
 
             $.ajax({
@@ -2332,15 +2338,46 @@ company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}'")[0]['maxedInvoiceNumber
 
                             $("#final_amount").val(product[
                                 3]);
-                            var regexPattern =
-                                /<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/;
-                            
-                            var matches = html.match(regexPattern);
-                            if (target.target.id.match(/percentageTabledData\d*/)) {
-                                $(document).find(`#${$(matches[0]).attr("id")}`)
-                                    .focus();
+
+                            if (target.target.id.match(
+                                    /percentageTabledData\d*/) && !focusSet) {
+
+                                $(document).find(
+                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                                ).focus();
+
                                 $("#unit_price").focus();
+                                focusSet = true;
                             }
+
+                            // if (target.target.id.match(
+                            //         /discountTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+
+                            if (target.target.id.match(
+                                    /quantityTabledData\d*/) && !focusSet) {
+                                $(document).find(
+                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                                ).focus();
+                                $("#unit_price").focus();
+                                focusSet = true;
+                            }
+
+                            if (target.target.id.match(
+                                    /item_priceTabledData\d*/) && !focusSet) {
+                                $(document).find(
+                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                                ).focus();
+                                $("#unit_price").focus();
+                                focusSet = true;
+                            }
+
 
                         }
                     });

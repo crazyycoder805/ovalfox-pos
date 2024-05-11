@@ -19,7 +19,7 @@ $suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['ovalfox
 $image_result = '';
 if (isset($_POST['add_supplier_btn'])) {
 
-    if (!empty($_POST['name']) && !empty($_POST['dist_name']) && !empty($_POST['cnic']) && !empty($_POST['mobile']) && !empty($_POST['office']) && !empty($_POST['address']) && !empty($_POST['dist_address'])  && !empty($_POST['balanace'])  && !empty($_POST['bill_head'])) {
+    if (!empty($_POST['name'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['mobile'], 'phone')) {
                 if (!empty($_FILES['image']['name'])) {
@@ -56,7 +56,7 @@ if (isset($_POST['add_supplier_btn'])) {
         $error = "All fields must be filled.";
     }
 } else if (isset($_POST['edit_supplier_btn'])) {
-    if (!empty($_POST['name']) && !empty($_POST['dist_name']) && !empty($_POST['cnic']) && !empty($_POST['mobile']) && !empty($_POST['office']) && !empty($_POST['address']) && !empty($_POST['dist_address'])  && !empty($_POST['balanace'])  && !empty($_POST['bill_head'])) {
+    if (!empty($_POST['name'])) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['mobile'], 'phone')) {
                 if (!empty($_FILES['image']['name'])) {

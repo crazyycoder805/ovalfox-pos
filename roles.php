@@ -77,18 +77,18 @@ if (isset($_POST['add_role_btn'])) {
         $suppliers = isset($_POST['suppliers']) && $_POST['suppliers'] != null ? $_POST['suppliers'] : 0;
         $companies = isset($_POST['companies']) && $_POST['companies'] != null ? $_POST['companies'] : 0;
         $employees = isset($_POST['employees']) && $_POST['employees'] != null ? $_POST['employees'] : 0;
-        $roles = isset($_POST['roles']) && $_POST['roles'] != null ? $_POST['roles'] : 0;
+        $rolesG = isset($_POST['roles']) && $_POST['roles'] != null ? $_POST['roles'] : 0;
         $users = isset($_POST['users']) && $_POST['users'] != null ? $_POST['users'] : 0;
         $sales_1 = isset($_POST['sales_1']) && $_POST['sales_1'] != null ? $_POST['sales_1'] : 0;
         $sales_2 = isset($_POST['sales_2']) && $_POST['sales_2'] != null ? $_POST['sales_2'] : 0;
         $purchase_1 = isset($_POST['purchase_1']) && $_POST['purchase_1'] != null ? $_POST['purchase_1'] : 0;
         $purchase_2 = isset($_POST['purchase_2']) && $_POST['purchase_2'] != null ? $_POST['purchase_2'] : 0;
         $ledger_report = isset($_POST['lgr']) && $_POST['lgr'] != null ? $_POST['lgr'] : 0;
-        $profile_eidt = isset($_POST['lgr']) && $_POST['pe'] != null ? $_POST['pe'] : 0;
+        $profile_edit = isset($_POST['pe']) && $_POST['pe'] != null ? $_POST['pe'] : 0;
 
         $rolesAll = json_encode(["d"=>$dashboard, "s"=>$sales, "g"=>$gernel_expenses, "l"=>$ledger, "st"=>$stores, 
         "ds"=>$designations, "pc"=>$product_categories, "p"=>$products, "c"=>$customers, "ec"=>$expense_category, "ss"=>$suppliers,
-        "cp"=>$companies, "em"=>$employees, "pe"=>$profile_eidt, "r"=>$roles, "us"=>$users, "prc"=>$purchase, "sr1"=>$sales_1, "sr2"=>$sales_2, "pr1"=>$sales_1, "pr2"=>$purchase_2, "lgr"=>$ledger_report]);
+        "cp"=>$companies, "em"=>$employees, "pe"=>$profile_edit, "r"=>$rolesG, "us"=>$users, "prc"=>$purchase, "sr1"=>$sales_1, "sr2"=>$sales_2, "pr1"=>$sales_1, "pr2"=>$purchase_2, "lgr"=>$ledger_report]);
         if ($pdo->update("access", ['id'=>$_POST['username']], ['access_of' => $rolesAll])) {
             $success = "Roles added.";
                                   header("Location:{$name}");

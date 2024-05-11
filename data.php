@@ -120,6 +120,13 @@ echo json_encode($data);
 
         $customerId = "";
         $customer = "";
+        
+        $discount = 0;
+        $extra_discount = 0;
+
+        if (!empty($_POST['discount'])) $discount = $_POST['discount'];
+        if (!empty($_POST['extra_discount'])) $extra_discount = $_POST['extra_discount'];
+
         if (!empty($_POST['customer_manual'])) { 
             if (!$pdo->isDataInserted("customers", ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']])) {
                 $returnedId = $pdo->create('customers', ['name'=> $_POST['customer_manual'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
@@ -151,8 +158,8 @@ echo json_encode($data);
             $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
             'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 'item_code' => $_POST['item_code'], 
             'item_name' => "(Refunded) " . $_POST['item_name'], 'item_price' => $_POST['item_price'] , 'quantity' => $_POST['quantity'], 
-            'grand_total' => $_POST['total_amount'], 'amount' => empty($_POST['taaup']) ? 0 : $_POST['taaup'], 
-            'discount' => empty($_POST['discount_in_amount']) ? 0 : $_POST['discount_in_amount'], 
+            'grand_total' => ($_POST['taaup'] - $discount) - $extra_discount, 'amount' => empty($_POST['taaup']) ? 0 : $_POST['taaup'], 
+            'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
             'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
         } else {
             $pdo->update("products", ['id' => $_POST['product_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $_POST['total_quantity']]);
@@ -166,16 +173,18 @@ echo json_encode($data);
                 $pdo->update("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['total_amount' => 
                 $_POST['total_amount']]);
             }
-    
-    
+
+
+
     
             if (empty($sales_1)) {
                 $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
             'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
             'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
             'item_code' => $_POST['item_code'], 'item_name' => $_POST['item_name'], 'item_price' => $_POST['item_price'], 
-            'quantity' => empty($_POST['quantity']) ? 0 : $_POST['quantity'], 'grand_total' => $_POST['total_amount'], 'amount' => empty($_POST['taaup']) ? 0 : $_POST['taaup'], 
-            'discount' => empty($_POST['discount_in_amount']) ? 0 : $_POST['discount_in_amount'], 
+            'quantity' => empty($_POST['quantity']) ? 0 : $_POST['quantity'], 'grand_total' => ($_POST['taaup'] - $discount) - $extra_discount, 
+            'amount' => empty($_POST['taaup']) ? 0 : $_POST['taaup'], 
+            'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
             'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
             } else {
                 $qun = $sales_1[0]['quantity'] + $_POST['quantity'];
@@ -736,6 +745,7 @@ if ($key == "quantity") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
     ['grand_total' => ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - array_values($array)[0]) - $selectedItem[0]['extra_discount']),
+    'percentage' => round((array_values($array)[0] / ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price'])) - $selectedItem[0]['extra_discount'])) * 100, 3),
     'discount' => array_values($array)[0]]);
     $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
@@ -766,9 +776,9 @@ if ($key == "quantity") {
 } else if ($key == "percentage") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $discount = array_values($array)[0] == 0 ? 0 :
-    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (array_values($array)[0] / 100))) - $selectedItem[0]['extra_discount']);
+    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (array_values($array)[0] / 100))));
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
-    ['discount' => $discount,
+    ['discount' => array_values($array)[0] == 0 ? 0 : ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - $discount,
     'percentage' => array_values($array)[0]]);
     $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 

@@ -33,29 +33,88 @@ $total_price = 0;
     <style>
     @media print {
         @page {
-            size: A6;
+            size: A6 portrait;
+            margin: 5mm;
         }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #main {
+            padding: 5px;
+            height: calc(100% - 20px);
+        }
+
+        #main-inner {
+            height: 100%;
+        }
+
+        #table-info,
+        #footer-outer {
+            font-size: 10px;
+        }
+
+        #table-data-product {
+            font-size: 10px;
+        }
+    }
+
+
+    #footer-outer {
+        margin-top: 5px;
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    #terms-cond {
+        font-size: 12px;
 
     }
 
+    @media print {
+        @page {
+            size: A6 portrait;
+            margin: 5mm;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            word-wrap: break-word;
+            max-width: calc(100% / 9);
+        }
+    }
+
+
     * {
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
     }
 
     body {
         width: 4.1in;
-
     }
 
     #main {
         padding-left: 3px;
     }
 
-
     #main-inner {
         width: 4.1in;
     }
+
+
 
     #company_name {
         text-align: center;
@@ -81,6 +140,7 @@ $total_price = 0;
         border-collapse: collapse;
         font-size: 12px;
         width: 100%;
+        height: 0.01in;
     }
 
     #table-data-product thead th {
@@ -98,9 +158,9 @@ $total_price = 0;
         border: 0px;
     }
 
-    /* 
+    /*
     #sub-total {
-        display: block;
+    display: block;
     } */
 
     #sub-total-inner {
@@ -190,72 +250,74 @@ $total_price = 0;
 
 
 <body>
-    <br /><br />
-    <div id="main" style="">
-        <div id="main-inner" style="">
-            <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
-            <h6 class="content" style="text-align: center;"></h6>
-            <h1 id="company_name" style="">
-                <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
-            </h1>
-            <p id="address" style="font-size: 10px;">Address:
-                <?php echo !empty($company['address']) ? $company['address'] : ""; ?>,
-                Ph. no.: <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
-                Email:
-                <?php echo !empty($company['email']) ? $company['email'] : ""; ?>
-            </p>
-            <p id="whatsapp" style="">WA:
-                <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
-                <?php echo !empty($company['phone2']) ?  '- - '. $company['phone2'] : ""; ?>
-                <?php echo !empty($company['phone3']) ?  '- - '. $company['phone3'] : ""; ?>
-            </p>
-            <div id="table-info">
-                <div style="border: 1px solid black;">
-                    <table id="" style="">
-                        <thead>
 
-                            <tr>
-                                <th style="text-align: start;" id="table-info-first-th-child" style="">
-                                    <?php echo $sales_2[0]['created_at'] ?></th>
-                                <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
+    <div class="page">
+        <div id="main" style="margin-top: 0.2in;margin-bottom: 0.2in;">
+            <div id="main-inner" style="">
+                <h1 id="company_name" style="">
+                    <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
+                </h1>
+                <p id="address" style="font-size: 10px;">Address:
+                    <?php echo !empty($company['address']) ? $company['address'] : ""; ?>,
+                    Ph. no.: <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
+                    Email:
+                    <?php echo !empty($company['email']) ? $company['email'] : ""; ?>
+                </p>
+                <p id="whatsapp" style="">WA:
+                    <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
+                    <?php echo !empty($company['phone2']) ?  '- - '. $company['phone2'] : ""; ?>
+                    <?php echo !empty($company['phone3']) ?  '- - '. $company['phone3'] : ""; ?>
+                </p>
+                <div id="table-info">
+                    <div style="border: 1px solid black;">
+                        <table id="" style="">
+                            <thead>
 
-                                <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>
+                                <tr>
+                                    <th style="text-align: start;" id="table-info-first-th-child" style="">
+                                        <?php echo $sales_2[0]['created_at'] ?></th>
+                                    <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
 
-                            </tr>
-                            <tr>
-                                <th style="text-align: start;">Booker : <?php echo $booker[0]['username']; ?>
-                                </th>
+                                    <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>
 
-                                <th style="text-align: center;">Name:
-                                    <?php echo $customers[0]['name'];?></th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align: start;">Admin :
+                                        <?php echo $_SESSION['ovalfox_pos_username']; ?>
+                                    </th>
+                                    <th style="text-align: start;">Cashier : <?php echo $booker[0]['username']; ?>
+                                    </th>
 
-                            </tr>
-                            <tr>
-                                <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
-                                </th>
-                                <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
 
-                            </tr>
-                        </thead>
 
-                    </table>
-                    <table id="table-data-product" style="" border="1">
-                        <thead>
-                            <th style="text-align: center;font-size: 10px;">SR</th>
-                            <th style="text-align: center;font-size: 10px;">Qty</th>
-                            <th style="text-align: center;font-size: 10px;">Description</th>
-                            <th style="text-align: center;font-size: 10px;">Rate</th>
-                            <th style="text-align: center;font-size: 10px;">Total</th>
-                            <th style="text-align: center;font-size: 10px;">Dis</th>
-                            <th style="text-align: center;font-size: 10px;">Ex.Dis</th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
+                                    </th>
+                                    <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
+                                    <th style="text-align: center;">Name:
+                                        <?php echo $customers[0]['name'];?></th>
+                                </tr>
+                            </thead>
 
-                            <th style="text-align: center;font-size: 10px;">%</th>
-                            <th style="text-align: center;font-size: 10px;">G.Total</th>
-                            <th style="text-align: center;font-size: 10px;">Details</th>
+                        </table>
+                        <table id="table-data-product" style="
+        " border="1">
+                            <thead>
+                                <th style="text-align: center;font-size: 11px;">SR</th>
+                                <th style="text-align: center;font-size: 11px;">Qty</th>
+                                <th style="text-align: center;font-size: 11px;">Description</th>
+                                <th style="text-align: center;font-size: 11px;">Rate</th>
+                                <th style="text-align: center;font-size: 11px;">Total</th>
+                                <th style="text-align: center;font-size: 11px;">Dis</th>
+                                <th style="text-align: center;font-size: 11px;">%</th>
+                                <th style="text-align: center;font-size: 11px;">Ex.Dis</th>
 
-                        </thead>
-                        <tbody>
-                            <?php 
+                                <th style="text-align: center;font-size: 11px;">G.Total</th>
+
+                            </thead>
+                            <tbody>
+                                <?php 
                         $total_price = 0;
                         $total_quantity = 0;
                 foreach ($sales_1 as $index => $sale) {
@@ -265,120 +327,132 @@ $total_price = 0;
                     $total_price += $sale['grand_total'];
 
                 ?>
-                            <tr>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $index; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['quantity']; ?>
-                                </td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['item_name']; ?>
-                                </td>
+                                <tr>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $index; ?></td>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['quantity']; ?>
+                                    </td>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['item_name']; ?>
+                                    </td>
 
 
-                                <td style="text-align: center;font-size: 10px;">
-                                    <?php echo $sale['item_price']; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['amount']; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['discount']; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['extra_discount']; ?>
-                                </td>
+                                    <td style="text-align: center;font-size: 11px;">
+                                        <?php echo $sale['item_price']; ?></td>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['amount']; ?></td>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['discount']; ?>
+                                    </td>
+                                    <td style="text-align: center;font-size: 11px;">
+                                        <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
+                                    <td style="text-align: center;font-size: 11px;">
+                                        <?php echo $sale['extra_discount']; ?>
+                                    </td>
 
-                                <td style="text-align: center;font-size: 10px;">
-                                    <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sale['grand_total']; ?></td>
-                                <td style="text-align: center;font-size: 10px;"><?php echo $sales_2[0]['details']; ?>
-                                </td>
-
-
-                            </tr>
-                            <?php } ?>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="footer-outer" style="">
-                    <div style="">
-                        <h4>Items: <?php echo $total_quantity; ?></h4>
-                        <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
+                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['grand_total']; ?>
+                                    </td>
+                                    </td>
 
 
-                        <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 12px;"
-                                placeholder="Type..." name="" id="terms-cond" cols="22"
-                                rows="10"><?php echo $company['terms_cond']; ?></textarea></p>
-
-
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <div id="sub-total" style="width: 100%;">
-                        <div id="sub-total-inner">
-                            <span id="sub-total-text" style="">Sub Total</span>
-                            <span id="sub-total-price">Rs <?php echo $total_price; ?></span>
+                    <div id="footer-outer" style="">
+                        <div style="">
+                            <h4>Items: <?php echo $total_quantity; ?></h4>
+                            <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
+
+
+                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 12px;"
+                                    placeholder="Type..." name="" id="terms-cond" cols="22"
+                                    rows="10"><?php echo $sales_2[0]['details']; ?></textarea></p>
+
+
                         </div>
+                        <div id="sub-total" style="width: 100%;">
+                            <div id="sub-total-inner">
+                                <span id="sub-total-text" style="">Sub Total</span>
+                                <span id="sub-total-price">Rs <?php echo $total_price; ?></span>
+                            </div>
 
 
-                        <div id="discount-outer">
-                            <span id="discount-text-inner" style="">Dicount
+                            <div id="discount-outer">
+                                <span id="discount-text-inner" style="">Dicount
 
-                                (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
-                            <span id="discount-total-price" style="">Rs
-                                <?php $per = ($total_price) * (1 - ($sales_2[0]['discount'] / 100)); echo $per; ?></span>
-                        </div>
-                        <div id="total-box" style="">
-                            <span id="total-text" style=""><b>Total</b></span>
-                            <b id="total-price-total" style="">Rs
-                                <?php echo $total_price - $per; ?></b>
-                        </div>
+                                    (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
+                                <span id="discount-total-price" style="">Rs
+                                    <?php $per = ($total_price) * (1 - ($sales_2[0]['discount'] / 100)); echo $per; ?></span>
+                            </div>
+                            <div id="total-box" style="">
+                                <span id="total-text" style=""><b>Total</b></span>
+                                <b id="total-price-total" style="">Rs
+                                    <?php echo $total_price - $per; ?></b>
+                            </div>
 
-                        <div id="rec-box" style="">
-                            <span id="rec-text" style="">Received</span>
+                            <div id="rec-box" style="">
+                                <span id="rec-text" style="">Received</span>
 
-                            <span
-                                id="rec-total">Rs<?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
-                        </div>
+                                <span
+                                    id="rec-total">Rs<?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
+                            </div>
 
-                        <div id="bala-box" style="">
-                            <span id="bala-text" style="">Balance</span>
-                            Rs <?php echo !empty($customers[0]['balance']) ? $customers[0]['balance'] : 0.00; ?>
-                        </div>
+                            <div id="bala-box" style="">
+                                <span id="bala-text" style="">Balance</span>
+                                Rs <?php echo !empty($customers[0]['balance']) ? $customers[0]['balance'] : 0.00; ?>
+                            </div>
 
 
 
-                        <div id="cb-box" style=" 
+                            <div id="cb-box" style=" 
                 ">
-                            <span id="cb-text" style="">Current Balance</span>
-                            Rs
-                            <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                                <span id="cb-text" style="">Current Balance</span>
+                                Rs
+                                <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                            </div>
                         </div>
+
+
                     </div>
-
-
                 </div>
+
+                <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
+
+                <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
+                <div style="width: 100%;border-bottom: 1px solid black;"></div>
+                <h6 class="content" style="text-align: center;"></h6>
+
             </div>
 
-
-
         </div>
-        <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
-        <div style="width: 100%;border-bottom: 1px solid black;"></div>
     </div>
     <!-- <button id="downloadBtn">Download as PDF</button> -->
 
     <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/print.js"></script>
+    <!-- <script src="assets/js/print.js"></script> -->
 
     <script>
-    const options = {
-        filename: 'small_inv.pdf',
-        image: {
-            type: 'jpeg',
-            quality: 0.98
-        },
-        html2canvas: {
-            scale: 2
-        },
-        jsPDF: {
-            unit: 'in',
-            format: 'a6',
-            orientation: 'portrait'
-        }
+    window.onload = function() {
+        // Calculate the height of the first page
+        var firstPageHeight = document.getElementById('main').offsetHeight;
+        // Set the top margin of the second page to the height of the first page
+        document.documentElement.style.setProperty('--page-margin', firstPageHeight + 'px');
     };
+    // const options = {
+    //     filename: 'small_inv.pdf',
+    //     image: {
+    //         type: 'jpeg',
+    //         quality: 0.98
+    //     },
+    //     html2canvas: {
+    //         scale: 2
+    //     },
+    //     jsPDF: {
+    //         unit: 'in',
+    //         format: 'a6',
+    //         orientation: 'portrait'
+    //     }
+    // };
 
-    html2pdf().from(document.body).set(options).save();
+    // html2pdf().from(document.body).set(options).save();
 
 
     var currentTime = new Date();

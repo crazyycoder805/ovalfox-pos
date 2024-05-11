@@ -29,9 +29,12 @@ if (isset($_POST['username'])) {
                 $_SESSION['ovalfox_pos_cp_sales_1_password'] = $company[0]['password_sales_1'];
                 if ($user[0]['role_id'] == 3) {
                     $_SESSION['ovalfox_pos_access_of'] = json_decode($user[0]['access_of']);
+                    header('location:user-index.php');
+
+                } else if ($user[0]['role_id'] == 1) {
+                    header('location:index.php');
     
                 }
-                header('location:index.php');
                 
 
             }

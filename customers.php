@@ -18,7 +18,7 @@ $image_result = '';
 
 if (isset($_POST['add_customer_btn'])) {
 
-    if (!empty($_POST['name']) && !empty($_POST['cnic']) && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['balance'])  && !empty($_POST['bill_head'])) {
+    if (!empty($_POST['name']) ) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['phone'], 'phone')) {
                 if (!empty($_FILES['image']['name'])) {
@@ -54,7 +54,7 @@ if (isset($_POST['add_customer_btn'])) {
         $error = "All fields must be filled.";
     }
 } else if (isset($_POST['edit_customer_btn'])) {
-    if (!empty($_POST['name']) && !empty($_POST['cnic']) && !empty($_POST['phone']) && !empty($_POST['address']) && !empty($_POST['balance'])  && !empty($_POST['bill_head'])) {
+    if (!empty($_POST['name']) ) {
         if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
             if ($pdo->validateInput($_POST['phone'], 'phone')) {
                 if (!empty($_FILES['image']['name'])) {

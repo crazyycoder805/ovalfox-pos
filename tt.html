@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Your PHP code goes here -->
+    <style>
+        /* CSS for hiding header and footer on subsequent pages */
+        @media print {
+            @page {
+                size: A6 portrait;
+                margin: 0; /* Reset default margin */
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .page {
+                page-break-after: always;
+                margin-top: var(--page-margin);
+            }
+
+            #main:first-of-type {
+                margin-top: 0;
+            }
+
+            #footer-outer {
+                display: none;
+            }
+
+            #header-outer {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Your PHP-generated content goes here -->
+
+    <!-- Header Section -->
+    <div id="header-outer">
+        Header
+    </div>
+
+    <!-- Main Content -->
+    <div class="page">
+        <div id="main">
+            Body
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Data</td>
+                </tr>
+                <tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr><tr>
+                  <td>Data</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div id="footer-outer">
+        Footer
+    </div>
+
+    <!-- JavaScript for adjusting page margin -->
+    <script>
+        window.onload = function () {
+            // Calculate the height of the first page
+            var firstPageHeight = document.getElementById('main').offsetHeight;
+            // Set the top margin of the second page to the height of the first page
+            document.documentElement.style.setProperty('--page-margin', firstPageHeight + 'px');
+        };
+    </script>
+</body>
+
+</html>
