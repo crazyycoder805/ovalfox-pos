@@ -51,7 +51,7 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                     </div>
                 </div>
 
-             <h1>Welcome, to Point Of Sale.</h1>
+                <h1>Welcome, to Point Of Sale.</h1>
                 <!-- Revanue Status Start -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
@@ -67,6 +67,7 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Inv number</th>
+                                                    <th>Customer</th>
                                                     <th>Booker</th>
 
                                                     <th>Status</th>
@@ -79,10 +80,14 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                                                             foreach ($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND created_at >= '".date("Y-m-d 00:00:00")."' AND created_at <= '".date("Y-m-d 23:59:59")."'") as $index => $order) {
                                                                 $index += 1;
                                                                 $booker = $pdo->read("access", ['id' => $order['booker_name']]);
+                                                                $customer = $pdo->read("customers", ['id' => $order['customer_name']]);
+
                                                             ?>
                                                 <tr>
                                                     <td><?php echo $index; ?></td>
                                                     <td><?php echo $order['invoice_number']; ?></td>
+                                                    <td><?php echo $customer[0]['name']; ?></td>
+
                                                     <td><?php echo $booker[0]['username']; ?></td>
 
                                                     <td><?php echo $order['status']; ?></td>
@@ -107,7 +112,7 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                         </div>
                     </div>
                 </div>
-              
+
 
                 <!-- Products Orders Start -->
 

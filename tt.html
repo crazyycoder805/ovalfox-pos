@@ -1,172 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Your PHP code goes here -->
-    <style>
-        /* CSS for hiding header and footer on subsequent pages */
-        @media print {
-            @page {
-                size: A6 portrait;
-                margin: 0; /* Reset default margin */
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            .page {
-                page-break-after: always;
-                margin-top: var(--page-margin);
-            }
-
-            #main:first-of-type {
-                margin-top: 0;
-            }
-
-            #footer-outer {
-                display: none;
-            }
-
-            #header-outer {
-                display: none;
-            }
-        }
-    </style>
+    <title>Voice-to-Text Generator</title>
 </head>
-
 <body>
+    <textarea id="transcript" rows="10" cols="50"></textarea><br>
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <div id="output"></div>
 
-    <!-- Your PHP-generated content goes here -->
-
-    <!-- Header Section -->
-    <div id="header-outer">
-        Header
-    </div>
-
-    <!-- Main Content -->
-    <div class="page">
-        <div id="main">
-            Body
-
-            <table>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Data</td>
-                </tr>
-                <tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr><tr>
-                  <td>Data</td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Footer Section -->
-    <div id="footer-outer">
-        Footer
-    </div>
-
-    <!-- JavaScript for adjusting page margin -->
     <script>
-        window.onload = function () {
-            // Calculate the height of the first page
-            var firstPageHeight = document.getElementById('main').offsetHeight;
-            // Set the top margin of the second page to the height of the first page
-            document.documentElement.style.setProperty('--page-margin', firstPageHeight + 'px');
-        };
-    </script>
-</body>
+        var textBox = document.querySelector("#transcript");
+        var startBtn = document.querySelector("#start-btn");
+        var stopBtn = document.querySelector("#stop-btn");
+        var outputDiv = document.querySelector("#output");
+        var content = "";
+        var recognition;
 
+        // Check for browser support and set up SpeechRecognition
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+
+            recognition.onresult = function(event) {
+                var transcript = event.results[0][0].transcript;
+                content += transcript + '<br>';
+                outputDiv.innerHTML = content;
+                textBox.value = transcript;
+            };
+
+            recognition.onerror = function(event) {
+                console.log('Speech recognition error detected: ' + event.error);
+            };
+        } else if (window.opera && window.opera.voice) { // Opera's voice-to-text API check
+            recognition = window.opera.voice;
+
+            recognition.onresult = function(event) {
+                var transcript = event.results[0];
+                content += transcript + '<br>';
+                outputDiv.innerHTML = content;
+                textBox.value = transcript;
+            };
+
+            recognition.onerror = function(event) {
+                console.log('Voice recognition error detected: ' + event.error);
+            };
+        } else if ('annyang' in window) { // Fallback to annyang if available
+            var commands = {
+                '*text': function(text) {
+                    content += text + '<br>';
+                    outputDiv.innerHTML = content;
+                    textBox.value = text;
+                }
+            };
+
+            annyang.addCommands(commands);
+            annyang.debug(true);
+        } else {
+            console.log('Speech recognition not supported in this browser.');
+            startBtn.disabled = true;
+            stopBtn.disabled = true;
+        }
+
+        startBtn.addEventListener('click', function() {
+            console.log("Voice recognition started");
+            content = ''; // Reset content
+            outputDiv.innerHTML = ''; // Clear previous output
+            if (recognition) {
+                recognition.start();
+            } else {
+                console.log('Speech recognition not supported in this browser.');
+            }
+        });
+
+        stopBtn.addEventListener('click', function() {
+          console.log("Voice recognition stopped");
+          if (recognition) {
+              recognition.stop();
+              // Check if the content matches the condition
+              var match = content.match(/open\s+(\w+)/i); // Regular expression to match "open" followed by another word
+              if (match && match.length >= 2) {
+                  var matchedWords = match[0].split(/\s+/); // Split the matched string into words
+                  console.log("open: " + matchedWords[0] + ", after word: " + matchedWords[1]); // Log both words
+              } else {
+                  console.log("No match found"); // Log if no match is found
+              }
+          }
+          textBox.value = "";
+      
+      });
+      
+    </script>
+    
+</body>
 </html>

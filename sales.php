@@ -22,6 +22,15 @@ $products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_p
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
+$sales_2_inv = "";
+$booker_inv = "";
+$customer_inv = "";
+
+if (isset($_GET['inv_num'])) {
+    $sales_2_inv = $pdo->read("sales_2", ["invoice_number" => $_GET['inv_num']]);
+    $booker_inv = $pdo->read("access", ['id' => $sales_2[0]['booker_name']]);
+    $customer_inv = $pdo->read("customers", ['id' => $sales_2[0]['customer_name']]);
+}
 
 
 ?>
@@ -38,761 +47,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <div class="logo-wrapper">
-                <a href="index.php" class="admin-logo">
-                    <img src="assets/images/ovalfox/logo.png" alt="" class="sp_logo">
-                    <img src="assets/images/ovalfox/icon.png" alt="" class="sp_mini_logo">
-                </a>
-            </div>
-            <div class="side-menu-wrap">
-                <ul class="main-menu">
-
-
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d != 0) {
-            ?>
-                    <li>
-                        <a href="index.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="index.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Dashboard
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
-            ?>
-                    <li>
-                        <a href="sales.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Sales
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="sales.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Sales
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-
-
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->prc) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->prc != 0) {
-            ?>
-                    <li>
-                        <a href="purchase.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Purchase
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="purchase.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Purchase
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->g) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->g != 0) {
-            ?>
-                    <li>
-                        <a href="gernel_expenses.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Gernel Expenses
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="gernel_expenses.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Gernel Expenses
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->l) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->l != 0) {
-            ?>
-                    <li>
-                        <a href="ledger.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Ledger
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="ledger.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Ledger
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->st != 0) {
-            ?>
-                    <li>
-                        <a href="store.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Stores
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="store.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Stores
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-                    <?php 
-            if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ds != 0) {
-            ?>
-                    <li>
-                        <a href="designations.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Designations
-                            </span>
-                        </a>
-                    </li>
-                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                    <li>
-                        <a href="designations.php">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Designations
-                            </span>
-                        </a>
-                    </li>
-                    <?php } ?>
-
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Products
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pc != 0) {
-                    ?>
-                            <li>
-                                <a href="categories.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage categories
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="categories.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage categories
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->p != 0) {
-                    ?>
-                            <li>
-                                <a href="products.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage products
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="products.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage products
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-                        </ul>
-                    </li>
-
-
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Customers
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->c) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->c != 0) {
-                    ?>
-                            <li>
-                                <a href="customers.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage customers
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="customers.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage customers
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-
-
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Expenses
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ec != 0) {
-                    ?>
-                            <li>
-                                <a href="expense_categories.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage expense category
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="expense_categories.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage expense category
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Suppliers
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->ss != 0) {
-                    ?>
-                            <li>
-                                <a href="suppliers.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage suppliers
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="suppliers.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage suppliers
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                    <?php 
-            
-                    if ($_SESSION['ovalfox_pos_role_id'] == 4 ) {
-                    ?>
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Companies
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-
-                            <li>
-                                <a href="companies_profile.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage companies
-                                    </span>
-                                </a>
-                            </li>
-
-
-                        </ul>
-                    </li>
-                    <?php } ?>
-
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Employees
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->e) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->em != 0) {
-                    ?>
-                            <li>
-                                <a href="employees.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage employees
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="employees.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage employees
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Login
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->r) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->r != 0) {
-                    ?>
-                            <li>
-                                <a href="roles.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage roles
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="roles.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage roles
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) { ?>
-                            <li>
-                                <a href="roles.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage roles
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->us) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->us != 0) {
-                    ?>
-                            <li>
-                                <a href="users.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage users
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="users.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage users
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 4) { ?>
-                            <li>
-                                <a href="users.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Manage users
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);" class="">
-                            <span class="icon-menu feather-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="feather feather-home">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                            </span>
-                            <span class="menu-text">
-                                Reporting
-                            </span>
-                        </a>
-                        <ul class="sub-menu">
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->sr1) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->sr1 != 0) {
-                    ?>
-                            <li>
-                                <a href="search_sales_1.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Sales 1
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="search_sales_1.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Sales 1
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->sr2) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->sr2 != 0) {
-                    ?>
-                            <li>
-                                <a href="search_sales_2.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Sales 2
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="search_sales_2.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Sales 2
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-
-
-
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->pr1) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pr1 != 0) {
-                    ?>
-                            <li>
-                                <a href="search_purchase_1.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Purchase 1
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="search_purchase_1.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Purchase 1
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->pr2) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->pr2 != 0) {
-                    ?>
-                            <li>
-                                <a href="search_purchase_2.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Purchase 2
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="search_purchase_2.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Purchase 2
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-
-
-                            <?php 
-                    if (isset($_SESSION['ovalfox_pos_access_of']->lgr) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->lgr != 0) {
-                    ?>
-                            <li>
-                                <a href="search_ledger.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Ledger
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
-                            <li>
-                                <a href="search_ledger.php">
-                                    <span class="icon-dash">
-                                    </span>
-                                    <span class="menu-text">
-                                        Ledger
-                                    </span>
-                                </a>
-                            </li>
-                            <?php } ?>
-
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+            <?php require_once 'assets/includes/sidebar.php'; ?>
         </div>
     </div>
     <div class="page-wrapper">
@@ -862,8 +117,18 @@ echo $maxedInvoiceNumber;
 
                                 <div class="form-group">
 
+
+                                    <?php 
+                                if (isset($_GET['inv_num'])) {
+                                ?>
                                     <label class="col-form-label">Customer name</label>
-                                    <select class="select2 form-control select-opt" name="customer_name"
+
+                                    <input type="text" class="form-control" disabled
+                                        value="<?php echo $customer_inv[0]['name']; ?>" name="customer_name"
+                                        id="customer_name">
+                                    <?php } else { ?>
+                                    <label class="col-form-label">Customer name</label>
+                                    <select class="select2 form-control select-opt customer-select" name="customer_name"
                                         id="customer_name">
                                         <option selected value="">
                                             Select Customer Name
@@ -880,6 +145,8 @@ foreach ($customers as $customer) {
 
                                         <?php } ?>
                                     </select>
+                                    <?php } ?>
+
                                 </div>
 
 
@@ -889,11 +156,11 @@ foreach ($customers as $customer) {
                                 <div class="form-group">
                                     <label class="col-form-label">Booker name</label>
                                     <?php 
-if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") {
+if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") || (isset($_GET['inv_num']))) {
 ?>
                                     <input type="text" class="form-control" disabled
-                                        value="<?php echo $_SESSION['ovalfox_pos_username']; ?>" name="booker_name"
-                                        id="booker_name">
+                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>"
+                                        name="booker_name" id="booker_name">
 
                                     <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
@@ -1697,12 +964,39 @@ foreach ($products as $product) {
 
 
         $("#quantity").on('input', e => {
+            if (!$("#free_items").is(":checked")) {
+                if ($("#type").val() == "rf") {
+                    $("#total_quantity").val(+initialQuantity + +$("#quantity").val());
+                    total_amount.val(+e.target.value * +unit_price.val());
+                    $("#taaup").val(+e.target.value * +unit_price.val());
 
-            if ($("#type").val() == "rf") {
-                $("#total_quantity").val(+initialQuantity + +$("#quantity").val());
-                total_amount.val(+e.target.value * +unit_price.val());
-                $("#taaup").val(+e.target.value * +unit_price.val());
+                } else {
+                    if (toggleValue == "piece") {
+                        if (+e.target.value > initialQuantity) {
+                            alert(
+                                "Quantity can't be greater than the total quantity the higher available quantity will be automatically selected"
+                            );
+                            e.target.value = initialQuantity;
+                        }
+                        $("#total_quantity").val(+initialQuantity - +$("#quantity").val());
+                        total_amount.val(+e.target.value * +unit_price.val());
+                        $("#taaup").val(+e.target.value * +unit_price.val());
 
+                    } else if (toggleValue == "box") {
+                        if (+e.target.value > box_quantity) {
+                            alert(
+                                "Quantity can't be greater than the total quantity the higher available quantity will be automatically selected"
+                            );
+                            e.target.value = box_quantity;
+                        }
+                        $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * +
+                            quantity_per_box));
+                        total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price
+                            .val());
+                        $("#taaup").val((+$("#quantity").val() * +quantity_per_box) * +unit_price
+                            .val());
+                    }
+                }
             } else {
                 if (toggleValue == "piece") {
                     if (+e.target.value > initialQuantity) {
@@ -1712,8 +1006,6 @@ foreach ($products as $product) {
                         e.target.value = initialQuantity;
                     }
                     $("#total_quantity").val(+initialQuantity - +$("#quantity").val());
-                    total_amount.val(+e.target.value * +unit_price.val());
-                    $("#taaup").val(+e.target.value * +unit_price.val());
 
                 } else if (toggleValue == "box") {
                     if (+e.target.value > box_quantity) {
@@ -1724,11 +1016,12 @@ foreach ($products as $product) {
                     }
                     $("#total_quantity").val(+total_quantity_is - (+$("#quantity").val() * +
                         quantity_per_box));
-                    total_amount.val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
-                    $("#taaup").val((+$("#quantity").val() * +quantity_per_box) * +unit_price.val());
 
                 }
             }
+
+
+
 
 
 
@@ -2018,39 +1311,43 @@ foreach ($products as $product) {
 
         });
         $("#invoice_number").on("change", e => {
-            $.ajax({
-                type: "POST",
-                url: "data.php",
-                data: {
-                    "in": e.target.value,
-
-                    "__FILE__": "loadInvoice",
-
-                },
-                success: e => {
-                    const product = JSON.parse(e);
-                    finalAmount = +product[1][0]['total_amount'];
-                    totalPayable = +product[1][0]['final_amount'];
-
-                    $("#data").html(product[0]);
-                    $("#total_items").text(product[2]);
-                    $("#total_quantity_added").text(product[3]);
-
-                    $("#final_amount").val(+product[1][0]['total_amount']);
-                    $("#discount_in_amount").val(+product[1][0]['discount']);
-                    $("#total_payable").val(+product[1][0]['final_amount']);
-                    $("#amount_received").val(+product[1][0][
-                        'recevied_amount'
-                    ]);
-                    $("#amount_return").val(+product[1][0]['returned_amount']);
-                    $("#pending_amount").val(+product[1][0]['pending_amount']);
-                    $("#quantity").focus();
-                    $("#pass_sales_div").removeAttr("hidden");
-
-                }
-            });
+            location.href = `sales.php?inv_num=${e.target.value}`;
 
         });
+        // $("#invoice_number").on("change", e => {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "data.php",
+        //         data: {
+        //             "in": e.target.value,
+
+        //             "__FILE__": "loadInvoice",
+
+        //         },
+        //         success: e => {
+        //             const product = JSON.parse(e);
+        //             finalAmount = +product[1][0]['total_amount'];
+        //             totalPayable = +product[1][0]['final_amount'];
+
+        //             $("#data").html(product[0]);
+        //             $("#total_items").text(product[2]);
+        //             $("#total_quantity_added").text(product[3]);
+
+        //             $("#final_amount").val(+product[1][0]['total_amount']);
+        //             $("#discount_in_amount").val(+product[1][0]['discount']);
+        //             $("#total_payable").val(+product[1][0]['final_amount']);
+        //             $("#amount_received").val(+product[1][0][
+        //                 'recevied_amount'
+        //             ]);
+        //             $("#amount_return").val(+product[1][0]['returned_amount']);
+        //             $("#pending_amount").val(+product[1][0]['pending_amount']);
+        //             $("#quantity").focus();
+        //             $("#pass_sales_div").removeAttr("hidden");
+
+        //         }
+        //     });
+
+        // });
 
 
         $("#wholeFormBtn").on("click", e => {
@@ -2107,12 +1404,14 @@ foreach ($products as $product) {
                     "item_code_search": $("#item_code_search").val(),
                     "total_quantity": $("#total_quantity").val(),
                     "type": $("#type").val(),
+                    "isItemFree": $("#free_items").is(":checked") ? true : false,
                     "customer_manual": $("#manual_customer").is(":checked") ? $(
                         "#customer_manual").val() : ""
 
                 },
 
                 success: e => {
+                    console.log(e);
                     item_code.val('');
                     unit_price.val('');
                     item_name.val('');
@@ -2222,13 +1521,10 @@ foreach ($products as $product) {
             $("#total_quantity").val(initialQuantity);
 
             if ($(this).is(':checked')) {
-                quantityAdd = 1;
 
-                quantity.val(1);
-                discount.val('');
-                extra_discount.val('');
-                $("#total_amount").val('');
-                quantity.prop("disabled", true);
+                discount.val(0);
+                extra_discount.val(0);
+                $("#total_amount").val(0);
                 discount.prop("disabled", true);
                 extra_discount.prop("disabled", true);
                 $("#total_amount").prop("disabled", true);
@@ -2236,7 +1532,6 @@ foreach ($products as $product) {
                 quantityAdd = 0;
                 quantity.val('');
 
-                quantity.prop("disabled", false);
                 discount.prop("disabled", false);
                 extra_discount.prop("disabled", false);
                 $("#total_amount").prop("disabled", false);

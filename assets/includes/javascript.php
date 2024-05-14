@@ -20,7 +20,7 @@ $(document).ready(function() {
     $('#example2').DataTable();
     $('#example9').DataTable();
 
-    $("#customer_name").select2();
+    $(".customer-select").select2();
     $(".booker-select").select2();
 
     $("#product").select2();

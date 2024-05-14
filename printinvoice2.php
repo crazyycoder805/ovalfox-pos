@@ -44,6 +44,16 @@ $total_price = 0;
             height: 100%;
         }
 
+
+        table {
+            width: 100%;
+        }
+
+        td {
+            word-wrap: break-word;
+            max-width: calc(100% / 9);
+        }
+
         #main {
             padding: 5px;
             height: calc(100% - 20px);
@@ -75,26 +85,7 @@ $total_price = 0;
 
     }
 
-    @media print {
-        @page {
-            size: A6 portrait;
-            margin: 5mm;
-        }
 
-        body {
-            margin: 0;
-            padding: 0;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        td {
-            word-wrap: break-word;
-            max-width: calc(100% / 9);
-        }
-    }
 
 
     * {
@@ -108,6 +99,7 @@ $total_price = 0;
 
     #main {
         padding-left: 3px;
+        margin-top: -0.3px !important;
     }
 
     #main-inner {
@@ -254,7 +246,7 @@ $total_price = 0;
     <div class="page">
         <div id="main" style="margin-top: 0.2in;margin-bottom: 0.2in;">
             <div id="main-inner" style="">
-                <h1 id="company_name" style="">
+                <h1 id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
                 <p id="address" style="font-size: 10px;">Address:
@@ -282,10 +274,10 @@ $total_price = 0;
 
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start;">Admin :
+                                    <th style="text-align: start;">Cashier :
                                         <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: start;">Cashier : <?php echo $booker[0]['username']; ?>
+                                    <th style="text-align: start;">Booker : <?php echo $booker[0]['username']; ?>
                                     </th>
 
 
@@ -362,9 +354,9 @@ $total_price = 0;
                             <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
-                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 12px;"
+                            <p> <b>Terms and Conditions:</b> <br /> <span disabled style="font-size: 12px;"
                                     placeholder="Type..." name="" id="terms-cond" cols="22"
-                                    rows="10"><?php echo $sales_2[0]['details']; ?></textarea></p>
+                                    rows="10"><?php echo $sales_2[0]['details']; ?></span></p>
 
 
                         </div>
