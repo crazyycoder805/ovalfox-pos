@@ -183,7 +183,7 @@ echo json_encode($data);
             'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
             'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
             'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $discount) - $extra_discount)), 
-            'percentage' => (round(((empty(intval($sales_1[0]['discount'])) ? intval($_POST['discount']) : 
+            'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
             intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
              ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 3)), 
             'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
@@ -196,7 +196,7 @@ echo json_encode($data);
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty(intval($sales_1[0]['discount'])) ? intval($_POST['discount']) : 
+                'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
                 intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
                  ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 3)),
                 'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);
@@ -233,7 +233,7 @@ echo json_encode($data);
             'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
             'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
             'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $discount) - $extra_discount)), 
-            'percentage' => (round(((empty(intval($sales_1[0]['discount'])) ? intval($_POST['discount']) : 
+            'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
             intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
              ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 3)), 
             'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
@@ -246,7 +246,7 @@ echo json_encode($data);
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty(intval($sales_1[0]['discount'])) ? intval($_POST['discount']) : 
+                'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
                 intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
                  ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 3)),
                 'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);

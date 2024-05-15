@@ -837,6 +837,7 @@ foreach ($products as $product) {
         let total_discount = 0;
 
         $("#product").on("input", e => {
+
             productId = e.target.value;
             $("#item_code_search").val('');
             $("#quantity").val('');
@@ -964,6 +965,10 @@ foreach ($products as $product) {
 
 
         $("#quantity").on('input', e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue <= 0) {
+                e.target.value = 1;
+            }
             if (!$("#free_items").is(":checked")) {
                 if ($("#type").val() == "rf") {
                     $("#total_quantity").val(+initialQuantity + +$("#quantity").val());
@@ -1102,6 +1107,10 @@ foreach ($products as $product) {
 
 
         discount.on("input", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue < 0) {
+                e.target.value = 0;
+            }
             const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
             total_discount = +result.discountedPrice;
             total_amount.val(+total_discount);
@@ -1110,6 +1119,10 @@ foreach ($products as $product) {
             extra_discount.val('');
         });
         extra_discount.on("input", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue < 0) {
+                e.target.value = 0;
+            }
             const extraDiscountValue = parseInt(e.target.value || 0);
             const result = calculateExtraDiscount(total_discount != 0 ? +total_discount : +quantity
                 .val() * +unit_price.val(), +extraDiscountValue);
@@ -1163,6 +1176,10 @@ foreach ($products as $product) {
 
 
         $("#discount_in_amount").on("input", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue < 0) {
+                e.target.value = 0;
+            }
             $("#total_payable").val(+finalAmount - +parseInt(e.target.value || 0));
             totalPayable = +finalAmount - +parseInt(e.target.value || 0);
 
@@ -1187,6 +1204,10 @@ foreach ($products as $product) {
 
 
         $("#amount_received").on("input", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue < 0) {
+                e.target.value = 0;
+            }
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
                 $("#amount_return").val(+parseInt(e.target.value || 0) - +totalPayable);
                 $("#pending_amount").val(0);
@@ -1299,6 +1320,10 @@ foreach ($products as $product) {
 
 
         unit_price.on("input", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue < 0) {
+                e.target.value = 1;
+            }
             quantity.val('');
             discount.val('');
             extra_discount.val('');
@@ -1538,20 +1563,27 @@ foreach ($products as $product) {
             }
 
         });
+
+        function showConfirmation() {
+            return confirm("Are you sure to clear this bill?");
+        }
+
         $("#clear_bill").on("click", e => {
-            $.ajax({
-                type: "POST",
-                url: "data.php",
-                data: {
-                    "__FILE__": "salesDelete",
-                    "invoice_number": $("#invoice_number").val(),
 
+            if (showConfirmation()) {
+                $.ajax({
+                    type: "POST",
+                    url: "data.php",
+                    data: {
+                        "__FILE__": "salesDelete",
+                        "invoice_number": $("#invoice_number").val(),
+                    },
+                    success: function(e) {
+                        location.href = "sales.php";
+                    }
+                });
+            }
 
-                },
-                success: e => {
-                    location.href = "sales.php";
-                }
-            });
         });
 
         $("#manual_customer").change(function() {
@@ -1602,6 +1634,18 @@ foreach ($products as $product) {
         $(document).on("blur", "#itemAddedtable td", e => {
             focusSet = false;
             let target = e;
+
+
+
+            let inputValue = parseInt(e.target.textContent);
+            if (!e.target.id.match(/discountTabledData/) && !e.target.id.match(/extraTabledData/)) {
+                if (inputValue <= 0) {
+                    e.target.textContent = 1;
+                    console.log(e.target.textContent);
+                }
+            }
+
+
 
             $.ajax({
                 type: "POST",
@@ -1803,7 +1847,10 @@ foreach ($products as $product) {
                     $("#pass_sales_div").removeAttr("hidden");
                 }
             });
-        })
+        });
+
+
+
     });
     </script>
 

@@ -28,7 +28,18 @@ $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_pro
 
 $total_quantity = 0;
 $total_price = 0;
+$total_quantity = 0;
+$total_price = 0;
 
+// Paginate the product list
+$productsPerPage = 20;
+$totalProducts = count($sales_1);
+$pageCount = ceil($totalProducts / $productsPerPage);
+
+// Get the page number from the URL parameter
+$page = isset($_GET['page']) ? max(1, min($pageCount, $_GET['page'])) : 1;
+$startIndex = ($page - 1) * $productsPerPage;
+$endIndex = min($startIndex + $productsPerPage, $totalProducts);
 ?>
     <style>
     @media print {
@@ -310,15 +321,13 @@ $total_price = 0;
                             </thead>
                             <tbody>
                                 <?php 
-                        $total_price = 0;
-                        $total_quantity = 0;
-                foreach ($sales_1 as $index => $sale) {
-                    $pd = $pdo->read("products", ['item_code' => $sale['item_code']]);
-                    $index += 1;
-                    $total_quantity += $sale['quantity'];
-                    $total_price += $sale['grand_total'];
-
-                ?>
+    for ($i = $startIndex; $i < $endIndex; $i++) {
+        $sale = $sales_1[$i];
+        $pd = $pdo->read("products", ['item_code' => $sale['item_code']]);
+        $index = $i + 1;
+        $total_quantity += $sale['quantity'];
+        $total_price += $sale['grand_total'];
+    ?>
                                 <tr>
                                     <td style="text-align: center;font-size: 11px;"><?php echo $index; ?></td>
                                     <td style="text-align: center;font-size: 11px;"><?php echo $sale['quantity']; ?>
@@ -347,6 +356,12 @@ $total_price = 0;
                                 <?php } ?>
                             </tbody>
                         </table>
+                        <div style="text-align: center;">
+                            <?php for ($i = 1; $i <= $pageCount; $i++) { ?>
+                            <a href="?inv=<?php echo $invoice_number ?>&page=<?php echo $i ?>"><?php echo $i ?></a>
+                            <?php } ?>
+                        </div>
+
                     </div>
                     <div id="footer-outer" style="">
                         <div style="">
@@ -372,7 +387,7 @@ $total_price = 0;
 
                                     (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
                                 <span id="discount-total-price" style="">Rs
-                                    <?php $per = ($total_price) * (1 - ($sales_2[0]['discount'] / 100)); echo $per; ?></span>
+                                    <?php $per = ($sales_2[0]['discount'] != 0 ? ($total_price) * (1 - ($sales_2[0]['discount'] / 100)) : 0); echo $per; ?></span>
                             </div>
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
