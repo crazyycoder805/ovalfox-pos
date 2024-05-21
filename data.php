@@ -114,6 +114,7 @@ echo json_encode($data);
     if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !empty($_POST['customer_manual'])) && 
     !empty($_POST['booker_name']) && !empty($_POST['date']) && !empty($_POST['date']) && !empty($_POST['total_quantity']) 
     && (!empty($_POST['item_code_search']) || !empty($_POST['product_id']))) {
+        $_SESSION['booker_select'] = $_POST['booker_name'];
         $item_name = ($_POST['type'] != "rf" ? ($_POST['isItemFree'] == "true" ? "(Free Item)" . " " . $_POST['item_name'] : $_POST['item_name']) : ('(Refunded)' . " " . $_POST['item_name']));
         
         $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code' => $_POST['item_code']
@@ -876,12 +877,16 @@ if ($key == "quantity") {
 
 <?php } else if ($_POST['__FILE__'] == 'showCustomerData') { 
     $customerSales2 = $pdo->read("sales_2", ['customer_name' => $_POST['cusId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($customerSales2[0]['invoice_number']) ? $customerSales2[0]['invoice_number'] : -1]);
     foreach ($customerSales2 as $index => $cs) {
         $index += 1;
         $customer = $pdo->read("customers" , ['id' => $cs['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     ?>
 <tr>
     <td><?php echo $index; ?></td>
+    <td><?php echo $cs['bill_number']; ?></td>
+    <td><?php echo preg_match('/\(Refunded\)/', $sl1[0]['item_name']) ? '(Refunded) ' . $cs['invoice_number'] : $cs['invoice_number']; ?></td>
+
     <td><?php echo $customer[0]['name']; ?></td>
     <td><?php echo $cs['total_amount']; ?></td>
     <td><?php echo $cs['date']; ?></td>

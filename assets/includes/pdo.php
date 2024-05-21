@@ -945,9 +945,9 @@ public function createMulti($table, $data, $fileInputName = null, $imageColumns 
     }
 }
 
-$dbHost = "";
-$dbName = "";
-$dbUser = "";
+$dbHost = "localhost";
+$dbName = "ovalfoxpos";
+$dbUser = "root";
 $dbPass = "";
 
 $pdo = new CRUDPDO($dbHost, $dbName, $dbUser, $dbPass);

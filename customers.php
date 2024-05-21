@@ -19,72 +19,60 @@ $image_result = '';
 if (isset($_POST['add_customer_btn'])) {
 
     if (!empty($_POST['name']) ) {
-        if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
-            if ($pdo->validateInput($_POST['phone'], 'phone')) {
-                if (!empty($_FILES['image']['name'])) {
-                    $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
+        if (!empty($_FILES['image']['name'])) {
+            $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
 
-                    if ($image_result && $pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
-                    'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
-                        $success = "Customer added.";
-                                              header("Location:{$name}");
+            if ($image_result && $pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+            'cnic' => $_POST['cnic'], 'area' => $_POST['area'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
+                $success = "Customer added.";
+                                        header("Location:{$name}");
 
-                    } else {
-                        $error = "Something went wrong.";
-                    }
-                } else {
-                    if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
-                    'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
-                        $success = "Customer added.";
-                                              header("Location:{$name}");
-
-                    } else {
-                        $error = "Something went wrong.";
-                    }
-                }
             } else {
-                $error = "Invalid Phone.";
+                $error = "Something went wrong.";
             }
         } else {
-            $error = "Invalid CNIC.";
+            if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+            'cnic' => $_POST['cnic'], 'area' => $_POST['area'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
+                $success = "Customer added.";
+                                        header("Location:{$name}");
+
+            } else {
+                $error = "Something went wrong.";
+            }
         }
+         
+      
     } else {
         $error = "All fields must be filled.";
     }
 } else if (isset($_POST['edit_customer_btn'])) {
     if (!empty($_POST['name']) ) {
-        if ($pdo->validateInput($_POST['cnic'], 'cnic')) {
-            if ($pdo->validateInput($_POST['phone'], 'phone')) {
-                if (!empty($_FILES['image']['name'])) {
-                    $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
+        if (!empty($_FILES['image']['name'])) {
+            $image_result = $pdo2->upload('image', 'assets/ovalfox/customers');
 
-                    if ($image_result && $pdo->update("customers", ['id' => $_GET['edit_customer']], 
-                    ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-                    'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
-                        $success = "Customer updated.";
-                                              header("Location:{$name}");
+            if ($image_result && $pdo->update("customers", ['id' => $_GET['edit_customer']], 
+            ['name' => $_POST['name'], 'area' => $_POST['area'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
+            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
+                $success = "Customer updated.";
+                                        header("Location:{$name}");
 
-                    } else {
-                        $error = "Something went wrong. or can't update this because no changes was found";
-                    }
-                } else {
-                    if ($pdo->update("customers", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 
-                    'address' => $_POST['address'], 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
-                        $success = "Customer updated.";
-                                              header("Location:{$name}");
-
-                    } else {
-                        $error = "Something went wrong. or can't update this because no changes was found";
-                    }
-                }
             } else {
-                $error = "Invalid Phone.";
+                $error = "Something went wrong. or can't update this because no changes was found";
             }
         } else {
-            $error = "Invalid CNIC.";
+            if ($pdo->update("customers", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 
+            'address' => $_POST['address'], 'area' => $_POST['area'], 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
+                $success = "Customer updated.";
+                                        header("Location:{$name}");
+
+            } else {
+                $error = "Something went wrong. or can't update this because no changes was found";
+            }
         }
+            
+       
     } else {
         $error = "All fields must be filled.";
     }
@@ -213,24 +201,20 @@ if (isset($_GET['edit_customer'])) {
                                                         name="address"
                                                         id="address"><?php echo isset($_GET['edit_customer']) ? $id[0]['address'] : null; ?></textarea>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="area" class="col-form-label">Area</label>
+                                                    <textarea class="form-control" placeholder="Customer area"
+                                                        name="area"
+                                                        id="area"><?php echo isset($_GET['edit_customer']) ? $id[0]['area'] : null; ?></textarea>
+                                                </div>
                                                 <div class="col-md">
 
                                                     <div class="form-group">
                                                         <label for="balance" class="col-form-label">Balance</label>
                                                         <input
-                                                            value="<?php echo isset($_GET['edit_customer']) ? $id[0]['balance'] : null; ?>"
+                                                            value="<?php echo isset($_GET['edit_customer']) ? $id[0]['balance'] : 0; ?>"
                                                             class="form-control" name="balance" type="number"
                                                             placeholder="Enter Customer balance" id="balance">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-
-                                                    <div class="form-group">
-                                                        <label for="bill_head" class="col-form-label">Bill head</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_customer']) ? $id[0]['bill_head'] : null; ?>"
-                                                            class="form-control" name="bill_head" type="text"
-                                                            placeholder="Enter Customer Bill Head" id="bill_head">
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <button class="btn btn-primary" type="reset">reset</button>
@@ -239,6 +223,7 @@ if (isset($_GET['edit_customer'])) {
                                                             class="btn btn-danger" type="submit">
                                                     </div>
                                                 </div>
+
 
                                                 <table id="example1"
                                                     class="table table-striped table-bordered dt-responsive">

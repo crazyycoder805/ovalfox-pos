@@ -176,7 +176,9 @@ $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SES
 foreach ($bookers as $booker) {
 
 ?>
-                                        <option value="<?php echo $booker['id']; ?>">
+                                        <option
+                                            <?php echo isset($_SESSION['booker_select']) && $_SESSION['booker_select'] != "" && $_SESSION['booker_select'] == $booker['id'] ? "selected" : "" ?>
+                                            value="<?php echo $booker['id']; ?>">
                                             <?php echo $booker['username']; ?>
                                         </option>
 
@@ -685,9 +687,12 @@ foreach ($products as $product) {
 
                                     <button style="border-radius: 0pX;" class="btn col-md-12 btn-danger">Show
                                         Unpaid Bills</button>
+                                    <?php  if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
+
                                     <button id="clear_bill" style="border-radius: 0pX;"
                                         class="btn col-md-12 btn-warning">Clear
                                         Bill</button>
+                                    <?php } ?>
                                 </div>
 
                             </div>
@@ -735,6 +740,9 @@ foreach ($products as $product) {
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Bill number</th>
+                                <th>Inv number</th>
+
 
                                 <th>Customer Name</th>
                                 <th>Total Amount</th>
@@ -811,6 +819,9 @@ foreach ($products as $product) {
                 ]);
                 $("#amount_return").val(+product[1][0]['returned_amount']);
                 $("#pending_amount").val(+product[1][0]['pending_amount']);
+                $("#current_date").val(product[1][0]['date']);
+             
+
                 $("#quantity").focus();
                 $("#pass_sales_div").removeAttr("hidden");
             }
@@ -1336,6 +1347,10 @@ foreach ($products as $product) {
 
         });
         $("#invoice_number").on("change", e => {
+            let inputValue = parseInt(e.target.value);
+            if (inputValue <= 0) {
+                e.target.value = 1;
+            }
             location.href = `sales.php?inv_num=${e.target.value}`;
 
         });
@@ -1451,13 +1466,13 @@ foreach ($products as $product) {
 
 
                     $("#final_amount").val(finalAmount + finalerAmount);
+                    $("#total_payable").val(finalAmount + finalerAmount);
+                    $("#pending_amount").val(finalAmount + finalerAmount);
 
 
                     $("#extra_discount").val('');
-                    $("#total_payable").val('');
                     $("#amount_received").val('');
                     $("#amount_return").val('');
-                    $("#pending_amount").val('');
                     total_amount.val('');
                     document.getElementById("product").selectedIndex = 0;
 
@@ -1501,6 +1516,9 @@ foreach ($products as $product) {
                             discount.prop("disabled", false);
                             extra_discount.prop("disabled", false);
                             $("#total_amount").prop("disabled", false);
+                            if ($("#type").val() == "rf") {
+                                $("#type").prop("disabled", true);
+                            }
                         }
                     });
                 }
@@ -1746,8 +1764,14 @@ foreach ($products as $product) {
         });
         $("#quantity").keydown(e => {
             if (e.keyCode == 13) {
-                $("#discount").focus();
+                if ($("#free_items").is(":checked")) {
+                    $("#wholeFormBtn").focus();
+                } else {
+                    $("#discount").focus();
+
+                }
             }
+
         });
         $("#discount").keydown(e => {
             if (e.keyCode == 13) {

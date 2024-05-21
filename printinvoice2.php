@@ -82,6 +82,10 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
         #table-data-product {
             font-size: 10px;
         }
+
+        #bbtn {
+            display: none;
+        }
     }
 
 
@@ -257,6 +261,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
     <div class="page">
         <div id="main" style="margin-top: 0.2in;margin-bottom: 0.2in;">
             <div id="main-inner" style="">
+            <p id="bbtn"><a href="sales.php">Back</a></p>
                 <h1 id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
@@ -392,7 +397,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
                                 <b id="total-price-total" style="">Rs
-                                    <?php echo $total_price - $per; ?></b>
+                                    <?php $minused = $total_price - $per;echo $minused; ?></b>
                             </div>
 
                             <div id="rec-box" style="">
@@ -404,7 +409,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
 
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="">Balance</span>
-                                Rs <?php echo !empty($customers[0]['balance']) ? $customers[0]['balance'] : 0.00; ?>
+                                Rs <?php echo $minused - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0); ?>
                             </div>
 
 
@@ -413,7 +418,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
                 ">
                                 <span id="cb-text" style="">Current Balance</span>
                                 Rs
-                                <?php echo !empty($customers[0]['balance']) ? $total_price + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                                <?php echo !empty($customers[0]['balance']) ? $minused + $customers[0]['balance'] : $customers[0]['balance']; ?>
                             </div>
                         </div>
 

@@ -6,6 +6,15 @@
 if (isset($_SESSION['ovalfox_pos_access_of']->p) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->p == 0) {
     header("location:404.php");
 }
+$lowercaseAlphabet = range('a', 'z');
+
+$uppercaseAlphabet = range('A', 'Z');
+
+$numbers = range(1, 10);
+
+$abc = array_merge($lowercaseAlphabet, $uppercaseAlphabet, $numbers);
+
+$randomOrderId = $abc[rand(19, 21)] . rand(0, 2) . $abc[rand(0, 2)] . $abc[rand(16, 19)]  . rand(5, 3432) . $abc[rand(5, 10)] . $abc[rand(10, 15)];
 $success = "";
 $error = "";
 $id = "";
@@ -191,7 +200,7 @@ if (isset($_GET['edit_product'])) {
                                                     <div class="form-group">
                                                         <label for="item_code" class="col-form-label">Item code</label>
                                                         <input
-                                                            value="<?php echo isset($_GET['edit_product']) ? $id[0]['item_code'] : null; ?>"
+                                                            value="<?php echo isset($_GET['edit_product']) ? $id[0]['item_code'] : $randomOrderId; ?>"
                                                             class="form-control" name="item_code" type="text"
                                                             placeholder="Enter Item Code" id="item_code">
                                                     </div>
@@ -461,7 +470,8 @@ if (isset($_GET['edit_product'])) {
                                                                 src="assets/ovalfox/products/<?php echo $product['image']; ?>"
                                                                 alt="" /></td>
                                                         <td><?php echo $product['item_code']; ?></td>
-                                                        <td><?php echo !empty($category2[0]['category']) ? $category2[0]['category'] : 'no_category'; ?></td>
+                                                        <td><?php echo !empty($category2[0]['category']) ? $category2[0]['category'] : 'no_category'; ?>
+                                                        </td>
                                                         <td><?php echo !empty($sub_category2[0]['sub_category']) ? $sub_category2[0]['sub_category'] : 'no_sub_category';; ?>
                                                         </td>
                                                         <td><?php echo $product['product_name']; ?></td>
@@ -476,7 +486,8 @@ if (isset($_GET['edit_product'])) {
                                                         <td><?php echo $product['quantity_per_box']; ?>
                                                         </td>
                                                         <td><?php echo $product['total_quantity']; ?></td>
-                                                        <td><?php echo !empty($store2[0]['store_name']) ? $store2[0]['store_name'] : 'no_sotre_name';; ?></td>
+                                                        <td><?php echo !empty($store2[0]['store_name']) ? $store2[0]['store_name'] : 'no_sotre_name';; ?>
+                                                        </td>
                                                         <td><?php echo $product['row']; ?></td>
                                                         <td><?php echo $product['col']; ?></td>
                                                         <td><?php echo $product['low_stock_limit']; ?></td>
@@ -534,8 +545,6 @@ if (isset($_GET['edit_product'])) {
     $("#printbtnproduct").on("click", e => {
         location.href = `printreport1.php?s=${searchedValue}&t=product`;
     });
-
-    
     </script>
 
 </body>
