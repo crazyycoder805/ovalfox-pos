@@ -31,7 +31,15 @@ $total_price = 0;
 $total_quantity = 0;
 $total_price = 0;
 
+// Paginate the product list
+$productsPerPage = 40;
+$totalProducts = count($sales_1);
+$pageCount = ceil($totalProducts / $productsPerPage);
 
+// Get the page number from the URL parameter
+$page = isset($_GET['page']) ? max(1, min($pageCount, $_GET['page'])) : 1;
+$startIndex = ($page - 1) * $productsPerPage;
+$endIndex = min($startIndex + $productsPerPage, $totalProducts);
 ?>
     <style>
     @media print {
@@ -81,7 +89,7 @@ $total_price = 0;
 
 
     }
-
+    
 
 
     #footer-outer {
@@ -101,18 +109,20 @@ $total_price = 0;
     * {
         margin: 0;
         padding: 0;
-        font-size: 20px !important;
-
     }
 
-
+    body {
+        width: 4.1in;
+    }
 
     #main {
         padding-left: 3px;
         margin-top: -0.3px !important;
     }
 
-
+    #main-inner {
+        width: 4.1in;
+    }
 
 
 
@@ -255,7 +265,7 @@ $total_price = 0;
         <div id="main" style="margin-top: 0.2in;margin-bottom: 0.2in;">
             <div id="main-inner" style="">
                 <p id="bbtn"><a href="sales.php">Back</a></p>
-                <h1 style="font-size: 50px !important;" id="company_name">
+                <h1 id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
                 <p id="address" style="font-size: 10px;">Address:
@@ -319,11 +329,10 @@ $total_price = 0;
                             </thead>
                             <tbody>
                                 <?php 
-    foreach ($sales_1 as $index => $sale) {
-        $index += 1;
-
-        
+    for ($i = $startIndex; $i < $endIndex; $i++) {
+        $sale = $sales_1[$i];
         $pd = $pdo->read("products", ['item_code' => $sale['item_code']]);
+        $index = $i + 1;
         $total_quantity += $sale['quantity'];
         $total_price += $sale['grand_total'];
     ?>
@@ -355,10 +364,17 @@ $total_price = 0;
                                 <?php } ?>
                             </tbody>
                         </table>
-
+                        <div style="text-align: center;">
+                            <?php for ($i = 1; $i <= $pageCount; $i++) { ?>
+                            <a href="?inv=<?php echo $invoice_number ?>&page=<?php echo $i ?>"><?php echo $i ?></a>
+                            <?php } ?>
+                        </div>
 
                     </div>
-
+                    <?php
+    // Check if it's the last page
+    if ($page == $pageCount) {
+?>
                     <div id="footer-outer" style="">
                         <div style="">
                             <h4>Items: <?php echo $total_quantity; ?></h4>
@@ -418,19 +434,33 @@ $total_price = 0;
                     </div>
                 </div>
 
+                <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
 
                 <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
                 <div style="width: 100%;border-bottom: 1px solid black;"></div>
+                <h6 class="content" style="text-align: center;"></h6>
+                <?php } ?>
             </div>
 
         </div>
     </div>
+    <button onclick="printContent()">Print</button>
     <!-- <button id="downloadBtn">Download as PDF</button> -->
 
     <script src="assets/js/jquery.min.js"></script>
     <!-- <script src="assets/js/print.js"></script> -->
 
     <script>
+    function printContent() {
+   
+        window.print();
+    }
+    window.onload = function() {
+        // Calculate the height of the first page
+        var firstPageHeight = document.getElementById('main').offsetHeight;
+        // Set the top margin of the second page to the height of the first page
+        document.documentElement.style.setProperty('--page-margin', firstPageHeight + 'px');
+    };
     // const options = {
     //     filename: 'small_inv.pdf',
     //     image: {
@@ -448,6 +478,31 @@ $total_price = 0;
     // };
 
     // html2pdf().from(document.body).set(options).save();
+
+
+    var currentTime = new Date();
+
+    // Get the current hour, minute, and second
+    var hours = currentTime.getHours();
+    var minutes = currentTime.getMinutes();
+    var seconds = currentTime.getSeconds();
+    // Determine if it's AM or PM
+    var period = hours < 12 ? "AM" : "PM";
+
+    // Adjust hours for AM/PM format
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Handle midnight (0 hours)
+    const time = `${hours}:${minutes}:${seconds} ${period}`;
+    document.getElementById("time").textContent = time;
+
+    function addPageNumbers() {
+        var pageNumbers = document.querySelectorAll('.content');
+        pageNumbers.forEach(function(pageNumber, index) {
+            pageNumber.textContent = 'Page: ' + (index + 1);
+        });
+    }
+
+    window.onload = addPageNumbers;
     </script>
 </body>
 

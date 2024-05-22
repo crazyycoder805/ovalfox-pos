@@ -1518,6 +1518,9 @@ foreach ($products as $product) {
                             $("#total_amount").prop("disabled", false);
                             if ($("#type").val() == "rf") {
                                 $("#type").prop("disabled", true);
+                            } else {
+                                $('#type option[value="rf"]').remove();
+
                             }
                         }
                     });
