@@ -276,7 +276,7 @@ $total_price = 0;
 
                                 <tr>
                                     <th style="text-align: start;" id="table-info-first-th-child" style="">
-                                        <?php echo $sales_2[0]['created_at'] ?></th>
+                                        <?php echo $sales_2[0]['date'] ?></th>
                                     <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
 
                                     <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>

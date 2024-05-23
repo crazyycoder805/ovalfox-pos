@@ -108,8 +108,8 @@ echo $maxedInvoiceNumber;
                                 <label class="col-form-label">Current date</label>
 
                                 <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                                    class="form-control" name="current_date" type="date" placeholder="Enter End Date"
-                                    id="current_date">
+                                    class="form-control" name="current_date" type="datetime-local"
+                                    placeholder="Enter End Date" id="current_date">
 
 
                             </div>
@@ -336,8 +336,9 @@ foreach ($products as $product) {
                                                                             placeholder="Enter password" />
                                                                     </div>
                                                                 </div>
-                                                                <table id="itemAddedtable"
-                                                                    class="table table-striped table-bordered dt-responsive ">
+                                                                <table style="user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;" id="itemAddedtable" class="table table-striped table-bordered dt-responsive ">
                                                                     <thead>
                                                                         <tr>
                                                                             <th style="font-size: 10px !important;">#
@@ -676,7 +677,7 @@ foreach ($products as $product) {
                                 <div class="form-group">
                                     <label class="col-form-label">Details</label>
                                     <textarea rows="1" cols="1" class="form-control" name="details" id="details"
-                                        placeholder="Enter Details"></textarea>
+                                        placeholder="Enter Details"><?php echo isset($_GET['inv_num']) ? $sales_2_inv[0]['details'] : ""; ?></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -735,27 +736,31 @@ foreach ($products as $product) {
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <table id="" class="table table-striped table-bordered dt-responsive ">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Bill number</th>
-                                <th>Inv number</th>
+                <div class="modal-body" style="overflow: scroll;">
+                    <div class="row">
+                        <div class="col-md">
+                            <table id="customerPreviosTable" class="table table-striped table-bordered dt-responsive table-responsive ">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bill number</th>
+                                        <th>Inv number</th>
 
 
-                                <th>Customer Name</th>
-                                <th>Total Amount</th>
-                                <th>Date</th>
+                                        <th>Customer Name</th>
+                                        <th>Total Amount</th>
+                                        <th>Date</th>
 
-                                <th>Action</th>
+                                        <th>Action</th>
 
-                            </tr>
-                        <tbody id="customerDataShow">
-                        </tbody>
-                        </thead>
+                                    </tr>
+                                <tbody id="customerDataShow">
+                                </tbody>
+                                </thead>
 
-                    </table>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -784,9 +789,16 @@ foreach ($products as $product) {
         const extra_discount = $("#extra_discount");
 
         let currentDate = new Date();
-        let formattedDate = currentDate.toISOString().split('T')[0];
+        let formattedDate = currentDate.toISOString().split('T')[0]; // Get the date part
 
-        current_date.val(formattedDate);
+        let hours = currentDate.getHours().toString().padStart(2,
+            '0'); // Get hours (with leading zero if needed)
+        let minutes = currentDate.getMinutes().toString().padStart(2,
+            '0'); // Get minutes (with leading zero if needed)
+
+        let formattedDateTime = `${formattedDate}T${hours}:${minutes}`;
+        current_date.val(formattedDateTime);
+
         let initialQuantity = 0;
         <?php 
             if (isset($_GET['inv_num'])) {
@@ -813,14 +825,18 @@ foreach ($products as $product) {
 
                 $("#final_amount").val(+product[1][0]['total_amount']);
                 $("#discount_in_amount").val(+product[1][0]['discount']);
-                $("#total_payable").val(+product[1][0]['final_amount']);
+                $("#total_payable").val((+product[1][0]['final_amount'] != 0 ? product[1][0][
+                    'final_amount'
+                ] : +product[1][0]['total_amount']));
                 $("#amount_received").val(+product[1][0][
                     'recevied_amount'
                 ]);
                 $("#amount_return").val(+product[1][0]['returned_amount']);
-                $("#pending_amount").val(+product[1][0]['pending_amount']);
+                $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
+                    'pending_amount'
+                ] : +product[1][0]['total_amount']));
                 $("#current_date").val(product[1][0]['date']);
-             
+
 
                 $("#quantity").focus();
                 $("#pass_sales_div").removeAttr("hidden");
@@ -1080,7 +1096,7 @@ foreach ($products as $product) {
         const calculateDiscount = (quantity, unitPrice, discountRate) => {
             const discountedPrice = ((quantity * unitPrice) - discountRate);
             let percentage = (quantity * unitPrice) * (1 - (discountRate / 100));
-
+            // 50 * 0.95
             return {
                 discountedPrice,
                 percentage
@@ -1220,11 +1236,13 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
-                $("#amount_return").val(+parseInt(e.target.value || 0) - +totalPayable);
+                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +
+                    totalPayable : +finalAmount));
                 $("#pending_amount").val(0);
             } else {
 
-                $("#pending_amount").val(+totalPayable - +parseInt(e.target.value || 0));
+                $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
+                    parseInt(e.target.value || 0));
                 $("#amount_return").val(0);
 
             }
@@ -1462,8 +1480,14 @@ foreach ($products as $product) {
                     $("#taaup").val('');
 
                     $("#extra_dsicount").val('');
-                    $("#product").focus();
-
+                    $("#product").select2("open");
+                    setTimeout(function() {
+                        var searchField = $(
+                            '.select2-container--open .select2-search__field');
+                        if (searchField.length) {
+                            searchField[0].focus();
+                        }
+                    }, 100);
 
                     $("#final_amount").val(finalAmount + finalerAmount);
                     $("#total_payable").val(finalAmount + finalerAmount);
@@ -1659,7 +1683,8 @@ foreach ($products as $product) {
 
 
             let inputValue = parseInt(e.target.textContent);
-            if (!e.target.id.match(/discountTabledData/) && !e.target.id.match(/extraTabledData/)) {
+            if (!e.target.id.match(/discountTabledData/) && !e.target.id.match(/extraTabledData/) && !e
+                .target.id.match(/percentageTabledData/)) {
                 if (inputValue <= 0) {
                     e.target.textContent = 1;
                     console.log(e.target.textContent);
@@ -1790,7 +1815,7 @@ foreach ($products as $product) {
 
         $(document).keydown(e => {
             if (e.keyCode == 27) {
-                $("#discount_in_amount").focus();
+                $("#amount_received").focus();
             }
         });
 
@@ -1843,38 +1868,38 @@ foreach ($products as $product) {
             <?php } ?>
         });
 
-        $(document).on("click", "#editCustomer", e => {
-            $.ajax({
-                type: "POST",
-                url: "data.php",
-                data: {
-                    "in": $(e.target).data("cus"),
+        // $(document).on("click", "#editCustomer", e => {
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "data.php",
+        //         data: {
+        //             "in": $(e.target).data("cus"),
 
-                    "__FILE__": "loadInvoice",
+        //             "__FILE__": "loadInvoice",
 
-                },
-                success: e => {
-                    const product = JSON.parse(e);
-                    finalAmount = +product[1][0]['total_amount'];
-                    totalPayable = +product[1][0]['final_amount'];
+        //         },
+        //         success: e => {
+        //             const product = JSON.parse(e);
+        //             finalAmount = +product[1][0]['total_amount'];
+        //             totalPayable = +product[1][0]['final_amount'];
 
-                    $("#data").html(product[0]);
-                    $("#total_items").text(product[2]);
-                    $("#total_quantity_added").text(product[3]);
+        //             $("#data").html(product[0]);
+        //             $("#total_items").text(product[2]);
+        //             $("#total_quantity_added").text(product[3]);
 
-                    $("#final_amount").val(+product[1][0]['total_amount']);
-                    $("#discount_in_amount").val(+product[1][0]['discount']);
-                    $("#total_payable").val(+product[1][0]['final_amount']);
-                    $("#amount_received").val(+product[1][0][
-                        'recevied_amount'
-                    ]);
-                    $("#amount_return").val(+product[1][0]['returned_amount']);
-                    $("#pending_amount").val(+product[1][0]['pending_amount']);
-                    $("#quantity").focus();
-                    $("#pass_sales_div").removeAttr("hidden");
-                }
-            });
-        });
+        //             $("#final_amount").val(+product[1][0]['total_amount']);
+        //             $("#discount_in_amount").val(+product[1][0]['discount']);
+        //             $("#total_payable").val(+product[1][0]['final_amount']);
+        //             $("#amount_received").val(+product[1][0][
+        //                 'recevied_amount'
+        //             ]);
+        //             $("#amount_return").val(+product[1][0]['returned_amount']);
+        //             $("#pending_amount").val(+product[1][0]['pending_amount']);
+        //             $("#quantity").focus();
+        //             $("#pass_sales_div").removeAttr("hidden");
+        //         }
+        //     });
+        // });
 
 
 

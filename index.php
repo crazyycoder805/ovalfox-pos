@@ -22,7 +22,7 @@ if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_i
 // Done
 $total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 // Done
-$today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"));
+$today_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 // Done
 $total_sales = count($pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 
@@ -180,7 +180,7 @@ $today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => da
                                 </div>
                                 <div class="icon-info-text">
                                     <h5 class="ad-title">Daily Orders</h5>
-                                    <h4 class="ad-card-title"><?php echo $today_orders; ?></h4>
+                                    <h4 class="ad-card-title"><?php echo count($today_orders); ?></h4>
                                 </div>
                             </div>
                         </div>
@@ -361,15 +361,17 @@ $today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => da
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                            foreach ($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}") as $index => $order) {
+                                                            foreach ($today_orders as $index => $order) {
                                                                 $index += 1;
+                                                                $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($order['invoice_number']) ? $order['invoice_number'] : -1]);
                                                                 $booker = $pdo->read("access", ['id' => $order['booker_name']]);
                                                                 $customer = $pdo->read("customers", ['id' => $order['customer_name']]);
 
                                                             ?>
                                                 <tr>
                                                     <td><?php echo $index; ?></td>
-                                                    <td><?php echo $order['invoice_number']; ?></td>
+                                                    <td><?php echo preg_match('/\(Refunded\)/', $sl1[0]['item_name']) ? '(Refunded) ' . $order['invoice_number'] : $order['invoice_number']; ?>
+                                                    </td>
                                                     <td><?php echo $customer[0]['name']; ?></td>
 
                                                     <td><?php echo $booker[0]['username']; ?></td>
@@ -398,14 +400,14 @@ $today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => da
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12">
+                    <div class="col-md">
                         <div class="card chart-card">
                             <div class="card-header">
                                 <h4 class="has-btn">Total Revanue <span></span></h4>
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-xl-12 col-lg-12 col-md-12 d-flex flex-row justify-content-center">
+                                    <div class="col-md">
                                         <div class="chart-holder">
                                             <div id="chartL"></div>
                                         </div>

@@ -11,7 +11,7 @@
 <!-- Custom Script -->
 
 
-<script src="assets/js/customSelect.js"></script>
+<script src="assets/js/selectCustom.js"></script>
 <script src="assets/js/custom.js"></script>
 
 <script>
@@ -28,6 +28,7 @@ $(document).ready(function() {
     // $("#company_name").select2();
     $("#last_rate").select2();
     $("#book").select2();
+    $("#customerPreviosTable").DataTable();
 
 
 });
@@ -48,8 +49,8 @@ $(document).ready(e => {
     function chartL() {
         var options = {
             chart: {
-                width: 1000,
-                type: 'bar',
+                
+                type: 'line', // Change to 'line' for a line chart
                 fontFamily: 'Poppins, sans-serif',
                 toolbar: {
                     show: true
@@ -58,20 +59,13 @@ $(document).ready(e => {
                     enabled: true
                 },
             },
-            plotOptions: {
-                bar: {
-                    horizontal: false // Set to true if you want horizontal bars
-                }
-            },
             dataLabels: {
                 enabled: true // If you want data labels, set this to true
             },
             xaxis: {
-                categories: ['Customers', 'Today orders', 'Total sales'
-                , 'Total revenue'
-                , 'Today sales'
-                , 'Today purchase'
-                , 'Today gernel expenses'
+                categories: ['Customers', 'Today orders', 'Total sales',
+                    'Total revenue', 'Today sales', 'Today purchase',
+                    'Today gernel expenses'
                 ], // X-axis labels
                 labels: {
                     style: {
@@ -82,16 +76,15 @@ $(document).ready(e => {
             yaxis: {
                 title: {
                     text: 'Value' // Y-axis label
+
                 }
             },
-            colors: ['#1b4962', '#1b4962', '#1b4962'], // Blue color for bars
+            colors: ['#1b4962'], // Blue color for the line
             series: [{
                 name: 'Value',
-                data: [<?php echo $total_customers; ?>, <?php echo $today_orders; ?>,
-                    <?php echo $total_sales; ?>,
-                    <?php echo $total_amount; ?>,
-                    <?php echo $today_sales; ?>,
-                    <?php echo $today_purchase; ?>,
+                data: [<?php echo $total_customers; ?>, <?php echo count($today_orders); ?>,
+                    <?php echo $total_sales; ?>, <?php echo $total_amount; ?>,
+                    <?php echo $today_sales; ?>, <?php echo $today_purchase; ?>,
                     <?php echo $today_gernel_expenses; ?>
                 ]
             }]
@@ -106,6 +99,7 @@ $(document).ready(e => {
     }
 
     chartL();
+
 
 
 
