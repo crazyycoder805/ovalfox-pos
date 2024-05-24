@@ -214,7 +214,7 @@ foreach ($bookers as $booker) {
 
                                 <div class="form-group">
 
-                                    <label class="col-form-label">Customer name (edit)</label>
+                                    <label class="col-form-label">Customer name</label>
                                     <input class="form-control" class="" disabled name="customer_manual" type="text"
                                         id="customer_manual">
                                 </div>

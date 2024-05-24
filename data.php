@@ -491,10 +491,21 @@ echo json_encode($data);
 <?php } else if ($_POST['__FILE__'] == "sales2Update") {
     
     $customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $blnc = intval($customer[0]['balance']) + intval($_POST['pending_amount']);
-   
+$customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+
+$currentBalance = intval($customer[0]['balance']);
+$previousPendingAmount = intval($customerSales[0]['pending_amount']);
+
+$newPendingAmount = intval($_POST['pending_amount']);
+
+if ($newPendingAmount != $previousPendingAmount) {
+    $balanceAdjustment = $newPendingAmount - $previousPendingAmount;
+
+    $blnc = $currentBalance + $balanceAdjustment;
+
     $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["balance" => $blnc]);
+}
+
     $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],"payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], 
     "recevied_amount" => $_POST['recevied_amount'],
     "details" => $_POST['details'], "payment_from" => $customer[0]['id'], "dr" => $_POST['pending_amount'], "cr" => $_POST['recevied_amount'], 

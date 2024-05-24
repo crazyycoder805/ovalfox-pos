@@ -383,7 +383,7 @@ $total_price = 0;
 
                                     (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
                                 <span id="discount-total-price" style="">Rs
-                                    <?php $per = ($sales_2[0]['discount'] != 0 ? ($total_price) * (1 - ($sales_2[0]['discount'] / 100)) : 0); echo $per; ?></span>
+                                    <?php $per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0); echo $per; ?></span>
                             </div>
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
@@ -410,7 +410,7 @@ $total_price = 0;
                 ">
                                 <span id="cb-text" style="">Current Balance</span>
                                 Rs
-                                <?php echo !empty($customers[0]['balance']) ? $minused + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                                <?php echo $customers[0]['balance']; ?>
                             </div>
                         </div>
 
