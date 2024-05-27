@@ -1294,8 +1294,7 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
-                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +
-                    totalPayable : +finalAmount));
+                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +totalPayable : +finalAmount));
                 $("#pending_amount").val(0);
             } else {
 
@@ -1320,6 +1319,9 @@ foreach ($products as $product) {
                     const item = JSON.parse(e);
 
                     $("#final_amount").val(finalAmount - item[0]);
+                    $("#total_payable").val(finalAmount - item[0]);
+                    $("#pending_amount").val(finalAmount - item[0]);
+
                     $.ajax({
                         type: "POST",
                         url: "data.php",
