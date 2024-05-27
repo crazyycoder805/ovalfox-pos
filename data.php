@@ -59,13 +59,13 @@ if ($_POST['__FILE__'] == "productSelect") {
 
     <td style='font-size: 10px !important;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
     <td style='font-size: 10px !important;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
-    <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
+    <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
 
-    <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' contenteditable='true'>{$sale['item_price']}</td>
+    <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
     <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-    <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
-    <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
-    <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
+    <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
+    <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
+    <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
     <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>$gt</td>
 
     
@@ -279,19 +279,19 @@ echo json_encode($data);
         <?php echo $sale['item_code']; ?></td>
     <td style='font-size: 10px !important;' id='item_nameTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['item_name']; ?></td>
-    <td style='font-size: 10px !important;' id='quantityTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+    <td style='font-size: 10px !important;' id='quantityTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['quantity']; ?></td>
 
-    <td style='font-size: 10px !important;' id='item_priceTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+    <td style='font-size: 10px !important;' id='item_priceTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['item_price']; ?></td>
     <td style='font-size: 10px !important;' id='amountTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['amount']; ?></td>
-    <td style='font-size: 10px !important;' id='discountTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+    <td style='font-size: 10px !important;' id='discountTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['discount']; ?></td>
     <td style='font-size: 10px !important;' id='extra_discountTabledData<?php echo $sale['id'];?>'
-        contenteditable='true'>
+        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['extra_discount']; ?></td>
-    <td style='font-size: 10px !important;' id='percentageTabledData<?php echo $sale['id'];?>' contenteditable='true'>
+    <td style='font-size: 10px !important;' id='percentageTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['percentage']; ?></td>
     <td style='font-size: 10px !important;' id='grandTotalTabledData<?php echo $sale['id'];?>'>
         <?php echo $gt; ?></td>
@@ -362,11 +362,13 @@ echo json_encode($data);
 ?>
 
 <?php } else if ($_POST['__FILE__'] == "deleteProductSales1") {
-    $pr = $pdo->read("sales_1", ['id' => $_POST['salesId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $pr = $pdo->read("sales_1", ['id' => $_POST['salesId'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
     $totalAmount = $pr[0]['grand_total'];
     $productData = [$totalAmount];
     echo json_encode($productData);
+    $pdo->customQuery("UPDATE sales_2 SET total_amount = total_amount - {$pr[0]['grand_total']} WHERE company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND invoice_number = {$pr[0]['invoice_number']}");
     $pdo->customQuery("DELETE FROM sales_1 WHERE id = {$_POST['salesId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
+
 ?>
 <?php } else if ($_POST['__FILE__'] == "deletePurchase") {
     $pr = $pdo->read("purchases_1", ['id' => $_POST['purchaseId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
@@ -429,8 +431,9 @@ echo json_encode($data);
     $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $all_over_qty = [];
-
+    $isRefunded = false;
     foreach ($sales_1 as $ss) {
+        $isRefunded = preg_match('/\(Refunded\)/', $ss['item_name']) ? true : false;
         $all_over_qty[] = $ss['quantity'];
     }
 
@@ -447,13 +450,13 @@ echo json_encode($data);
 
         <td style='font-size: 10px !important;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
         <td style='font-size: 10px !important;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
-        <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' contenteditable='true'>{$sale['quantity']}</td>
+        <td style='font-size: 10px !important;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
     
-        <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' contenteditable='true'>{$sale['item_price']}</td>
+        <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
         <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-        <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' contenteditable='true'>{$sale['discount']}</td>
-        <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' contenteditable='true'>{$sale['extra_discount']}</td>
-        <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' contenteditable='true'>{$sale['percentage']}</td>
+        <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
+        <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
+        <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
         <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$gt}</td>
 
         <td style='font-size: 10px !important;'>
@@ -481,7 +484,7 @@ echo json_encode($data);
     }
 
 
-    $productData = [$html, $sales_2, count($sales_1), $all_over_qty];
+    $productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded];
     echo json_encode($productData);
 
 ?>
@@ -893,6 +896,7 @@ if ($key == "quantity") {
         $index += 1;
         $customer = $pdo->read("customers" , ['id' => $cs['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
         $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($cs['invoice_number']) ? $cs['invoice_number'] : -1]);
+        $booker = $pdo->read("access" , ['id' => $cs['booker_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
     ?>
 <tr>
@@ -901,7 +905,9 @@ if ($key == "quantity") {
     <td><?php echo preg_match('/\(Refunded\)/', $sl1[0]['item_name']) ? '(Refunded) ' . $cs['invoice_number'] : $cs['invoice_number']; ?></td>
 
     <td><?php echo $customer[0]['name']; ?></td>
-    <td><?php echo $cs['total_amount']; ?></td>
+    <td><?php echo $booker[0]['username']; ?></td>
+
+    <td><?php echo $cs['final_amount']; ?></td>
     <td><?php echo $cs['date']; ?></td>
 
     <td>

@@ -276,7 +276,7 @@ $total_price = 0;
 
                                 <tr>
                                     <th style="text-align: start;" id="table-info-first-th-child" style="">
-                                        <?php echo $sales_2[0]['date'] ?></th>
+                                        <?php echo str_replace('T', ' ',$sales_2[0]['date']); ?></th>
                                     <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
 
                                     <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>
@@ -296,7 +296,7 @@ $total_price = 0;
                                     <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
                                     </th>
                                     <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
-                                    <th style="text-align: center;">Name:
+                                    <th style="text-align: center;">Customer Name:
                                         <?php echo $customers[0]['name'];?></th>
                                 </tr>
                             </thead>

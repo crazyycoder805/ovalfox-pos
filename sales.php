@@ -44,9 +44,18 @@ if (isset($_GET['inv_num'])) {
         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
         <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Menu</h5>
+            <div class="header-left">
+                <div class="header-links">
+                    <a href="javascript:void(0);" class="toggle-btn">
+                        <span></span>
+                    </a>
+                </div>
+
+            </div>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
+
             <?php require_once 'assets/includes/sidebar.php'; ?>
         </div>
     </div>
@@ -71,9 +80,15 @@ if (isset($_GET['inv_num'])) {
                     if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] != "2") {
                     ?>
 
-                            <a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
+                            <a class="btn btn-sm btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
                                 role="button" aria-controls="offcanvasExample">
                                 <i class="fa fa-arrow-left"></i> </a>
+                            <?php 
+                                if (isset($_GET['inv_num'])) {
+                                ?>
+                            <a class="btn btn-danger" href="sales.php">
+                                Unload invoice editing </a>
+                            <?php } ?>
                             <?php } ?>
                             <h6 class="mt-3">Next Invoice Number: <?php
 $maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
@@ -104,23 +119,12 @@ echo $maxedInvoiceNumber;
                             </div>
                             <div class="col-md">
 
-
-                                <label class="col-form-label">Current date</label>
-
-                                <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
-                                    class="form-control" name="current_date" type="datetime-local"
-                                    placeholder="Enter End Date" id="current_date">
-
-
-                            </div>
-                            <div class="col-md">
-
                                 <div class="form-group">
 
 
                                     <?php 
-                                if (isset($_GET['inv_num'])) {
-                                ?>
+if (isset($_GET['inv_num'])) {
+?>
                                     <label class="col-form-label">Customer name</label>
 
                                     <input type="text" class="form-control" disabled
@@ -210,22 +214,22 @@ foreach ($bookers as $booker) {
 
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+
                             <div class="col-md">
 
-                                <div class="form-group">
 
-                                    <label class="col-form-label">Customer name</label>
-                                    <input class="form-control" class="" disabled name="customer_manual" type="text"
-                                        id="customer_manual">
-                                </div>
+                                <label class="col-form-label">Current date</label>
+
+                                <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
+                                    class="form-control" name="current_date" type="datetime-local"
+                                    placeholder="Enter End Date" id="current_date">
 
 
-                                <div class="checkbox">
-                                    <input name="manual_customer" value="manual_customer" id="manual_customer"
-                                        type="checkbox">
-                                    <label for="manual_customer">Add Customer</label>
-                                </div>
                             </div>
+
+
                             <div class="col-md">
                                 <label class="col-form-label">Sale price type</label>
 
@@ -243,7 +247,39 @@ foreach ($bookers as $booker) {
 
                                 </select>
                             </div>
+                            <div class="col-md">
 
+                                <!-- <div class="form-group">
+
+                                    <label class="col-form-label">Customer name</label>
+                                    <input class="form-control" class="" disabled name="customer_manual" type="text"
+                                        id="customer_manual">
+                                </div>
+
+
+                                <div class="checkbox">
+                                    <input name="manual_customer" value="manual_customer" id="manual_customer"
+                                        type="checkbox">
+                                    <label for="manual_customer">Add Customer</label>
+                                </div> -->
+
+                                <div class="form-group">
+                                    <label class="col-form-label">Customer name</label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <input name="manual_customer" value="manual_customer" id="manual_customer"
+                                                type="checkbox">
+                                        </span>
+                                        <input class="form-control" class="" placeholder="Check the box to add customer"
+                                            disabled name="customer_manual" type="text" id="customer_manual">
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md">
@@ -685,9 +721,9 @@ foreach ($products as $product) {
                                         class="btn col-md-12 btn-primary">Print
                                         Bill</button>
 
-
+                                    <!-- 
                                     <button style="border-radius: 0pX;" class="btn col-md-12 btn-danger">Show
-                                        Unpaid Bills</button>
+                                        Unpaid Bills</button> -->
                                     <?php  if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == 1) { ?>
 
                                     <button id="clear_bill" style="border-radius: 0pX;"
@@ -739,7 +775,8 @@ foreach ($products as $product) {
                 <div class="modal-body" style="overflow: scroll;">
                     <div class="row">
                         <div class="col-md">
-                            <table id="customerPreviosTable" class="table table-striped table-bordered dt-responsive table-responsive ">
+                            <table id="customerPreviosTable"
+                                class="table table-striped table-bordered dt-responsive table-responsive ">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -748,6 +785,8 @@ foreach ($products as $product) {
 
 
                                         <th>Customer Name</th>
+                                        <th>Booker Name</th>
+
                                         <th>Total Amount</th>
                                         <th>Date</th>
 
@@ -840,6 +879,25 @@ foreach ($products as $product) {
 
                 $("#quantity").focus();
                 $("#pass_sales_div").removeAttr("hidden");
+
+
+                if (product[4]) {
+                    $("#amount_received").prop("disabled", true);
+                    $("#pending_amount").val(0);
+                    $("#recevied_amount").val(0);
+                    $("#discount_in_amount").val(0);
+                    $("#details").focus();
+                    $('#type').val('rf');
+                    $('#type').prop('disabled', true);
+
+                } else {
+                    $("#amount_received").focus();
+                    $('#type option[value="rf"]').remove();
+
+                }
+                $("#customer_manual").prop("disabled", true);
+                $("#manual_customer").prop("disabled", true);
+
             }
         });
 
@@ -1429,6 +1487,10 @@ foreach ($products as $product) {
 
             if ($("#type").val() == "rf") {
                 finalAmount -= +$("#total_amount").val();
+                $("#amount_received").prop("disabled", true);
+                $("#pending_amount").val(0);
+                $("#recevied_amount").val(0);
+                $("#discount_in_amount").val(0);
             } else {
                 finalAmount += +$("#total_amount").val();
             }
@@ -1573,16 +1635,28 @@ foreach ($products as $product) {
 
                 },
                 success: target => {
-                    <?php
-                        if ($user[0]['printing_page_size'] == "large") {
+                    <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
-                    location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
+                    openPopup(`printinvoice1.php?inv=${$("#invoice_number").val()}`);
+                    location.href = `sales.php`;
+
                     <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
-                    location.href = `printinvoice2.php?inv=${invoice_number.val()}`;
+                    openPopup(`printinvoice2.php?inv=${$("#invoice_number").val()}`);
+                    location.href = `sales.php`;
 
                     <?php } ?>
+                    <?php
+                        // if ($user[0]['printing_page_size'] == "large") {
+                         ?>
+                    // location.href = `printinvoice1.php?inv=${invoice_number.val()}`;
+                    <?php 
+                        //} else if ($user[0]['printing_page_size'] == "small") {
+                         ?>
+                    //location.href = `printinvoice2.php?inv=${invoice_number.val()}`;
+
+                    <?php //} ?>
                 },
 
             });
@@ -1815,7 +1889,14 @@ foreach ($products as $product) {
 
         $(document).keydown(e => {
             if (e.keyCode == 27) {
-                $("#amount_received").focus();
+                if ($("#type").val() != "rf") {
+                    $("#amount_received").focus();
+                } else {
+                    $("#details").focus();
+
+
+                }
+
             }
         });
 
@@ -1852,7 +1933,7 @@ foreach ($products as $product) {
         function openPopup(urlUp) {
             var url = urlUp;
             var windowName = "Customer Data Print";
-            var windowFeatures = "width=600,height=400";
+            var windowFeatures = "width=1000,height=1000";
 
             window.open(url, windowName, windowFeatures);
         }
