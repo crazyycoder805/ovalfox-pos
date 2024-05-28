@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div class="header-controls">
-                <div class="setting-wrapper header-links">
+                <!-- <div class="setting-wrapper header-links">
                     <a href="javascript:void(0);" class="setting-info">
                         <span class="header-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -37,7 +37,7 @@
                             </svg>
                         </span>
                     </a>
-                </div>
+                </div> -->
                 <div class="cart-wrapper header-links">
                     <a href="javascript:void(0);" class="cart-info">
                         <span class="header-icon">

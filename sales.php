@@ -543,11 +543,13 @@ foreach ($products as $product) {
                                     <?php     if ($settings[0]['theme'] == "full_white") {
                             ?>
                                     <div class="splash-radio-button">
-                                        <input id="discount_amount" name="discount" type="radio" checked="">
+                                        <input id="discount_amount" name="discountchkbx1" value="amount" type="radio"
+                                            checked="">
                                         <label for="discount_amount" class="radio-label">In
                                             Amount</label>
                                         &nbsp;&nbsp;&nbsp;
-                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <input id="discount_percentage" name="discountchkbx1" value="percentage"
+                                            type="radio">
                                         <label for="discount_percentage" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -560,11 +562,11 @@ foreach ($products as $product) {
                             ?>
                                     <div class="ad-radio-button">
 
-                                        <input id="discount_amount" name="discount" type="radio" checked>
+                                        <input id="discount_amount" name="discountchkbx1" type="radio" checked>
                                         <label for="discount_amount" class="radio-label">In
                                             Amount</label>
 
-                                        <input id="discount_percentage" name="discount" type="radio">
+                                        <input id="discount_percentage" name="discountchkbx1" type="radio">
                                         <label for="discount_percentage" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -622,11 +624,11 @@ foreach ($products as $product) {
                                     <?php     if ($settings[0]['theme'] == "full_white") {
                             ?>
                                     <div class="splash-radio-button">
-                                        <input id="discount_amount2" name="discount" type="radio" checked="">
+                                        <input id="discount_amount2" name="discountchkbx2" type="radio" checked="">
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
                                         &nbsp;&nbsp;&nbsp;
-                                        <input id="discount_percentage2" name="discount" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -639,11 +641,11 @@ foreach ($products as $product) {
                             ?>
                                     <div class="ad-radio-button">
 
-                                        <input id="discount_amount2" name="discount" type="radio" checked>
+                                        <input id="discount_amount2" name="discountchkbx2" type="radio" checked>
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
 
-                                        <input id="discount_percentage2" name="discount" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -885,7 +887,7 @@ foreach ($products as $product) {
 
 
                 if (product[4]) {
-                    //                $("#amount_received").prop("disabled", true);
+                    $("#amount_received").prop("disabled", true);
                     $("#pending_amount").val(0);
                     $("#recevied_amount").val(0);
                     $("#discount_in_amount").prop("disabled", true);
@@ -1193,6 +1195,7 @@ foreach ($products as $product) {
         //     total_amount.val(resultDis);
         // });
 
+        let isAmount = "";
 
         discount.on("input", e => {
             let inputValue = parseInt(e.target.value);
@@ -1200,7 +1203,8 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
-            total_discount = +result.discountedPrice;
+            total_discount = isAmount == "" ? +result
+                .discountedPrice : (isAmount == "amount" ? +result.discountedPrice : +result.percentage);
             total_amount.val(+total_discount);
             // $("#taaup").val(+total_discount);
 
@@ -1215,7 +1219,7 @@ foreach ($products as $product) {
             const result = calculateExtraDiscount(total_discount != 0 ? +total_discount : +quantity
                 .val() * +unit_price.val(), +extraDiscountValue);
             total_amount.val(+result);
-            $("#discount_amount").prop("checked", true);
+            // $("#discount_amount").prop("checked", true);
             // $("#taaup").val(+result);
 
         });
@@ -1223,7 +1227,9 @@ foreach ($products as $product) {
             const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
                 "#discount").val());
             total_amount.val(resultDis.discountedPrice);
+            total_discount = resultDis.discountedPrice;
             $("#extra_discount").val('');
+            isAmount = e.target.value;
             // $("#taaup").val(resultDis);
 
         });
@@ -1231,7 +1237,10 @@ foreach ($products as $product) {
             const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
                 "#discount").val());
             total_amount.val(resultDis.percentage);
+            total_discount = resultDis.percentage;
+
             $("#extra_discount").val('');
+            isAmount = e.target.value;
 
             // $("#taaup").val(resultDis);
 
@@ -1495,13 +1504,14 @@ foreach ($products as $product) {
 
             if ($("#type").val() == "rf") {
                 finalAmount -= +$("#total_amount").val();
-                //                $("#amount_received").prop("disabled", true);
+                $("#amount_received").prop("disabled", true);
                 $("#pending_amount").val(0);
                 $("#recevied_amount").val(0);
                 $("#discount_in_amount").prop("disabled", true);
             } else {
                 finalAmount += +$("#total_amount").val();
             }
+
 
 
             $.ajax({
@@ -1534,7 +1544,8 @@ foreach ($products as $product) {
                     "type": $("#type").val(),
                     "isItemFree": $("#free_items").is(":checked") ? true : false,
                     "customer_manual": $("#manual_customer").is(":checked") ? $(
-                        "#customer_manual").val() : ""
+                        "#customer_manual").val() : "",
+                    "amountIn": isAmount == "" ? "amount" : isAmount
 
                 },
 
@@ -1560,8 +1571,8 @@ foreach ($products as $product) {
                     }, 100);
 
                     $("#final_amount").val(finalAmount + finalerAmount);
-                    $("#total_payable").val(finalAmount + finalerAmount);
-                    $("#pending_amount").val(finalAmount + finalerAmount);
+                    $("#total_payable").val($("#final_amount").val());
+                    $("#pending_amount").val($("#final_amount").val());
 
 
                     $("#extra_discount").val('');
@@ -1616,6 +1627,7 @@ foreach ($products as $product) {
                                 $('#type option[value="rf"]').remove();
 
                             }
+                            $("#discount_amount").prop("checked", true);
                         }
                     });
                 }
@@ -1805,6 +1817,8 @@ foreach ($products as $product) {
 
                             $("#final_amount").val(product[
                                 3]);
+                            $("#total_payable").val($("#final_amount").val());
+                            $("#pending_amount").val($("#final_amount").val());
 
                             if (target.target.id.match(
                                     /percentageTabledData\d*/) && !focusSet) {
