@@ -377,8 +377,7 @@ echo json_encode($data);
     sales_2.total_amount = $totalAmountMinus,
     sales_2.final_amount = $finalAmountMinus,
 
-    sales_2.pending_amount = $pendingAmountMinus,
-    -- sales_2.returned_amount = $returnAmountMinus 
+    sales_2.pending_amount = $pendingAmountMinus
     WHERE 
         company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} 
         AND invoice_number = {$pr[0]['invoice_number']}

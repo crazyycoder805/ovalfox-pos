@@ -365,9 +365,9 @@ $total_price = 0;
                             <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
-                            <p> <b>Terms and Conditions:</b> <br /> <span disabled style="font-size: 12px;"
+                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 8px;"
                                     placeholder="Type..." name="" id="terms-cond" cols="22"
-                                    rows="10"><?php echo $sales_2[0]['details']; ?></span></p>
+                                    rows="10"><?php echo $sales_2[0]['details']; ?></textarea></p>
 
 
                         </div>

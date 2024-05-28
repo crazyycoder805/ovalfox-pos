@@ -83,13 +83,16 @@ if (isset($_GET['inv_num'])) {
                             <a class="btn btn-sm btn-primary" data-bs-toggle="offcanvas" href="#offcanvasScrolling"
                                 role="button" aria-controls="offcanvasExample">
                                 <i class="fa fa-arrow-left"></i> </a>
+
+                            <?php } ?>
                             <?php 
                                 if (isset($_GET['inv_num'])) {
                                 ?>
                             <a class="btn btn-danger" href="sales.php">
                                 Unload invoice editing </a>
                             <?php } ?>
-                            <?php } ?>
+                            <a class="btn btn-info" href="sales.php">
+                                Refresh</a>
                             <h6 class="mt-3">Next Invoice Number: <?php
 $maxedInvoiceNumber = (int)$pdo->customQuery("SELECT 
 MAX(CAST(invoice_number AS UNSIGNED)) AS maxedInvoiceNumber,
@@ -882,10 +885,10 @@ foreach ($products as $product) {
 
 
                 if (product[4]) {
-                    $("#amount_received").prop("disabled", true);
+                    //                $("#amount_received").prop("disabled", true);
                     $("#pending_amount").val(0);
                     $("#recevied_amount").val(0);
-                    $("#discount_in_amount").val(0);
+                    $("#discount_in_amount").prop("disabled", true);
                     $("#details").focus();
                     $('#type').val('rf');
                     $('#type').prop('disabled', true);
@@ -1294,7 +1297,10 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
-                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +totalPayable : +finalAmount));
+                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +
+                    totalPayable : +finalAmount));
+                //$("#amount_return").val($("#type").val() != "rf" ? parseInt(e.target.value || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt(e.target.value || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+
                 $("#pending_amount").val(0);
             } else {
 
@@ -1489,10 +1495,10 @@ foreach ($products as $product) {
 
             if ($("#type").val() == "rf") {
                 finalAmount -= +$("#total_amount").val();
-                $("#amount_received").prop("disabled", true);
+                //                $("#amount_received").prop("disabled", true);
                 $("#pending_amount").val(0);
                 $("#recevied_amount").val(0);
-                $("#discount_in_amount").val(0);
+                $("#discount_in_amount").prop("disabled", true);
             } else {
                 finalAmount += +$("#total_amount").val();
             }
