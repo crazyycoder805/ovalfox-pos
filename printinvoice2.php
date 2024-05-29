@@ -41,7 +41,7 @@ $total_price = 0;
         }
 
 
-        body {
+        /* body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -50,30 +50,30 @@ $total_price = 0;
 
         table {
             width: 100%;
-        }
+        } */
 
-        td {
+        /* td {
             word-wrap: break-word;
             max-width: calc(100% / 9);
-        }
+        } */
 
-        #main {
+        /* #main {
             padding: 5px;
             height: calc(100% - 20px);
-        }
-
+        } */
+/* 
         #main-inner {
             height: 100%;
-        }
-
+        } */
+/* 
         #table-info,
         #footer-outer {
             font-size: 10px;
-        }
-
+        } */
+/* 
         #table-data-product {
             font-size: 10px;
-        }
+        } */
 
         #bbtn {
             display: none;
@@ -101,7 +101,7 @@ $total_price = 0;
     * {
         margin: 0;
         padding: 0;
-        font-size: 20px !important;
+        font-size: 25px !important;
 
     }
 
@@ -286,7 +286,7 @@ $total_price = 0;
                                     <th style="text-align: start;">Cashier :
                                         <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: start;">Booker : <?php echo $booker[0]['username']; ?>
+                                    <th style="text-align: center;">Booker : <?php echo $booker[0]['username']; ?>
                                     </th>
 
 
@@ -296,7 +296,7 @@ $total_price = 0;
                                     <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
                                     </th>
                                     <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
-                                    <th style="text-align: center;">Customer Name:
+                                    <th style="text-align: end;">Customer Name:
                                         <?php echo $customers[0]['name'];?></th>
                                 </tr>
                             </thead>
@@ -365,7 +365,7 @@ $total_price = 0;
                             <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
-                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 8px;"
+                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled style="font-size: 8px;background-color:white;"
                                     placeholder="Type..." name="" id="terms-cond" cols="22"
                                     rows="10"><?php echo $sales_2[0]['details']; ?></textarea></p>
 

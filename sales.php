@@ -28,8 +28,8 @@ $customer_inv = "";
 
 if (isset($_GET['inv_num'])) {
     $sales_2_inv = $pdo->read("sales_2", ["invoice_number" => $_GET['inv_num']]);
-    $booker_inv = $pdo->read("access", ['id' => $sales_2[0]['booker_name']]);
-    $customer_inv = $pdo->read("customers", ['id' => $sales_2[0]['customer_name']]);
+    $booker_inv = $pdo->read("access", ['id' => $sales_2_inv[0]['booker_name']]);
+    $customer_inv = $pdo->read("customers", ['id' => $sales_2_inv[0]['customer_name']]);
 }
 
 
@@ -351,7 +351,7 @@ foreach ($products as $product) {
 
                                     <div class="card-body">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <div class="card" style="overflow: scroll; height: 300px;">
+                                            <div class="card" style="overflow: scroll; height: 800px;">
 
                                                 <div class="card-body">
 
