@@ -358,7 +358,7 @@ if (isset($_POST['user_update'])) {
 
                                     </div>
                                     <div class="col-md">
-                                        <textarea name="terms_cond" id="terms_cond" class="form-control" cols="30"
+                                        <textarea name="terms_cond" placeholder="Ters & Conditions" id="terms_cond" class="form-control" cols="30"
                                             rows="10"><?php echo $company[0]['terms_cond']; ?></textarea>
 
                                     </div>
