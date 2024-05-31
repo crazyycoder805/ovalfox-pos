@@ -258,7 +258,7 @@ echo json_encode($data);
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 } else {
                     $discount2 = $_POST['discount'] == 0 ? 0 :
-                    ((($_POST['quantity'] * $_POST['item_price']) * (1 - ($_POST['discount'] / 100))));
+                    (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - (intval($_POST['discount']) / 100))));
                     $percentageCut = $_POST['discount'] == 0 ? 0 : ($_POST['quantity'] * $_POST['item_price']) - $discount2;
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
@@ -554,7 +554,8 @@ if ($newPendingAmount != $previousPendingAmount) {
 }
 
     if (empty($ledger)) {
-        $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],"payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], 
+        $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],
+        "payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], 
     "recevied_amount" => $_POST['recevied_amount'],
     "details" => $_POST['details'], "payment_from" => $customer[0]['id'], "dr" => $_POST['pending_amount'], "cr" => $_POST['recevied_amount'], 
     "remaining_amount" => $_POST['final_amount'], "status" => $_POST['pending_amount'] != 0 || $_POST['pending_amount'] != "0" ? "Paid" : "Unpaid"]);

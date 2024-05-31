@@ -1,6 +1,7 @@
 <?php
 require_once 'pdo.php';
 require_once 'pdo2.php';
+date_default_timezone_set('Asia/Karachi');
 
 session_start();
 $script_name = $_SERVER['SCRIPT_NAME'];
@@ -83,7 +84,7 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/boot_strap_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/font-aws_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/icon-fa_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/style_full_white.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/sty.css">
     <style>
         .select2-dropdown {
             background-color: white !important;

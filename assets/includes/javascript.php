@@ -63,8 +63,7 @@ $(document).ready(e => {
                 enabled: true // If you want data labels, set this to true
             },
             xaxis: {
-                categories: ['Customers', 'Today orders', 'Total sales',
-                    'Total revenue', 'Today sales', 'Today purchase',
+                categories: ['Customers', 'Today orders', 'Total sales', 'Today sales', 'Today purchase',
                     'Today gernel expenses'
                 ], // X-axis labels
                 labels: {
@@ -83,7 +82,7 @@ $(document).ready(e => {
             series: [{
                 name: 'Value',
                 data: [<?php echo $total_customers; ?>, <?php echo count($today_orders); ?>,
-                    <?php echo $total_sales; ?>, <?php echo $total_amount; ?>,
+                    <?php echo $total_sales; ?>,
                     <?php echo $today_sales; ?>, <?php echo $today_purchase; ?>,
                     <?php echo $today_gernel_expenses; ?>
                 ]

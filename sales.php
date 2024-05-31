@@ -1216,7 +1216,8 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             const extraDiscountValue = parseInt(e.target.value || 0);
-            const result = calculateExtraDiscount(total_discount != 0 ? +total_discount : +quantity
+            const result = calculateExtraDiscount(total_discount != 0 ? ($("#extra_dsicount").val() == 0 ? +quantity
+                .val() * +unit_price.val() : +total_discount) : +quantity
                 .val() * +unit_price.val(), +extraDiscountValue);
             total_amount.val(+result);
             // $("#discount_amount").prop("checked", true);

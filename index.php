@@ -22,7 +22,7 @@ if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_i
 // Done
 $total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 // Done
-$today_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
+$today_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE (status = 'Incomplete' OR status = 'Unpaid') AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 // Done
 $total_sales = count($pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 
@@ -30,14 +30,13 @@ $sales_2 = $pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos
 $total_amount = [];
 
 foreach ($sales_2 as $re) {
-    $total_amount[] = $re['total_amount'];
+    $total_amount[] = $re['final_amount'];
 }
 
 $total_amount = array_sum($total_amount);
-
-$today_sales = count($pdo->read("sales_2", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
-$today_purchase = count($pdo->read("purchases_2", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
-$today_gernel_expenses = count($pdo->read("gernel_expenses", ['created_at' => date("Y-m-d"),'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
+$today_sales = count($pdo->customQuery("SELECT * FROM sales_2 WHERE created_at LIKE '%".date('Y-m-d')."%' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"));
+$today_purchase = count($pdo->customQuery("SELECT * FROM purchases_2 WHERE created_at LIKE '%".date('Y-m-d')."%' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"));
+$today_gernel_expenses = count($pdo->customQuery("SELECT * FROM gernel_expenses WHERE created_at LIKE '%".date('Y-m-d')."%' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"));
 
 
 ?>

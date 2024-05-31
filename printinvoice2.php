@@ -9,6 +9,9 @@
 
 require_once 'assets/includes/pdo.php';
 session_start();
+    if (!isset($_SESSION["ovalfox_pos_username"])) {
+        header("location:login.php");
+    }
 
 $invoice_number = $_GET['inv'];
 
