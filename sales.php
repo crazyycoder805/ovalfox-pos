@@ -114,7 +114,7 @@ echo $maxedInvoiceNumber;
                                     <label class="col-form-label">Inv number</label>
                                     <input class="form-control" class=""
                                         value="<?php echo isset($_GET['inv_num']) ? $_GET['inv_num'] : ""; ?>"
-                                        name="invoice_number" type="number" placeholder="Enter Invoice No."
+                                        name="invoice_number" type="number" placeholder="Invoice No."
                                         id="invoice_number">
 
 
@@ -227,7 +227,7 @@ foreach ($bookers as $booker) {
 
                                 <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
                                     class="form-control" name="current_date" type="datetime-local"
-                                    placeholder="Enter End Date" id="current_date">
+                                    placeholder="End Date" id="current_date">
 
 
                             </div>
@@ -318,7 +318,7 @@ foreach ($products as $product) {
 
                             </div>
 
-                            <div class="col-md">
+                            <div class="col-md-2">
                                 <div class="form-group">
 
                                     <label class="col-form-label">Last rate</label>
@@ -330,13 +330,13 @@ foreach ($products as $product) {
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="col-form-label">Item unit price</label>
 
 
                                     <input class="form-control" class="" name="unit_price" type="number"
-                                        placeholder="Enter Unit Price" id="unit_price">
+                                        placeholder="Unit Price" id="unit_price">
                                 </div>
 
 
@@ -366,13 +366,13 @@ foreach ($products as $product) {
                                                                     &nbsp;&nbsp;&nbsp;
                                                                     <div id="pass_sales_div" hidden>
                                                                         <label for="password_sales_1"
-                                                                            style="padding-top: 8px;">Enter password to
+                                                                            style="padding-top: 8px;">password to
                                                                             delete items:</label>
                                                                         &nbsp;&nbsp;&nbsp;
 
                                                                         <input type="text" id="password_sales_1"
                                                                             name="password_sales_1"
-                                                                            placeholder="Enter password" />
+                                                                            placeholder="password" />
                                                                     </div>
                                                                 </div>
                                                                 <table style="user-select: none;
@@ -380,31 +380,33 @@ foreach ($products as $product) {
     -moz-user-select: none;" id="itemAddedtable" class="table table-striped table-bordered dt-responsive ">
                                                                     <thead>
                                                                         <tr>
-                                                                            <th style="font-size: 10px !important;">#
+                                                                            <th style="font-size: 13px !important;">#
                                                                             </th>
 
-                                                                            <th style="font-size: 10px !important;">Item
+                                                                            <th style="font-size: 13px !important;">
+                                                                                Item
                                                                                 Code</th>
 
-                                                                            <th style="font-size: 10px !important;">Item
+                                                                            <th style="font-size: 13px !important;">
+                                                                                Item
                                                                                 Name</th>
 
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Quantity</th>
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Price</th>
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Total Amount</th>
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Discount</th>
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Extra discount</th>
-                                                                            <th style="font-size: 10px !important;">%
+                                                                            <th style="font-size: 13px !important;">%
                                                                             </th>
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Grand Total</th>
 
-                                                                            <th style="font-size: 10px !important;">
+                                                                            <th style="font-size: 13px !important;">
                                                                                 Remove</th>
 
                                                                         </tr>
@@ -435,7 +437,7 @@ foreach ($products as $product) {
                                                 Name</label>
 
                                             <input class="form-control" disabled class="" name="item_name" type="text"
-                                                placeholder="Enter Item Name" id="item_name">
+                                                placeholder="Item Name" id="item_name">
 
                                         </div>
                                     </div>
@@ -478,8 +480,8 @@ foreach ($products as $product) {
                                     <div class="form-group">
                                         <label class="col-form-label">Item qunatity</label>
 
-                                        <input style="font-size: 10px;" class="form-control" class="" name="quantity"
-                                            type="number" placeholder="Enter Quantity" id="quantity">
+                                        <input style="font-size: 13px;" class="form-control" class="" name="quantity"
+                                            type="number" placeholder="Quantity" id="quantity">
                                         <?php     if ($settings[0]['theme'] == "full_white") {
 ?>
                                         <div class="d-flex flex-row">
@@ -537,7 +539,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Discount</label>
 
                                     <input class="form-control" class="" name="discount" type="number"
-                                        placeholder="Enter Discount" id="discount">
+                                        placeholder="Discount" id="discount">
                                     <!-- <label class="col-form-label">(<strong style="color: red;">Press
                 Enter</strong>)</label> -->
                                     <?php     if ($settings[0]['theme'] == "full_white") {
@@ -611,7 +613,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Total
                                         Amount</label>
                                     <input class="form-control" class="" disabled name="final_amount" type="number"
-                                        placeholder="Enter Final Amount" id="final_amount">
+                                        placeholder="Final Amount" id="final_amount">
                                 </div>
                             </div>
 
@@ -620,7 +622,7 @@ foreach ($products as $product) {
                                 <div class="form-group">
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
-                                        placeholder="Enter Discount" id="discount_in_amount">
+                                        placeholder="Discount" id="discount_in_amount">
                                     <?php     if ($settings[0]['theme'] == "full_white") {
                             ?>
                                     <div class="splash-radio-button">
@@ -661,7 +663,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Total
                                         Payable</label>
                                     <input class="form-control" class="" disabled name="total_payable" type="number"
-                                        placeholder="Enter Total Payable" id="total_payable">
+                                        placeholder="Total Payable" id="total_payable">
                                 </div>
                             </div>
                         </div>
@@ -672,7 +674,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Amount
                                         Received</label>
                                     <input class="form-control" class="" name="amount_received" type="number"
-                                        placeholder="Enter Amount Received" id="amount_received">
+                                        placeholder="Amount Received" id="amount_received">
                                 </div>
                             </div>
                             <div class="col-md">
@@ -701,7 +703,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Amount
                                         Return</label>
                                     <input class="form-control" disabled class="" name="amount_return" type="number"
-                                        placeholder="Enter Amount Return" id="amount_return">
+                                        placeholder="Amount Return" id="amount_return">
                                 </div>
                             </div>
                             <div class="col-md">
@@ -709,7 +711,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Pending
                                         Amount</label>
                                     <input class="form-control" disabled class="" name="pending_amount" type="number"
-                                        placeholder="Enter Pending Amount" id="pending_amount">
+                                        placeholder="Pending Amount" id="pending_amount">
                                 </div>
                             </div>
                         </div>
@@ -718,7 +720,7 @@ foreach ($products as $product) {
                                 <div class="form-group">
                                     <label class="col-form-label">Details</label>
                                     <textarea rows="1" cols="1" class="form-control" name="details" id="details"
-                                        placeholder="Enter Details"><?php echo isset($_GET['inv_num']) ? $sales_2_inv[0]['details'] : ""; ?></textarea>
+                                        placeholder="Details"><?php echo isset($_GET['inv_num']) ? $sales_2_inv[0]['details'] : ""; ?></textarea>
                                 </div>
 
                                 <div class="form-group">
@@ -754,7 +756,7 @@ foreach ($products as $product) {
                 <label class="col-form-label">Item
                     Code</label>
 
-                <input class="form-control" disabled class="" name="item_code" type="text" placeholder="Enter Item Code"
+                <input class="form-control" disabled class="" name="item_code" type="text" placeholder="Item Code"
                     id="item_code">
 
             </div>
@@ -1204,7 +1206,8 @@ foreach ($products as $product) {
             }
             const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
             total_discount = isAmount == "" ? +result
-                .discountedPrice : (isAmount == "amount" ? +result.discountedPrice : +result.percentage);
+                .discountedPrice : (isAmount == "amount" ? +result.discountedPrice : +result
+                    .percentage);
             total_amount.val(+total_discount);
             // $("#taaup").val(+total_discount);
 
@@ -1216,8 +1219,9 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             const extraDiscountValue = parseInt(e.target.value || 0);
-            const result = calculateExtraDiscount(total_discount != 0 ? ($("#extra_dsicount").val() == 0 ? +quantity
-                .val() * +unit_price.val() : +total_discount) : +quantity
+            const result = calculateExtraDiscount(total_discount != 0 ? ($("#extra_dsicount").val() ==
+                    0 ? +quantity
+                    .val() * +unit_price.val() : +total_discount) : +quantity
                 .val() * +unit_price.val(), +extraDiscountValue);
             total_amount.val(+result);
             // $("#discount_amount").prop("checked", true);
@@ -1629,6 +1633,7 @@ foreach ($products as $product) {
 
                             }
                             $("#discount_amount").prop("checked", true);
+                            isAmount = "amount";
                         }
                     });
                 }
@@ -1766,23 +1771,24 @@ foreach ($products as $product) {
         });
         $(document).on('keydown', "#itemAddedtable td", e => {
             if (e.keyCode == 13) {
-                $("#unit_price").focus();
+                console.log(e.target);
+                $(e.target.id).focus();
             }
         });
         let focusSet = false;
 
-        $(document).on("blur", "#itemAddedtable td", e => {
+        $(document).on("blur", "#itemAddedtable td", eTarget => {
             focusSet = false;
-            let target = e;
+            let target = eTarget;
 
 
 
-            let inputValue = parseInt(e.target.textContent);
-            if (!e.target.id.match(/discountTabledData/) && !e.target.id.match(/extraTabledData/) && !e
+            let inputValue = parseInt(eTarget.target.textContent);
+            if (!eTarget.target.id.match(/discountTabledData/) && !eTarget.target.id.match(
+                    /extraTabledData/) && !eTarget
                 .target.id.match(/percentageTabledData/)) {
                 if (inputValue <= 0) {
-                    e.target.textContent = 1;
-                    console.log(e.target.textContent);
+                    eTarget.target.textContent = 1;
                 }
             }
 
@@ -1793,7 +1799,7 @@ foreach ($products as $product) {
                 url: "data.php",
                 data: {
                     "__FILE__": "runtimeTableDataEdit",
-                    "target": `{"${e.target.id}": "${e.target.textContent}"}`,
+                    "target": `{"${eTarget.target.id}": "${eTarget.target.textContent}"}`,
                     "invoice_number": $("#invoice_number").val()
                 },
                 success: runtimeTableDataEditE => {
@@ -1807,10 +1813,14 @@ foreach ($products as $product) {
                             "invoice_number": $("#invoice_number").val(),
 
                         },
+                        complete: (jq) => {
+                            focusSet = true;
+
+                        },
                         success: e => {
                             const product = JSON.parse(e);
                             $("#data").html(product[0]);
-                            let html = product[0];
+                            // let html = ;
                             $("#total_items").text(product[1]);
                             $("#total_quantity_added").text(product[
                                 2]);
@@ -1821,16 +1831,23 @@ foreach ($products as $product) {
                             $("#total_payable").val($("#final_amount").val());
                             $("#pending_amount").val($("#final_amount").val());
 
-                            if (target.target.id.match(
-                                    /percentageTabledData\d*/) && !focusSet) {
+                            // if (focusSet == false) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
 
-                                $(document).find(
-                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                ).focus();
+                            // }
 
-                                $("#unit_price").focus();
-                                focusSet = true;
-                            }
+                            // if (target.target.id.match(
+                            //         /percentageTabledData\d*/) && !focusSet) {
+
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
 
                             // if (target.target.id.match(
                             //         /discountTabledData\d*/) && !focusSet) {
@@ -1842,25 +1859,66 @@ foreach ($products as $product) {
                             // }
 
 
-                            if (target.target.id.match(
-                                    /quantityTabledData\d*/) && !focusSet) {
-                                $(document).find(
-                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                ).focus();
-                                $("#unit_price").focus();
-                                focusSet = true;
-                            }
+                            // if (target.target.id.match(
+                            //         /quantityTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
 
-                            if (target.target.id.match(
-                                    /item_priceTabledData\d*/) && !focusSet) {
-                                $(document).find(
-                                    `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                ).focus();
-                                $("#unit_price").focus();
-                                focusSet = true;
-                            }
+                            // if (target.target.id.match(
+                            //         /item_priceTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
 
 
+                            // if (target.target.id.match(
+                            //         /percentageTabledData\d*/) && !focusSet) {
+
+                            //     // $(document).find(
+                            //     //     `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     // ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /discountTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+                            // if (target.target.id.match(
+                            //         /quantityTabledData\d*/) && !
+                            //     focusSet) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /item_priceTabledData\d*/) && !
+                            //     focusSet) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
                         }
                     });
 

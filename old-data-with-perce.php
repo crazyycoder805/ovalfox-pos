@@ -65,7 +65,7 @@ if ($_POST['__FILE__'] == "productSelect") {
     <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
     <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
     <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
-    <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
+    <td style='font-size: 10px !important;'  id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
     <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>$gt</td>
 
     
@@ -178,15 +178,30 @@ echo json_encode($data);
             }
             if (empty($sales_1)) {
                 if ($_POST['amountIn'] == "amount") {
+                    $discount = empty($sales_1[0]['discount']) ? intval($_POST['discount']) : intval($sales_1[0]['discount']);
+                    $extra_discount = empty($sales_1[0]['extra_discount']) ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount']);
+                    // Fetch and validate quantity and item price
+                    $quantity = intval($_POST['quantity']);
+                    $item_price = intval($_POST['item_price']);
+
+                    // Calculate total price before any discounts
+                    $total_price_before_discounts = $quantity * $item_price;
+
+                    // Apply extra discount
+                    $total_price_after_extra_discount = $total_price_before_discounts;
+                    if ($total_price_after_extra_discount > 0) {
+                        $discount_percentage = round(($discount / $total_price_after_extra_discount) * 100, 2);
+                    } else {
+                        $discount_percentage = 0;
+                    }
+                 
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $discount) - $extra_discount)), 
-                    'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
-                    intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
-                     ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 2)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) * (1 - (round($discount_percentage, 2) / 100))) - $extra_discount)), 
+                    'percentage' => $discount_percentage, 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
                     'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
@@ -199,7 +214,7 @@ echo json_encode($data);
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $percentageCut) - $extra_discount)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $percentageCut) - $extra_discount)), 
                     'percentage' => $_POST['discount'], 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
                     'discount' => $percentageCut, 
@@ -244,28 +259,42 @@ echo json_encode($data);
     
             if (empty($sales_1)) {
                 if ($_POST['amountIn'] == "amount") {
+                    $discount = empty($sales_1[0]['discount']) ? intval($_POST['discount']) : intval($sales_1[0]['discount']);
+                    $extra_discount = empty($sales_1[0]['extra_discount']) ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount']);
+                    // Fetch and validate quantity and item price
+                    $quantity = intval($_POST['quantity']);
+                    $item_price = intval($_POST['item_price']);
+
+                    // Calculate total price before any discounts
+                    $total_price_before_discounts = $quantity * $item_price;
+
+                    // Apply extra discount
+                    $total_price_after_extra_discount = $total_price_before_discounts;
+                    if ($total_price_after_extra_discount > 0) {
+                        $discount_percentage = round(($discount / $total_price_after_extra_discount) * 100, 2);
+                    } else {
+                        $discount_percentage = 0;
+                    }
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $discount) - $extra_discount)), 
-                    'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
-                    intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
-                     ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 2)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) * (1 - (round($discount_percentage, 2) / 100))) - $extra_discount)), 
+                    'percentage' => $discount_percentage, 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
                     'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 } else {
                     $discount2 = $_POST['discount'] == 0 ? 0 :
-                    ((($_POST['quantity'] * $_POST['item_price']) * (1 - ($_POST['discount'] / 100))));
+                    (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - (intval($_POST['discount']) / 100))));
                     $percentageCut = $_POST['discount'] == 0 ? 0 : ($_POST['quantity'] * $_POST['item_price']) - $discount2;
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : (($_POST['taaup'] - $percentageCut) - $extra_discount)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $percentageCut) - $extra_discount)), 
                     'percentage' => $_POST['discount'], 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
                     'discount' => $percentageCut, 
@@ -308,19 +337,25 @@ echo json_encode($data);
         <?php echo $sale['item_code']; ?></td>
     <td style='font-size: 10px !important;' id='item_nameTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['item_name']; ?></td>
-    <td style='font-size: 10px !important;' id='quantityTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
+    <td style='font-size: 10px !important;' id='quantityTabledData<?php echo $sale['id'];?>'
+        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['quantity']; ?></td>
 
-    <td style='font-size: 10px !important;' id='item_priceTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
+    <td style='font-size: 10px !important;' id='item_priceTabledData<?php echo $sale['id'];?>'
+        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['item_price']; ?></td>
     <td style='font-size: 10px !important;' id='amountTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['amount']; ?></td>
-    <td style='font-size: 10px !important;' id='discountTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
+    <td style='font-size: 10px !important;'
+        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>
+        id='discountTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['discount']; ?></td>
     <td style='font-size: 10px !important;' id='extra_discountTabledData<?php echo $sale['id'];?>'
         <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['extra_discount']; ?></td>
-    <td style='font-size: 10px !important;' id='percentageTabledData<?php echo $sale['id'];?>' <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
+    <td style='font-size: 10px !important;' oninput="limitDecimalPlaces(this)"
+        id='percentageTabledData<?php echo $sale['id'];?>'
+        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['percentage']; ?></td>
     <td style='font-size: 10px !important;' id='grandTotalTabledData<?php echo $sale['id'];?>'>
         <?php echo $gt; ?></td>
@@ -498,9 +533,9 @@ echo json_encode($data);
     
         <td style='font-size: 10px !important;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
         <td style='font-size: 10px !important;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-        <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
+        <td style='font-size: 10px !important;' id='"."discountTabledData{$sale['id']}'  ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
         <td style='font-size: 10px !important;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
-        <td style='font-size: 10px !important;' id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
+        <td style='font-size: 10px !important;'  id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
         <td style='font-size: 10px !important;' id='"."grandTotalTabledData{$sale['id']}'>{$gt}</td>
 
         <td style='font-size: 10px !important;'>
@@ -530,7 +565,6 @@ echo json_encode($data);
 
     $productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded];
     echo json_encode($productData);
-
 ?>
 
 
@@ -554,7 +588,8 @@ if ($newPendingAmount != $previousPendingAmount) {
 }
 
     if (empty($ledger)) {
-        $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],"payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], 
+        $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],
+        "payment_type" => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], "total_amount" => $_POST['total_amount'], 
     "recevied_amount" => $_POST['recevied_amount'],
     "details" => $_POST['details'], "payment_from" => $customer[0]['id'], "dr" => $_POST['pending_amount'], "cr" => $_POST['recevied_amount'], 
     "remaining_amount" => $_POST['final_amount'], "status" => $_POST['pending_amount'] != 0 || $_POST['pending_amount'] != "0" ? "Paid" : "Unpaid"]);
@@ -854,7 +889,7 @@ if ($key == "quantity") {
     }
 
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
-    ['grand_total' => ceil(((array_values($array)[0] * $selectedItem[0]['item_price']) - $selectedItem[0]['discount'])- $selectedItem[0]['extra_discount']), 
+    ['grand_total' => (((array_values($array)[0] * $selectedItem[0]['item_price']) - $selectedItem[0]['discount'])- $selectedItem[0]['extra_discount']), 
     'amount' => (array_values($array)[0] * $selectedItem[0]['item_price']),
     'quantity' => array_values($array)[0] > $prd[0]['total_quantity'] ? $prd[0]['total_quantity'] : array_values($array)[0]]);
     $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
@@ -870,21 +905,31 @@ if ($key == "quantity") {
     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number']], ['total_amount' => $toa]);
     
 } else if ($key == "discount") {
-    $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
-    ['grand_total' => ceil(((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - array_values($array)[0]) - $selectedItem[0]['extra_discount'])),
-    'percentage' => round((array_values($array)[0] / ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price'])) - $selectedItem[0]['extra_discount'])) * 100, 2),
-    'discount' => ceil(array_values($array)[0])]);
-    $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+//     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+//     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
+//     [
+        
+//         // 'grand_total' => (((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - array_values($array)[0]) - $selectedItem[0]['extra_discount'])),
+    
+    
+//     // 'percentage' => round((array_values($array)[0] / ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price'])) - 
+//     // $selectedItem[0]['extra_discount'])) * 100, 2),
 
-    $toa = [];
-    foreach ($sls1 as $sl1) {
-        $toa[] = $sl1['grand_total'];
-    }
 
-    $toa = array_sum($toa);
 
-    $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number']], ['total_amount' => $toa]);
+//     // 'discount' => (array_values($array)[0])
+
+// ]);
+//     $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+
+//     $toa = [];
+//     foreach ($sls1 as $sl1) {
+//         $toa[] = $sl1['grand_total'];
+//     }
+
+//     $toa = array_sum($toa);
+
+//     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number']], ['total_amount' => $toa]);
 } else if ($key == "extra_discount") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
@@ -903,11 +948,12 @@ if ($key == "quantity") {
     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number']], ['total_amount' => $toa]);
 } else if ($key == "percentage") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $discount = array_values($array)[0] == 0 ? 0 :
-    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (array_values($array)[0] / 100))));
+    $discount = round(array_values($array)[0], 2) == 0 ? 0 :
+    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (round(array_values($array)[0], 2) / 100))));
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
-    ['discount' => ceil(array_values($array)[0] == 0 ? 0 : ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - $discount),
-    'percentage' => array_values($array)[0]]);
+    ['discount' => (round(array_values($array)[0], 2) == 0 ? 0 : ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - $discount),
+    'grand_total' => round(array_values($array)[0], 2) == 0 ? ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) -  $selectedItem[0]['extra_discount'] : $discount -  $selectedItem[0]['extra_discount'],
+    'percentage' => round(round(array_values($array)[0], 2), 2)]);
     $sls1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 
     $toa = [];
@@ -921,7 +967,7 @@ if ($key == "quantity") {
 } else if ($key == "item_price") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
-    ['grand_total' => ceil(((($selectedItem[0]['quantity'] 
+    ['grand_total' => (((($selectedItem[0]['quantity'] 
     * array_values($array)[0]) 
     - $selectedItem[0]['discount']) - $selectedItem[0]['extra_discount'])), 
     'amount' => ($selectedItem[0]['quantity'] 
@@ -954,7 +1000,8 @@ if ($key == "quantity") {
 <tr>
     <td><?php echo $index; ?></td>
     <td><?php echo $cs['bill_number']; ?></td>
-    <td><?php echo preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $cs['invoice_number'] : $cs['invoice_number']; ?></td>
+    <td><?php echo preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $cs['invoice_number'] : $cs['invoice_number']; ?>
+    </td>
 
     <td><?php echo $customer[0]['name']; ?></td>
     <td><?php echo $booker[0]['username']; ?></td>
@@ -963,8 +1010,9 @@ if ($key == "quantity") {
     <td><?php echo $cs['date']; ?></td>
 
     <td>
-        <a href="#" id="printCustomer" data-cus="<?php echo $cs['id'] ?>" name="printCustomer">PRINT</a> || <a href="sales.php?inv_num=<?php echo $cs['id'] ?>"
-            id="editCustomer" data-cus="<?php echo $cs['invoice_number'] ?>" name="printCustomer">EDIT</a>
+        <a href="#" id="printCustomer" data-cus="<?php echo $cs['id'] ?>" name="printCustomer">PRINT</a> || <a
+            href="sales.php?inv_num=<?php echo $cs['id'] ?>" id="editCustomer"
+            data-cus="<?php echo $cs['invoice_number'] ?>" name="printCustomer">EDIT</a>
     </td>
 
 </tr>
