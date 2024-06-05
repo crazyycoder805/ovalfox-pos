@@ -280,34 +280,43 @@ $total_price = 0;
                             <thead>
 
                                 <tr>
-                                    <th style="text-align: start;" id="table-info-first-th-child">
+                                    <th style="text-align: start;font-size: 21px !important;"
+                                        id="table-info-first-th-child">
                                         <?php echo str_replace('T', ' ', $sales_2[0]['date']); ?>
                                     </th>
-                                    <th style="text-align: start;padding-left:30px;">
-                                        Invoice: <?php echo $invoice_number; ?>
+
+                                    <th style="text-align: center; font-size: 21px !important;">
+                                        Cash.: <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: end;">
-                                        <?php echo $sales_2[0]['status']; ?>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: start; ">
-                                        Cashier: <?php echo $_SESSION['ovalfox_pos_username']; ?>
-                                    </th>
-                                    <th style="text-align: start;padding-left:30px;">
+                                    <th style="text-align: end;font-size: 21px !important;">
                                         Booker: <?php echo $booker[0]['username']; ?>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start;">
-                                        Add: <?php echo $customers[0]['address']; ?>
-                                    </th>
-                                    <th style="text-align: start;padding-left:30px;">
-                                        Phone: <?php echo $customers[0]['phone']; ?>
-                                    </th>
-                                    <th style="text-align: end;">
+                                    <th style="text-align: start;font-size: 21px !important;">
                                         CUST. <?php echo $customers[0]['name']; ?>
                                     </th>
+
+                                    <th style="text-align: center;font-size: 21px !important;">
+                                        Ph.: <?php echo $customers[0]['phone']; ?>
+                                    </th>
+
+                                </tr>
+
+                                <tr>
+                                    <th style="text-align: start;font-size: 21px !important;">
+                                        Add: <span style=" overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;font-size: 21px !important;"><?php echo $customers[0]['address']; ?></span>
+                                    </th>
+
+                                    <th style="text-align: center;font-size: 21px !important;">
+                                        Inv.: <?php echo $invoice_number; ?>
+                                    </th>
+                                    <th style="text-align: end;font-size: 21px !important;">
+                                        <?php echo $sales_2[0]['status']; ?>
+                                    </th>
+
                                 </tr>
 
 
@@ -316,16 +325,16 @@ $total_price = 0;
                         </table>
                         <table id="table-data-product" style="width: 100%;" border="2">
                             <thead>
-                                <th style="text-align: center;font-size: 11px;">SR</th>
-                                <th style="text-align: center;font-size: 11px;">Description</th>
-                                <th style="text-align: center;font-size: 11px;">Qty</th>
-                                <th style="text-align: center;font-size: 11px;">Rate</th>
-                                <th style="text-align: center;font-size: 11px;">Total</th>
-                                <th style="text-align: center;font-size: 11px;">Dis</th>
-                                <th style="text-align: center;font-size: 11px;">%</th>
-                                <th style="text-align: center;font-size: 11px;">Ex.Dis</th>
+                                <th style="text-align: center;font-size: 20px !important;">SR</th>
+                                <th style="text-align: center;font-size: 20px !important;">Description</th>
+                                <th style="text-align: center;font-size: 20px !important;">Qty</th>
+                                <th style="text-align: center;font-size: 20px !important;">Rate</th>
+                                <th style="text-align: center;font-size: 20px !important;">Total</th>
+                                <th style="text-align: center;font-size: 20px !important;">Dis</th>
+                                <th style="text-align: center;font-size: 20px !important;">%</th>
+                                <th style="text-align: center;font-size: 20px !important;">Ex.Dis</th>
 
-                                <th style="text-align: center;font-size: 11px;">G.Total</th>
+                                <th style="text-align: center;font-size: 20px !important;">G.Total</th>
 
                             </thead>
                             <tbody>
@@ -339,30 +348,30 @@ $total_price = 0;
         $total_price += $sale['grand_total'];
     ?>
                                 <tr>
-                                    <td style="text-align: center;font-size: 16px !important;"><?php echo $index; ?>
+                                    <td style="text-align: center;font-size: 23px !important;"><?php echo $index; ?>
                                     </td>
 
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['item_name']; ?>
                                     </td>
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['quantity']; ?>
                                     </td>
 
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['item_price']; ?></td>
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['amount']; ?></td>
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['discount']; ?>
                                     </td>
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['extra_discount']; ?>
                                     </td>
 
-                                    <td style="text-align: center;font-size: 16px !important;">
+                                    <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['grand_total']; ?>
                                     </td>
                                     </td>

@@ -1489,6 +1489,14 @@ foreach ($products as $product) {
 
 
         $("#wholeFormBtn").on("click", e => {
+            $("#product").select2("open");
+            setTimeout(function() {
+                var searchField = $(
+                    '.select2-container--open .select2-search__field');
+                if (searchField.length) {
+                    searchField[0].focus();
+                }
+            }, 5);
             quantityAdd = 0;
 
             if ($("#invoice_number").val() == "") {
@@ -1566,14 +1574,14 @@ foreach ($products as $product) {
                     $("#taaup").val('');
 
                     $("#extra_dsicount").val('');
-                    $("#product").select2("open");
-                    setTimeout(function() {
-                        var searchField = $(
-                            '.select2-container--open .select2-search__field');
-                        if (searchField.length) {
-                            searchField[0].focus();
-                        }
-                    }, 100);
+                    // $("#product").select2("open");
+                    // setTimeout(function() {
+                    //     var searchField = $(
+                    //         '.select2-container--open .select2-search__field');
+                    //     if (searchField.length) {
+                    //         searchField[0].focus();
+                    //     }
+                    // }, 100);
 
                     $("#final_amount").val(finalAmount + finalerAmount);
                     $("#total_payable").val($("#final_amount").val());
