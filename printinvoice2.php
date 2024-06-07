@@ -280,40 +280,40 @@ $total_price = 0;
                             <thead>
 
                                 <tr>
-                                    <th style="text-align: start;font-size: 21px !important;"
+                                    <th style="text-align: start;font-size: 25px !important;"
                                         id="table-info-first-th-child">
                                         <?php echo str_replace('T', ' ', $sales_2[0]['date']); ?>
                                     </th>
 
-                                    <th style="text-align: center; font-size: 21px !important;">
+                                    <th style="text-align: center; font-size: 25px !important;">
                                         Cash.: <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: end;font-size: 21px !important;">
+                                    <th style="text-align: end;font-size: 25px !important;">
                                         Booker: <?php echo $booker[0]['username']; ?>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start;font-size: 21px !important;">
+                                    <th style="text-align: start;font-size: 25px !important;">
                                         CUST. <?php echo $customers[0]['name']; ?>
                                     </th>
 
-                                    <th style="text-align: center;font-size: 21px !important;">
+                                    <th style="text-align: center;font-size: 25px !important;">
                                         Ph.: <?php echo $customers[0]['phone']; ?>
                                     </th>
 
                                 </tr>
 
                                 <tr>
-                                    <th style="text-align: start;font-size: 21px !important;">
+                                    <th style="text-align: start;font-size: 25px !important;">
                                         Add: <span style=" overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;font-size: 21px !important;"><?php echo $customers[0]['address']; ?></span>
+  white-space: nowrap;font-size: 25px !important;"><?php echo $customers[0]['address']; ?></span>
                                     </th>
 
-                                    <th style="text-align: center;font-size: 21px !important;">
+                                    <th style="text-align: center;font-size: 25px !important;">
                                         Inv.: <?php echo $invoice_number; ?>
                                     </th>
-                                    <th style="text-align: end;font-size: 21px !important;">
+                                    <th style="text-align: end;font-size: 25px !important;">
                                         <?php echo $sales_2[0]['status']; ?>
                                     </th>
 
@@ -393,7 +393,7 @@ $total_price = 0;
 
                             <p> <b>Terms and Conditions:</b> <br /> <textarea disabled
                                     style="font-size: 8px;background-color:white;" placeholder="Type..." name=""
-                                    id="terms-cond" cols="22" rows="10"><?php echo $sales_2[0]['details']; ?></textarea>
+                                    id="terms-cond" cols="22" rows="4"><?php echo $sales_2[0]['details']; ?></textarea>
                             </p>
 
 

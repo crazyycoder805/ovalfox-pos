@@ -360,12 +360,14 @@ $today_gernel_expenses = count($pdo->customQuery("SELECT * FROM gernel_expenses 
                                             </thead>
                                             <tbody>
                                                 <?php
+                                                $total = [];
                                                             foreach ($today_orders as $index => $order) {
                                                                 $index += 1;
                                                                 $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($order['invoice_number']) ? $order['invoice_number'] : -1]);
                                                                 $booker = $pdo->read("access", ['id' => $order['booker_name']]);
                                                                 $customer = $pdo->read("customers", ['id' => $order['customer_name']]);
-
+                                                                $total[] = $order['final_amount'];
+                                                                    
                                                             ?>
                                                 <tr>
                                                     <td><?php echo $index; ?></td>
@@ -387,9 +389,16 @@ $today_gernel_expenses = count($pdo->customQuery("SELECT * FROM gernel_expenses 
                                                     </td>
 
                                                 </tr>
-                                                <?php } ?>
+                                                <?php } 
+                                                ?>
                                             </tbody>
                                         </table>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <h3>Total: <?php $total = array_sum($total); echo $total; ?>
+                                                </h3>
+                                            </div>
+                                        </div>
                                     </div>
 
 

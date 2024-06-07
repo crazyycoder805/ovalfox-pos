@@ -370,7 +370,7 @@ foreach ($products as $product) {
                                                                             delete items:</label>
                                                                         &nbsp;&nbsp;&nbsp;
 
-                                                                        <input type="password" id="password_sales_1"
+                                                                        <input type="text" id="password_sales_1"
                                                                             name="password_sales_1"
                                                                             placeholder="password" />
                                                                     </div>
@@ -1789,163 +1789,161 @@ foreach ($products as $product) {
             })
 
         });
-        let focusSet = false;
-
-        $(document).on('keydown', "#itemAddedtable td", eTarget => {
-            if (eTarget.keyCode == 13) {
-                focusSet = false;
-                let target = eTarget;
-
-
-
-                let inputValue = parseInt(eTarget.target.textContent);
-                if (!eTarget.target.id.match(/discountTabledData/) && !eTarget.target.id.match(
-                        /extraTabledData/) && !eTarget
-                    .target.id.match(/percentageTabledData/)) {
-                    if (inputValue <= 0) {
-                        eTarget.target.textContent = 1;
-                    }
-                }
-
-
-
-                $.ajax({
-                    type: "POST",
-                    url: "data.php",
-                    data: {
-                        "__FILE__": "runtimeTableDataEdit",
-                        "target": `{"${eTarget.target.id}": "${eTarget.target.textContent}"}`,
-                        "invoice_number": $("#invoice_number").val()
-                    },
-                    success: runtimeTableDataEditE => {
-
-
-                        $.ajax({
-                            type: "POST",
-                            url: "data.php",
-                            data: {
-                                "__FILE__": "productFetch",
-                                "invoice_number": $("#invoice_number").val(),
-
-                            },
-                            complete: (jq) => {
-                                focusSet = true;
-
-                            },
-                            success: e => {
-                                const product = JSON.parse(e);
-                                $("#data").html(product[0]);
-                                // let html = ;
-                                $("#total_items").text(product[1]);
-                                $("#total_quantity_added").text(product[
-                                    2]);
-                                finalAmount = product[3];
-
-                                $("#final_amount").val(product[
-                                    3]);
-                                $("#total_payable").val($("#final_amount")
-                                    .val());
-                                $("#pending_amount").val($("#final_amount")
-                                    .val());
-
-                                // if (focusSet == false) {
-                                //     $(document).find(
-                                //         `#${$(product[0].match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-
-                                // }
-
-                                // if (target.target.id.match(
-                                //         /percentageTabledData\d*/) && !focusSet) {
-
-                                //     $(document).find(
-                                //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-                                // if (target.target.id.match(
-                                //         /discountTabledData\d*/) && !focusSet) {
-                                //     $(document).find(
-                                //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-
-                                // if (target.target.id.match(
-                                //         /quantityTabledData\d*/) && !focusSet) {
-                                //     $(document).find(
-                                //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-                                // if (target.target.id.match(
-                                //         /item_priceTabledData\d*/) && !focusSet) {
-                                //     $(document).find(
-                                //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-
-                                // if (target.target.id.match(
-                                //         /percentageTabledData\d*/) && !focusSet) {
-
-                                //     // $(document).find(
-                                //     //     `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     // ).focus();
-
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-                                // if (target.target.id.match(
-                                //         /discountTabledData\d*/) && !focusSet) {
-                                //     $(document).find(
-                                //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-                                // if (target.target.id.match(
-                                //         /quantityTabledData\d*/) && !
-                                //     focusSet) {
-                                //     $(document).find(
-                                //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-
-                                // if (target.target.id.match(
-                                //         /item_priceTabledData\d*/) && !
-                                //     focusSet) {
-                                //     $(document).find(
-                                //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
-                                //     ).focus();
-
-
-                                //     $("#unit_price").focus();
-                                //     focusSet = true;
-                                // }
-                            }
-                        });
-
-                    }
-                });
+        $(document).on('keydown', "#itemAddedtable td", e => {
+            if (e.keyCode == 13) {
+                console.log(e.target);
+                $(e.target.id).focus();
             }
         });
+        let focusSet = false;
 
         $(document).on("blur", "#itemAddedtable td", eTarget => {
+            focusSet = false;
+            let target = eTarget;
 
+
+
+            let inputValue = parseInt(eTarget.target.textContent);
+            if (!eTarget.target.id.match(/discountTabledData/) && !eTarget.target.id.match(
+                    /extraTabledData/) && !eTarget
+                .target.id.match(/percentageTabledData/)) {
+                if (inputValue <= 0) {
+                    eTarget.target.textContent = 1;
+                }
+            }
+
+
+
+            $.ajax({
+                type: "POST",
+                url: "data.php",
+                data: {
+                    "__FILE__": "runtimeTableDataEdit",
+                    "target": `{"${eTarget.target.id}": "${eTarget.target.textContent}"}`,
+                    "invoice_number": $("#invoice_number").val()
+                },
+                success: runtimeTableDataEditE => {
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "data.php",
+                        data: {
+                            "__FILE__": "productFetch",
+                            "invoice_number": $("#invoice_number").val(),
+
+                        },
+                        complete: (jq) => {
+                            focusSet = true;
+
+                        },
+                        success: e => {
+                            const product = JSON.parse(e);
+                            $("#data").html(product[0]);
+                            // let html = ;
+                            $("#total_items").text(product[1]);
+                            $("#total_quantity_added").text(product[
+                                2]);
+                            finalAmount = product[3];
+
+                            $("#final_amount").val(product[
+                                3]);
+                            $("#total_payable").val($("#final_amount").val());
+                            $("#pending_amount").val($("#final_amount").val());
+
+                            // if (focusSet == false) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /percentageTabledData\d*/) && !focusSet) {
+
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /discountTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+
+                            // if (target.target.id.match(
+                            //         /quantityTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /item_priceTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+
+                            // if (target.target.id.match(
+                            //         /percentageTabledData\d*/) && !focusSet) {
+
+                            //     // $(document).find(
+                            //     //     `#${$(html.match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     // ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /discountTabledData\d*/) && !focusSet) {
+                            //     $(document).find(
+                            //         `#${$(html.match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+                            // if (target.target.id.match(
+                            //         /quantityTabledData\d*/) && !
+                            //     focusSet) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+
+                            // if (target.target.id.match(
+                            //         /item_priceTabledData\d*/) && !
+                            //     focusSet) {
+                            //     $(document).find(
+                            //         `#${$(product[0].match(/<td.*?id=['"]percentageTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
+                            //     ).focus();
+
+
+                            //     $("#unit_price").focus();
+                            //     focusSet = true;
+                            // }
+                        }
+                    });
+
+                }
+            });
         });
 
         $("#customer_name").on("input", e => {

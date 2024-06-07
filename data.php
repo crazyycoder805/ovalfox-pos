@@ -178,8 +178,8 @@ echo json_encode($data);
             }
             if (empty($sales_1)) {
                 if ($_POST['amountIn'] == "amount") {
-                    $discount = empty($sales_1[0]['discount']) ? intval($_POST['discount']) : intval($sales_1[0]['discount']);
-                    $extra_discount = empty($sales_1[0]['extra_discount']) ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount']);
+                    $discount = empty($sales_1[0]['discount']) ? (double)$_POST['discount'] : (double)$sales_1[0]['discount'];
+                    $extra_discount = empty($sales_1[0]['extra_discount']) ? (double)$_POST['extra_discount'] : (double)$sales_1[0]['extra_discount'];
                     // Fetch and validate quantity and item price
                     $quantity = intval($_POST['quantity']);
                     $item_price = intval($_POST['item_price']);
@@ -200,10 +200,10 @@ echo json_encode($data);
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) * (1 - (round($discount_percentage, 2) / 100))) - $extra_discount)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $discount) - $extra_discount)), 
                     'percentage' => $discount_percentage, 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
-                    'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
+                    'discount' => round(empty($_POST['discount']) ? 0 : $_POST['discount'], 2), 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 } else {
                     $discount2 = $_POST['discount'] == 0 ? 0 :
@@ -217,7 +217,7 @@ echo json_encode($data);
                     'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $percentageCut) - $extra_discount)), 
                     'percentage' => $_POST['discount'], 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
-                    'discount' => $percentageCut, 
+                    'discount' => round($percentageCut, 2), 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 }
             
@@ -227,9 +227,9 @@ echo json_encode($data);
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
-                intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
-                 ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 2)),
+                'percentage' => (round(((empty($sales_1[0]['discount']) ? (double)$_POST['discount'] : 
+                (double)($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - ((double)(empty($sales_1[0]['extra_discount']))
+                 ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount'])))) * 100, 2)),
                 'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);
                 
 
@@ -259,8 +259,8 @@ echo json_encode($data);
     
             if (empty($sales_1)) {
                 if ($_POST['amountIn'] == "amount") {
-                    $discount = empty($sales_1[0]['discount']) ? intval($_POST['discount']) : intval($sales_1[0]['discount']);
-                    $extra_discount = empty($sales_1[0]['extra_discount']) ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount']);
+                    $discount = empty($sales_1[0]['discount']) ? (double)($_POST['discount']) : (double)($sales_1[0]['discount']);
+                    $extra_discount = empty($sales_1[0]['extra_discount']) ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount']);
                     // Fetch and validate quantity and item price
                     $quantity = intval($_POST['quantity']);
                     $item_price = intval($_POST['item_price']);
@@ -280,14 +280,14 @@ echo json_encode($data);
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
                     'item_code' => $_POST['item_code'], 'item_name' => $item_name, 'item_price' => $_POST['item_price'], 
                     'quantity' => (empty($_POST['quantity']) ? 0 : $_POST['quantity']), 
-                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) * (1 - (round($discount_percentage, 2) / 100))) - $extra_discount)), 
+                    'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $discount) - $extra_discount)), 
                     'percentage' => $discount_percentage, 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
-                    'discount' => empty($_POST['discount']) ? 0 : $_POST['discount'], 
+                    'discount' => round(empty($_POST['discount']) ? 0 : $_POST['discount'], 2), 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 } else {
                     $discount2 = $_POST['discount'] == 0 ? 0 :
-                    (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - (intval($_POST['discount']) / 100))));
+                    (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - ((double)($_POST['discount']) / 100))));
                     $percentageCut = $_POST['discount'] == 0 ? 0 : ($_POST['quantity'] * $_POST['item_price']) - $discount2;
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
@@ -297,7 +297,7 @@ echo json_encode($data);
                     'grand_total' => ($_POST['isItemFree'] == "true" ? 0 : ((($_POST['quantity'] * $_POST['item_price']) - $percentageCut) - $extra_discount)), 
                     'percentage' => $_POST['discount'], 
                     'amount' => ($_POST['isItemFree'] == "true" ? 0 : (empty($_POST['taaup']) ? 0 : $_POST['taaup'])), 
-                    'discount' => $percentageCut, 
+                    'discount' => round($percentageCut, 2), 
                     'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
                 }
             
@@ -306,9 +306,9 @@ echo json_encode($data);
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty($sales_1[0]['discount']) ? intval($_POST['discount']) : 
-                intval($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - (intval(empty($sales_1[0]['extra_discount']))
-                 ? intval($_POST['extra_discount']) : intval($sales_1[0]['extra_discount'])))) * 100, 2)),
+                'percentage' => (round(((empty($sales_1[0]['discount']) ? (double)($_POST['discount']) : 
+                (double)($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - ((double)(empty($sales_1[0]['extra_discount']))
+                 ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount'])))) * 100, 2)),
                 'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);
                 
 
@@ -884,7 +884,7 @@ if ($key == "quantity") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $prd = $pdo->read("products", ['item_code' => $selectedItem[0]['item_code']]);
     $discount = 
-    (((array_values($array)[0] * $selectedItem[0]['item_price']) * (1 - (round($selectedItem[0]['percentage'], 2) / 100))));
+    round((((array_values($array)[0] * $selectedItem[0]['item_price']) * (1 - (round($selectedItem[0]['percentage'], 2) / 100)))), 2);
     $percentage =  round((((array_values($array)[0] * $selectedItem[0]['item_price']) - $discount) / (array_values($array)[0] * $selectedItem[0]['item_price'])) * 100, 2);
     // if (array_values($array)[0] <= $prd[0]['total_quantity']) {
     //     $pdo->update("products", ['id' => $prd[0]['id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["total_quantity" => $prd[0]['total_quantity'] - array_values($array)[0]]);
@@ -952,8 +952,8 @@ if ($key == "quantity") {
     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number']], ['total_amount' => $toa]);
 } else if ($key == "percentage") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $discount = array_values($array)[0] == 0 ? 0 :
-    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (round(array_values($array)[0], 2) / 100))));
+    $discount = round(array_values($array)[0] == 0 ? 0 :
+    ((($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) * (1 - (round(array_values($array)[0], 2) / 100)))), 2);
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
     ['discount' => (array_values($array)[0] == 0 ? 0 : ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) - $discount),
     'grand_total' => array_values($array)[0] == 0 ? ($selectedItem[0]['quantity'] * $selectedItem[0]['item_price']) -  $selectedItem[0]['extra_discount'] : $discount -  $selectedItem[0]['extra_discount'],
@@ -971,7 +971,7 @@ if ($key == "quantity") {
 } else if ($key == "item_price") {
     $selectedItem = $pdo->read("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
     $discount = 
-    ((($selectedItem[0]['quantity'] * array_values($array)[0]) * (1 - (round($selectedItem[0]['percentage'], 2) / 100))));
+    round(((($selectedItem[0]['quantity'] * array_values($array)[0]) * (1 - (round($selectedItem[0]['percentage'], 2) / 100)))), 2);
     $percentage =  round(((($selectedItem[0]['quantity'] * array_values($array)[0]) - $discount) / ($selectedItem[0]['quantity'] * array_values($array)[0])) * 100, 2);
     $pdo->update("sales_1", ['id' => $id, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], 
     ['grand_total' => $discount - $selectedItem[0]['extra_discount'], 
