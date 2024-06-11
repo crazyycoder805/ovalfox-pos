@@ -224,15 +224,32 @@ echo json_encode($data);
 
             } else {
                 $qun = ($sales_1[0]['quantity'] + $_POST['quantity']);
+
+                $discount = (double)$sales_1[0]['discount'];
+                $extra_discount = (double)$sales_1[0]['extra_discount'];
+                $quantity = intval($qun);
+                $item_price = intval($sales_1[0]['item_price']);
+
+                $total_price_before_discounts = $quantity * $item_price;
+                $discount_percentage = 0;
+                $total_price_after_extra_discount = $total_price_before_discounts;
+                if ($total_price_after_extra_discount > 0) {
+                    $discount_percentage = round(($discount / $total_price_after_extra_discount) * 100, 2);
+                } else {
+                    $discount_percentage = 0;
+                }
+
+                $discountedValue = round($discount_percentage == 0 ? 0 :
+                ((($qun * $sales_1[0]['item_price']) * 
+                (1 - (round($discount_percentage, 2) / 100)))), 2);
+
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty($sales_1[0]['discount']) ? (double)$_POST['discount'] : 
-                (double)($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - ((double)(empty($sales_1[0]['extra_discount']))
-                 ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount'])))) * 100, 2)),
-                'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);
+                'percentage' => $discount_percentage,
+                'discount' => ($qun * $sales_1[0]['item_price']) - $discountedValue,
+                'grand_total' => $_POST['isItemFree'] == "true" ? 0 : ($discountedValue - $extra_discount)]);
                 
-
             }
         } else {
 
@@ -267,7 +284,7 @@ echo json_encode($data);
 
                     // Calculate total price before any discounts
                     $total_price_before_discounts = $quantity * $item_price;
-
+                    $discount_percentage = 0;
                     // Apply extra discount
                     $total_price_after_extra_discount = $total_price_before_discounts;
                     if ($total_price_after_extra_discount > 0) {
@@ -289,6 +306,9 @@ echo json_encode($data);
                     $discount2 = $_POST['discount'] == 0 ? 0 :
                     (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - ((double)($_POST['discount']) / 100))));
                     $percentageCut = $_POST['discount'] == 0 ? 0 : ($_POST['quantity'] * $_POST['item_price']) - $discount2;
+
+
+
                     $pdo->create("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
                     'customer_name' => !empty($_POST['customer_manual']) ? $customerId[0]['id'] : $_POST['customer_name'], 
                     'booker_name' => $_POST['booker_name'], 'operator_name' => $_POST['booker_name'], 'date' => $_POST['date'], 
@@ -303,14 +323,33 @@ echo json_encode($data);
             
             } else {
                 $qun = ($sales_1[0]['quantity'] + $_POST['quantity']);
+
+                $discount = (double)$sales_1[0]['discount'];
+                $extra_discount = (double)$sales_1[0]['extra_discount'];
+                $quantity = intval($qun);
+                $item_price = intval($sales_1[0]['item_price']);
+
+                $total_price_before_discounts = $quantity * $item_price;
+                $discount_percentage = 0;
+                $total_price_after_extra_discount = $total_price_before_discounts;
+                if ($total_price_after_extra_discount > 0) {
+                    $discount_percentage = round(($discount / $total_price_after_extra_discount) * 100, 2);
+                } else {
+                    $discount_percentage = 0;
+                }
+
+                $discountedValue = round($discount_percentage == 0 ? 0 :
+                ((($qun * $sales_1[0]['item_price']) * 
+                (1 - (round($discount_percentage, 2) / 100)))), 2);
+
                 $pdo->update("sales_1", ["invoice_number" => $_POST['invoice_number'], 'item_code' => $_POST['item_code'], 'item_name' => $item_name, 
                 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
                 $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
-                'percentage' => (round(((empty($sales_1[0]['discount']) ? (double)($_POST['discount']) : 
-                (double)($sales_1[0]['discount'])) / (((intval($_POST['quantity']) * intval($_POST['item_price']))) - ((double)(empty($sales_1[0]['extra_discount']))
-                 ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount'])))) * 100, 2)),
-                'grand_total' => $_POST['isItemFree'] == "true" ? 0 : (($qun * $sales_1[0]['item_price']) - $sales_1[0]['discount']) - $sales_1[0]['extra_discount']]);
+                'percentage' => $discount_percentage,
+                'discount' => ($qun * $sales_1[0]['item_price']) - $discountedValue,
+                'grand_total' => $_POST['isItemFree'] == "true" ? 0 : ($discountedValue - $extra_discount)]);
                 
+
 
             }
 
@@ -448,6 +487,10 @@ echo json_encode($data);
     ");
     $pdo->customQuery("DELETE FROM sales_1 WHERE id = {$_POST['salesId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 
+
+    if (!empty($sl2)) {
+        $pdo->customQuery("UPDATE customers SET balance = balance - ".($totalAmount - $sl2[0]['recevied_amount'])." WHERE id = {$sl2[0]['customer_name']}");
+    }
 ?>
 <?php } else if ($_POST['__FILE__'] == "deletePurchase") {
     $pr = $pdo->read("purchases_1", ['id' => $_POST['purchaseId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
@@ -572,20 +615,20 @@ echo json_encode($data);
 <?php } else if ($_POST['__FILE__'] == "sales2Update") {
     
     $customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$currentBalance = intval($customer[0]['balance']);
-$previousPendingAmount = intval($customerSales[0]['pending_amount']);
+    $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $currentBalance = intval($customer[0]['balance']);
+    $previousPendingAmount = intval($customerSales[0]['pending_amount']);
 
-$newPendingAmount = intval($_POST['pending_amount']);
+    $newPendingAmount = intval($_POST['pending_amount']);
 
-if ($newPendingAmount != $previousPendingAmount) {
-    $balanceAdjustment = $newPendingAmount - $previousPendingAmount;
+    if ($newPendingAmount != $previousPendingAmount) {
+        $balanceAdjustment = ($newPendingAmount) - $previousPendingAmount;
 
-    $blnc = $currentBalance + $balanceAdjustment;
+        $blnc = ($currentBalance + $balanceAdjustment);
 
-    $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["balance" => $blnc]);
-}
+        $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["balance" => ((double)$blnc)]);
+    }
 
     if (empty($ledger)) {
         $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],

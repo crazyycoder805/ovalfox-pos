@@ -276,53 +276,46 @@ $total_price = 0;
                 </p>
                 <div id="table-info">
                     <div style="border: 2px solid black;">
-                        <table id="" style="width: 100%;">
+                        <table id="" style="width: 100%; table-layout: fixed;">
                             <thead>
-
                                 <tr>
-                                    <th style="text-align: start;font-size: 25px !important;"
-                                        id="table-info-first-th-child">
+                                    <th style="text-align: start; font-size: 25px !important;">
                                         <?php echo str_replace('T', ' ', $sales_2[0]['date']); ?>
                                     </th>
-
                                     <th style="text-align: center; font-size: 25px !important;">
                                         Cash.: <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: end;font-size: 25px !important;">
+                                    <th style="text-align: end; font-size: 25px !important;">
                                         Booker: <?php echo $booker[0]['username']; ?>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start;font-size: 25px !important;">
+                                    <th style="text-align: start; font-size: 25px !important;">
                                         CUST. <?php echo $customers[0]['name']; ?>
-                                    </th>
 
-                                    <th style="text-align: center;font-size: 25px !important;">
+                                    </th>
+                                    <th style="text-align: center; font-size: 25px !important;">
                                         Ph.: <?php echo $customers[0]['phone']; ?>
                                     </th>
-
                                 </tr>
-
                                 <tr>
-                                    <th style="text-align: start;font-size: 25px !important;">
-                                        Add: <span style=" overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;font-size: 25px !important;"><?php echo $customers[0]['address']; ?></span>
-                                    </th>
+                                    <th style="text-align: start; font-size: 25px !important;">
+                                        Add: <span
+                                            style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 25px !important;">
+                                            <?php echo $customers[0]['address']; ?>
 
-                                    <th style="text-align: center;font-size: 25px !important;">
+                                        </span>
+                                    </th>
+                                    <th style="text-align: center; font-size: 25px !important;">
                                         Inv.: <?php echo $invoice_number; ?>
                                     </th>
-                                    <th style="text-align: end;font-size: 25px !important;">
+                                    <th style="text-align: end; font-size: 25px !important;">
                                         <?php echo $sales_2[0]['status']; ?>
                                     </th>
-
                                 </tr>
-
-
                             </thead>
-
                         </table>
+
                         <table id="table-data-product" style="width: 100%;" border="2">
                             <thead>
                                 <th style="text-align: center;font-size: 20px !important;">SR</th>
@@ -393,7 +386,7 @@ $total_price = 0;
 
                             <p> <b>Terms and Conditions:</b> <br /> <textarea disabled
                                     style="font-size: 8px;background-color:white;" placeholder="Type..." name=""
-                                    id="terms-cond" cols="22" rows="4"><?php echo $sales_2[0]['details']; ?></textarea>
+                                    id="terms-cond" cols="22" rows="3"><?php echo $sales_2[0]['details']; ?></textarea>
                             </p>
 
 
@@ -424,7 +417,12 @@ $total_price = 0;
                                 <span
                                     id="rec-total">Rs<?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
                             </div>
+                            <div id="rec-box" style="">
+                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
 
+                                <span
+                                    id="rec-total">Rs<?php echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ; ?></span>
+                            </div>
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
                                 Rs

@@ -50,8 +50,9 @@ if ($xlsx = SimpleXLSX::parse($filePath)) {
 
 // }
 foreach (removeEmptyValues($rows) as $key => $value) {
+    $key += $key;
      $pdo->create("products", [
-    'item_code' => !empty($value['item_code']) ?  $value['item_code'] : "no_product_item_code",'category_id' => 2
+    'item_code' => !empty($value['item_code']) ? $value['item_code'] : "no_product_item_code",'category_id' => 2
      ,'sub_category_id' => 2, 
      'product_name' => !empty($value['product_name']) ?  $value['product_name'] : "no_product_name", 'product_details' => "Grocery", 
      'purchase_per_unit_price' => !empty($value['trade_unit_price']) ? $value['trade_unit_price'] : 0, 

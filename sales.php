@@ -862,6 +862,7 @@ foreach ($products as $product) {
             },
             success: e => {
                 const product = JSON.parse(e);
+                console.log(product);
                 finalAmount = +product[1][0]['total_amount'];
                 totalPayable = +product[1][0]['final_amount'];
 
@@ -874,13 +875,34 @@ foreach ($products as $product) {
                 $("#total_payable").val((+product[1][0]['final_amount'] != 0 ? product[1][0][
                     'final_amount'
                 ] : +product[1][0]['total_amount']));
+
+                console.log(product);
                 $("#amount_received").val(+product[1][0][
                     'recevied_amount'
                 ]);
+
                 $("#amount_return").val(+product[1][0]['returned_amount']);
                 $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
                     'pending_amount'
                 ] : +product[1][0]['total_amount']));
+                // if (+parseInt($("#amount_received").val() || 0) >= $("#total_payable").val()) {
+                //     $("#amount_return").val(+parseInt($("#amount_received").val() || 0) - (+
+                //         totalPayable != 0 &&
+                //         +
+                //         totalPayable != "" ? +
+                //         totalPayable : +finalAmount));
+                //     //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+
+                //     $("#pending_amount").val(0);
+                // } else {
+
+                //     $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
+                //         parseInt($("#amount_received").val() || 0));
+                //     $("#amount_return").val(0);
+
+                // }
+
+
                 $("#current_date").val(product[1][0]['date']);
 
 
@@ -905,6 +927,8 @@ foreach ($products as $product) {
                 $("#customer_manual").prop("disabled", true);
                 $("#manual_customer").prop("disabled", true);
 
+
+                loadScreen();
             }
         });
 
@@ -917,7 +941,6 @@ foreach ($products as $product) {
         let quantityAdd = 0;
         let totalQuan = 0;
         let productId = 0;
-        let finalerAmount = 0;
         let finalAmount = 0;
 
         let totalPayable = 0;
@@ -927,6 +950,26 @@ foreach ($products as $product) {
         let box_quantity = 0;
         let total_quantity_is = 0;
         let total_discount = 0;
+
+        function loadScreen() {
+            $(window).on('beforeunload', function(
+                event) {
+                var confirmationMessage =
+                    'Are you sure you want to leave this page?';
+
+                (event || window.event)
+                .returnValue
+                    = confirmationMessage;
+
+                return confirmationMessage;
+            });
+
+            $(window).on('unload', function() {
+                $("#pBill").click();
+            });
+
+
+        }
 
         $("#product").on("input", e => {
 
@@ -1311,7 +1354,8 @@ foreach ($products as $product) {
                 e.target.value = 0;
             }
             if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
-                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 ? +
+                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 && +
+                    totalPayable != "" ? +
                     totalPayable : +finalAmount));
                 //$("#amount_return").val($("#type").val() != "rf" ? parseInt(e.target.value || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt(e.target.value || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
@@ -1355,7 +1399,30 @@ foreach ($products as $product) {
                             $("#data").html(product[0]);
                             $("#total_items").text(product[1]);
                             $("#total_quantity_added").text(product[2]);
+                            finalAmount = product[3];
+                            totalPayable = product[3];
+                            if (+parseInt($("#amount_received").val() ||
+                                    0) >= $("#total_payable").val()) {
+                                $("#amount_return").val(+parseInt($(
+                                        "#amount_received").val() ||
+                                    0) - (+
+                                    totalPayable != 0 &&
+                                    +
+                                    totalPayable != "" ? +
+                                    totalPayable : +finalAmount));
+                                //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
+                                $("#pending_amount").val(0);
+                            } else {
+
+                                $("#pending_amount").val((+totalPayable !=
+                                        0 ? +totalPayable : +finalAmount
+                                    ) - +
+                                    parseInt($("#amount_received")
+                                        .val() || 0));
+                                $("#amount_return").val(0);
+
+                            }
                         }
                     });
                 }
@@ -1487,6 +1554,19 @@ foreach ($products as $product) {
 
         // });
 
+        $(document).keydown(function(event) {
+            if (event.shiftKey && event.key === 'F') {
+                $("#product").focus();
+                $("#product").select2("open");
+                setTimeout(function() {
+                    var searchField = $(
+                        '.select2-container--open .select2-search__field');
+                    if (searchField.length) {
+                        searchField[0].focus();
+                    }
+                }, 0.1);
+            }
+        });
         let A = 0;
         $("#wholeFormBtn").on("click", e => {
             A = 1;
@@ -1586,7 +1666,7 @@ foreach ($products as $product) {
                         //     }
                         // }, 100);
 
-                        $("#final_amount").val(finalAmount + finalerAmount);
+                        $("#final_amount").val(finalAmount);
                         $("#total_payable").val($("#final_amount").val());
                         $("#pending_amount").val($("#final_amount").val());
 
@@ -1653,6 +1733,10 @@ foreach ($products as $product) {
                                 }
                                 $("#discount_amount").prop("checked", true);
                                 isAmount = "amount";
+
+                                loadScreen();
+
+
                             }
                         });
                     }
@@ -1683,12 +1767,16 @@ foreach ($products as $product) {
                 success: target => {
                     <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
+                    $(window).off('beforeunload');
+
                     openPopup(`printinvoice1.php?inv=${$("#invoice_number").val()}`);
                     location.href = `sales.php`;
 
                     <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
+                    $(window).off('beforeunload');
+
                     openPopup(`printinvoice2.php?inv=${$("#invoice_number").val()}`);
                     location.href = `sales.php`;
 
@@ -1840,6 +1928,7 @@ foreach ($products as $product) {
                                 $("#total_quantity_added").text(product[
                                     2]);
                                 finalAmount = product[3];
+                                totalPayable = finalAmount = product[3];
 
                                 $("#final_amount").val(product[
                                     3]);
@@ -1847,7 +1936,28 @@ foreach ($products as $product) {
                                     .val());
                                 $("#pending_amount").val($("#final_amount")
                                     .val());
+                                if (+parseInt($("#amount_received").val() ||
+                                        0) >= $("#total_payable").val()) {
+                                    $("#amount_return").val(+parseInt($(
+                                            "#amount_received").val() ||
+                                        0) - (+
+                                        totalPayable != 0 &&
+                                        +
+                                        totalPayable != "" ? +
+                                        totalPayable : +finalAmount));
+                                    //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
+                                    $("#pending_amount").val(0);
+                                } else {
+
+                                    $("#pending_amount").val((+totalPayable !=
+                                            0 ? +totalPayable : +finalAmount
+                                        ) - +
+                                        parseInt($("#amount_received")
+                                            .val() || 0));
+                                    $("#amount_return").val(0);
+
+                                }
                                 // if (focusSet == false) {
                                 //     $(document).find(
                                 //         `#${$(product[0].match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
@@ -2043,10 +2153,12 @@ foreach ($products as $product) {
         $(document).on("click", "#printCustomer", e => {
             <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
+
             openPopup(`printinvoice1.php?inv=${$(e.target).data("cus")}`);
             <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
+
             openPopup(`printinvoice2.php?inv=${$(e.target).data("cus")}`);
 
             <?php } ?>
@@ -2084,6 +2196,7 @@ foreach ($products as $product) {
         //         }
         //     });
         // });
+
 
 
 
