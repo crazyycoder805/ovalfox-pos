@@ -279,38 +279,51 @@ $total_price = 0;
                         <table id="" style="width: 100%; table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: start; font-size: 25px !important;">
+                                    <th style="text-align: start; font-size: 20px !important;">
                                         <?php echo str_replace('T', ' ', $sales_2[0]['date']); ?>
                                     </th>
-                                    <th style="text-align: center; font-size: 25px !important;">
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Inv.: <?php echo $invoice_number; ?>
+                                    </th>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        <?php echo $sales_2[0]['status']; ?>
+                                    </th>
+
+
+                                </tr>
+                                <tr>
+                                    <th style="text-align: start; white-space: nowrap;font-size: 20px !important;">BOK.
+                                        <?php echo $booker[0]['username']; ?></th>
+                                    <th style="text-align: start; font-size: 20px !important;">
                                         Cash.: <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: end; font-size: 25px !important;">
-                                        Booker: <?php echo $booker[0]['username']; ?>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th style="text-align: start; font-size: 25px !important;">
-                                        CUST. <?php echo $customers[0]['name']; ?>
-
-                                    </th>
-                                    <th style="text-align: center; font-size: 25px !important;">
+                                    <th style="text-align: start; font-size: 20px !important;">
                                         Ph.: <?php echo $customers[0]['phone']; ?>
                                     </th>
+
+
                                 </tr>
+
+                            </thead>
+                        </table>
+                        <table style="width: 100%; table-layout: fixed;">
+                            <thead>
                                 <tr>
-                                    <th style="text-align: start; font-size: 25px !important;">
-                                        Add: <span
-                                            style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 25px !important;">
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Address: <span style="white-space: nowrap; font-size: 20px !important;">
                                             <?php echo $customers[0]['address']; ?>
 
                                         </span>
                                     </th>
-                                    <th style="text-align: center; font-size: 25px !important;">
-                                        Inv.: <?php echo $invoice_number; ?>
-                                    </th>
-                                    <th style="text-align: end; font-size: 25px !important;">
-                                        <?php echo $sales_2[0]['status']; ?>
+
+
+                                </tr>
+                                <tr >
+                                    <th style="text-align: start; font-size: 20px !important;width:200px">
+                                        Customer Name. <span style="white-space: nowrap; font-size: 20px !important;">
+                                        <?php echo $customers[0]['name']; ?>
+                                        </span>
+
                                     </th>
                                 </tr>
                             </thead>
@@ -415,19 +428,26 @@ $total_price = 0;
                                 <span id="rec-text" style="font-weight: bold;">Received</span>
 
                                 <span
-                                    id="rec-total">Rs<?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
-                            </div>
-                            <div id="rec-box" style="">
-                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
-
-                                <span
-                                    id="rec-total">Rs<?php echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ; ?></span>
+                                    id="rec-total">Rs <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
                             </div>
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
                                 Rs
                                 <?php echo $minused - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0); ?>
                             </div>
+                            <div id="rec-box" style="">
+                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
+
+                                <span
+                                    id="rec-total">Rs <?php 
+                                    
+                                    //echo $minused;
+                                    echo $customers[0]['balance'] - ($minused - $sales_2[0]['recevied_amount']);
+                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
+                                    
+                                    ?></span>
+                            </div>
+                     
 
 
 
@@ -444,35 +464,35 @@ $total_price = 0;
                 </div>
 
 
-                <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
                 <div style="width: 100%;border-bottom: 1px solid black;"></div>
+                <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
             </div>
 
         </div>
     </div>
-    <!-- <button id="downloadBtn">Download as PDF</button> -->
+    <button hidden id="downloadBtn">Download as PDF</button>
 
     <script src="assets/js/jquery.min.js"></script>
-    <!-- <script src="assets/js/print.js"></script> -->
+    <script src="assets/js/print.js"></script>
 
     <script>
-    // const options = {
-    //     filename: 'small_inv.pdf',
-    //     image: {
-    //         type: 'jpeg',
-    //         quality: 0.98
-    //     },
-    //     html2canvas: {
-    //         scale: 2
-    //     },
-    //     jsPDF: {
-    //         unit: 'in',
-    //         format: 'a6',
-    //         orientation: 'portrait'
-    //     }
-    // };
+    const options = {
+        filename: 'small_inv.pdf',
+        image: {
+            type: 'jpeg',
+            quality: 0.98
+        },
+        html2canvas: {
+            scale: 2
+        },
+        jsPDF: {
+            unit: 'in',
+            format: 'letter',
+            orientation: 'portrait'
+        }
+    };
 
-    // html2pdf().from(document.body).set(options).save();
+    html2pdf().from(document.body).set(options).save();
     </script>
 </body>
 
