@@ -749,7 +749,15 @@
                         </a>
                     </li>
                     <?php } ?>
-
+                    <li>
+                        <a href="search_daily.php">
+                            <span class="icon-dash">
+                            </span>
+                            <span class="menu-text">
+                                Daily Report
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

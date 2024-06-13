@@ -260,6 +260,9 @@ $total_price = 0;
         <div id="main">
             <div id="main-inner" style="">
                 <p id="bbtn"><a href="sales.php">Back</a></p>
+                <h3 style="text-align: end; font-size: 20px !important;">
+                    <?php echo $sales_2[0]['status']; ?>
+</h3>
                 <h1 style="font-size: 50px !important;" id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
@@ -286,8 +289,12 @@ $total_price = 0;
                                         Inv.: <?php echo $invoice_number; ?>
                                     </th>
                                     <th style="text-align: start; font-size: 20px !important;">
-                                        <?php echo $sales_2[0]['status']; ?>
+                                        Add.<span style="white-space: nowrap; font-size: 20px !important;">
+                                            <?php echo $customers[0]['address']; ?>
+
+                                        </span>
                                     </th>
+
 
 
                                 </tr>
@@ -309,19 +316,14 @@ $total_price = 0;
                         <table style="width: 100%; table-layout: fixed;">
                             <thead>
                                 <tr>
-                                    <th style="text-align: start; font-size: 20px !important;">
-                                        Address: <span style="white-space: nowrap; font-size: 20px !important;">
-                                            <?php echo $customers[0]['address']; ?>
 
-                                        </span>
-                                    </th>
 
 
                                 </tr>
-                                <tr >
+                                <tr>
                                     <th style="text-align: start; font-size: 20px !important;width:200px">
                                         Customer Name. <span style="white-space: nowrap; font-size: 20px !important;">
-                                        <?php echo $customers[0]['name']; ?>
+                                            <?php echo $customers[0]['name']; ?>
                                         </span>
 
                                     </th>
@@ -427,8 +429,8 @@ $total_price = 0;
                             <div id="rec-box" style="">
                                 <span id="rec-text" style="font-weight: bold;">Received</span>
 
-                                <span
-                                    id="rec-total">Rs <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
+                                <span id="rec-total">Rs
+                                    <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
                             </div>
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
@@ -438,8 +440,7 @@ $total_price = 0;
                             <div id="rec-box" style="">
                                 <span id="rec-text" style="font-weight: bold;">Prev.</span>
 
-                                <span
-                                    id="rec-total">Rs <?php 
+                                <span id="rec-total">Rs <?php 
                                     
                                     //echo $minused;
                                     echo $customers[0]['balance'] - ($minused - $sales_2[0]['recevied_amount']);
@@ -447,7 +448,7 @@ $total_price = 0;
                                     
                                     ?></span>
                             </div>
-                     
+
 
 
 

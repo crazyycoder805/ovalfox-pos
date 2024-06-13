@@ -10,6 +10,8 @@
 
 
 $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+
 ?>
 
 <body>
@@ -91,50 +93,84 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
                                                             <?php } ?>
                                                         </select>
                                                     </div>
+
+
+
+                                                </div>
+                                                <div class="col-md">
+                                                    <div class="form-group">
+
+                                                        <label class="col-form-label">Customer Name</label>
+
+                                                        <select class="select select-opt" name="customer" id="customer">
+                                                            <option disabled selected value="">Select Booker
+                                                            </option>
+                                                            <?php
+
+                                                            foreach ($customers as $customer) {
+
+                                                            ?>
+                                                            <option value="<?php echo $customer['id']; ?>">
+                                                                <?php echo $customer['name']; ?></option>
+
+
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
                                                     <div class="form-group">
                                                         <label for="start_date" class="col-form-label">Start
                                                             date</label>
                                                         <input class="form-control" name="start_date" type="date"
                                                             placeholder="Search..." id="start_date">
                                                     </div>
+                                                </div>
+                                                <div class="col-md">
+
                                                     <div class="form-group">
                                                         <label for="end_date" class="col-form-label">End
                                                             date</label>
                                                         <input class="form-control" name="end_date" type="date"
                                                             placeholder="Search..." id="end_date">
                                                     </div>
-
-
                                                 </div>
-
-                                            </div>
-                                            <br />
-
-                                            <div class="form-group mb-">
-                                                <button class="btn btn-primary" type="reset">reset</button>
-                                                <button name="search" id="search" class="btn btn-danger"
-                                                    type="button">Submit</button>
-                                            </div>
-                                            <div class="row">
-                                                <div id="data"></div>
 
                                             </div>
 
                                         </div>
+                                        <br />
 
-                                    </form>
+                                        <div class="form-group mb-">
+                                            <button class="btn btn-primary" type="reset">reset</button>
+                                            <button name="search" id="search" class="btn btn-danger"
+                                                type="button">Submit</button>
+                                        </div>
+                                        <div class="row">
+                                            <div id="data"></div>
+
+                                        </div>
+
                                 </div>
+
+                                </form>
                             </div>
                         </div>
-
-
                     </div>
 
+
                 </div>
-                <?php require_once 'assets/includes/footer.php'; ?>
 
             </div>
+            <?php require_once 'assets/includes/footer.php'; ?>
+
         </div>
+    </div>
     </div>
 
 
@@ -150,8 +186,8 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
                 type: "POST",
                 url: "search.php",
                 data: {
-                    "__FILE__": "search_sales_1",
-                    "search_sales_1": e.target.value,
+                    "__FILE__": "search_daily_report",
+                    "search_daily_report": e.target.value,
                     "start_date": $("#start_date").val(),
                     "end_date": $("#end_date").val(),
                     "booker_name": $("#booker_name").val()

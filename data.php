@@ -111,6 +111,7 @@ echo json_encode($data);
 
 <?php
 } else if ($_POST['__FILE__'] == 'productAdd') {
+    $_POST['date'] = str_replace("T", " ", $_POST['date']);
     $item_name = ($_POST['type'] != "rf" ? ($_POST['isItemFree'] == "true" ? "(Free Item)" . " " . $_POST['item_name'] : $_POST['item_name']) : ('(Refunded)' . " " . $_POST['item_name']));
         
         $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'item_code' => $_POST['item_code']

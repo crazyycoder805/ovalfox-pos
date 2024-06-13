@@ -1735,7 +1735,7 @@ foreach ($products as $product) {
                                 isAmount = "amount";
 
                                 loadScreen();
-
+                                total_discount = 0;
 
                             }
                         });
