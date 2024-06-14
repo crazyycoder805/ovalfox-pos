@@ -137,6 +137,15 @@ $customers = $pdo->read("customers", ['company_profile_id'=>$_SESSION['ovalfox_p
                                         </div>
 
                                     </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="form-group mb-3">
+                                                <button id="printbtnsales2custom" class="btn btn-danger"
+                                                    type="button"><i class="fa fa-print"></i> Print</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -158,6 +167,8 @@ $customers = $pdo->read("customers", ['company_profile_id'=>$_SESSION['ovalfox_p
     <?php require_once 'assets/includes/javascript.php'; ?>
 
     <script>
+    let searchedValue = "";
+
     $(document).ready(e => {
         $("#search").on("click", e => {
             $.ajax({
@@ -176,13 +187,18 @@ $customers = $pdo->read("customers", ['company_profile_id'=>$_SESSION['ovalfox_p
 
                 },
                 success: e => {
-                    $("#data").html(e);
+                    const items = JSON.parse(e);
+                    $("#data").html(items[0]);
                     $('#search_table').DataTable();
+                    searchedValue = items[1];
 
                 }
 
             });
 
+        });
+        $("#printbtnsales2custom").on("click", e => {
+            location.href = `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=sales_2`;
         });
 
     });

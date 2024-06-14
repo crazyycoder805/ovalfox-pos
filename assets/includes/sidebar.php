@@ -758,6 +758,15 @@
                             </span>
                         </a>
                     </li>
+                    <li>
+                        <a href="search_item_wise.php">
+                            <span class="icon-dash">
+                            </span>
+                            <span class="menu-text">
+                                Item Wise Report
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

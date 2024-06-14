@@ -373,6 +373,7 @@ foreach ($products as $product) {
                                                                         <input type="password" id="password_sales_1"
                                                                             name="password_sales_1"
                                                                             placeholder="password" />
+                                                                            <button id="deleteBtn">Delete</button>
                                                                     </div>
                                                                 </div>
                                                                 <table style="user-select: none;
@@ -2181,8 +2182,8 @@ foreach ($products as $product) {
             }
         });
 
-        $("#password_sales_1").on("change", e => {
-            if (e.target.value == "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
+        $("#deleteBtn").on("click", e => {
+            if ($("#password_sales_1").val() == "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
                 $(".overlay-cus").prop("hidden", true);
             } else {
                 $(".overlay-cus").prop("hidden", false);

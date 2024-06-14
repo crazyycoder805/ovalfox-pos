@@ -7,6 +7,7 @@
         header("location:404.php");
     
 }
+$suppliers = $pdo->read("suppliers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 ?>
 
@@ -70,11 +71,43 @@
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
+                                                        <!-- <label class="col-form-label">Product name</label> -->
+
+
+                                                        <select class="select2 form-control select-opt" name="product"
+                                                            id="product">
+                                                            <option selected value="">Select
+                                                                Supplier
+                                                            </option>
+                                                            <?php
+
+foreach ($suppliers as $sp) {
+
+?>
+                                                            <option value="<?php echo $sp['id']; ?>">
+                                                                <?php echo $sp['name']; ?>
+                                                            </option>
+
+
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
                                                         <label for="start_date" class="col-form-label">Start
                                                             date</label>
                                                         <input class="form-control" name="start_date" type="date"
                                                             placeholder="Search..." id="start_date">
                                                     </div>
+                                                </div>
+                                                <div class="col-md">
+
                                                     <div class="form-group">
                                                         <label for="end_date" class="col-form-label">End
                                                             date</label>
@@ -83,7 +116,6 @@
                                                     </div>
 
                                                 </div>
-
                                             </div>
                                             <div class="form-group mb-">
                                                 <button class="btn btn-primary" type="reset">reset</button>
@@ -98,6 +130,15 @@
                                         </div>
 
                                     </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="form-group mb-3">
+                                                <button id="printbtnpurchase1custom" class="btn btn-danger"
+                                                    type="button"><i class="fa fa-print"></i> Print</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -128,20 +169,23 @@
                     "__FILE__": "search_purchase_1",
                     "search_purchase_1": e.target.value,
                     "start_date": $("#start_date").val(),
-                    "end_date": $("#end_date").val()
-
+                    "end_date": $("#end_date").val(),
+                    "supplier": $("#product").val()
 
                 },
                 success: e => {
-                    $("#data").html(e);
+                    const items = JSON.parse(e);
+                    $("#data").html(items[0]);
                     $('#search_table').DataTable();
-
+                    searchedValue = items[1];
                 }
 
             });
 
         });
-
+        $("#printbtnpurchase1custom").on("click", e => {
+            location.href = `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=purchases_1`;
+        });
     })
     </script>
 </body>

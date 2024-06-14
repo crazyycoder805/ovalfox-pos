@@ -490,7 +490,7 @@ echo json_encode($data);
 
 
     if (!empty($sl2)) {
-        $pdo->customQuery("UPDATE customers SET balance = balance - ".($totalAmount - $sl2[0]['recevied_amount'])." WHERE id = {$sl2[0]['customer_name']}");
+        $pdo->customQuery("UPDATE customers SET balance = balance - ".((double)$totalAmount - (double)$sl2[0]['recevied_amount'])." WHERE id = {$sl2[0]['customer_name']}");
     }
 ?>
 <?php } else if ($_POST['__FILE__'] == "deletePurchase") {

@@ -123,6 +123,15 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
                                         </div>
 
                                     </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="form-group mb-3">
+                                                <button id="printbtnsales1custom" class="btn btn-danger"
+                                                    type="button"><i class="fa fa-print"></i> Print</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -144,6 +153,8 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
     <?php require_once 'assets/includes/javascript.php'; ?>
 
     <script>
+    let searchedValue = "";
+
     $(document).ready(e => {
         $("#search").on("click", e => {
             $.ajax({
@@ -160,8 +171,10 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
 
                 },
                 success: e => {
-                    $("#data").html(e);
+                    const items = JSON.parse(e);
+                    $("#data").html(items[0]);
                     $('#search_table').DataTable();
+                    searchedValue = items[1];
 
                 }
 
@@ -169,6 +182,9 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
 
         });
 
+        $("#printbtnsales1custom").on("click", e => {
+            location.href = `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=sales_1`;
+        });
     });
     </script>
 </body>

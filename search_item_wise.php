@@ -11,6 +11,7 @@
 
 $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 ?>
 
@@ -47,14 +48,14 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                         <?php } ?>
                         <div class="page-title-wrapper">
                             <div class="page-title-box">
-                                <h4 class="page-title">Daily Search Form</h4>
+                                <h4 class="page-title">Item Wise Form</h4>
                             </div>
                             <div class="breadcrumb-list">
                                 <ul>
                                     <li class="breadcrumb-link">
                                         <a href="index.php"><i class="fas fa-home mr-2"></i>Dashboard</a>
                                     </li>
-                                    <li class="breadcrumb-link active">Daily Search</li>
+                                    <li class="breadcrumb-link active">Item Wise</li>
                                 </ul>
                             </div>
                         </div>
@@ -72,6 +73,31 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                     <form class="separate-form" method="post">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <!-- <label class="col-form-label">Product name</label> -->
+
+
+                                                        <select class="select2 form-control select-opt" name="product"
+                                                            id="product">
+                                                            <option selected value="">Select
+                                                                product
+                                                            </option>
+                                                            <?php
+
+foreach ($products as $product) {
+
+?>
+                                                            <option value="<?php echo $product['item_code']; ?>">
+                                                                <?php echo $product['product_name']; ?>
+                                                            </option>
+
+
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
                                                 <div class="col-md">
                                                     <div class="form-group">
 
@@ -121,6 +147,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
 
                                                 </div>
+
                                             </div>
                                             <div class="row">
                                                 <div class="col-md">
@@ -186,13 +213,13 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                 type: "POST",
                 url: "search.php",
                 data: {
-                    "__FILE__": "search_daily_report",
-                    "search_daily_report": e.target.value,
+                    "__FILE__": "search_item_wise",
+                    "search_item_wise": e.target.value,
                     "start_date": $("#start_date").val(),
                     "end_date": $("#end_date").val(),
                     "booker_name": $("#booker_name").val(),
+                    "product_name": $("#product").val(),
                     "customer_name": $("#customer").val()
-
 
 
 
