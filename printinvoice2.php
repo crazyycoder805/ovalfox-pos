@@ -443,7 +443,7 @@ $total_price = 0;
                                 <span id="rec-total">Rs <?php 
                                     
                                     //echo $minused;
-                                    echo $customers[0]['balance'] - ($minused - $sales_2[0]['recevied_amount']);
+                                    echo (double)$customers[0]['balance'] - ((double)$minused - (double)$sales_2[0]['recevied_amount']);
                                     //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
                                     
                                     ?></span>

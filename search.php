@@ -322,7 +322,14 @@ foreach ($ledgers as $ledger) {
 <?php } else if ($_POST['__FILE__'] == "search_daily_report") { 
     $sales_2 = "";
 
-   
+
+    $total_amount = [];
+    $final_amount = [];
+    $received_amount = [];
+    $returned_amount = [];
+    $pending_amount = [];
+    
+
     if (!empty($_POST['start_date']) && !empty($_POST['end_date']) && !empty($_POST['booker_name']) && !empty($_POST['customer_name'])) {
         $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}' AND customer_name = '{$_POST['customer_name']}' AND booker_name = '{$_POST['booker_name']}'");
     } else if (!empty($_POST['start_date']) && !empty($_POST['booker_name']) && !empty($_POST['customer_name'])) {
@@ -346,6 +353,20 @@ foreach ($ledgers as $ledger) {
     } else if (!empty($_POST['start_date'])) {
         $sales_2 = $pdo->customQuery("SELECT *, SUM(total_amount) AS total_price FROM sales_2 WHERE Date(date) = '{$_POST['start_date']}'");
     }
+    foreach ($sales_2 as $sale) {
+        $total_amount[] = $sale['total_amount'];
+        $final_amount[] = $sale['final_amount'];
+        $received_amount[] = $sale['recevied_amount'];
+        $returned_amount[] = $sale['returned_amount'];
+        $pending_amount[] = $sale['pending_amount'];
+
+    }
+
+    $total_amount = array_sum($total_amount);
+    $final_amount = array_sum($final_amount);
+    $received_amount = array_sum($received_amount);
+    $returned_amount = array_sum($returned_amount);
+    $pending_amount = array_sum($pending_amount);
 ?>
 
 
@@ -366,7 +387,7 @@ foreach ($ledgers as $ledger) {
             <th>Final amount</th>
             <th>Received amount</th>
             <th>Returned amount</th>
-            <th>Pneding amount</th>
+            <th>Pending amount</th>
             <th>Status</th>
 
             <th>Created at</th>
@@ -403,6 +424,16 @@ foreach ($sales_2 as $sale_2) {
     </tbody>
 
 </table>
+<br /><br /><br />
+
+<div style="display: flex;">
+    <h6>Total Amount: <?php echo $total_amount; ?></h6>
+    &nbsp;&nbsp;&nbsp;<h6>Final Amount: <?php echo $final_amount; ?></h6>
+    &nbsp;&nbsp;&nbsp;<h6>Received Amount: <?php echo $received_amount; ?></h6>
+    &nbsp;&nbsp;&nbsp;<h6>Returned Amount: <?php echo $returned_amount; ?></h6>
+    &nbsp;&nbsp;&nbsp;<h6>Pending Amount: <?php echo $pending_amount; ?></h6>
+</div>
+
 
 
 <?php } ?>

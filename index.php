@@ -22,7 +22,7 @@ if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_i
 // Done
 $total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 // Done
-$today_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE (status = 'Incomplete' OR status = 'Unpaid') AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
+$today_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE (status = 'Incomplete') AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 // Done
 $total_sales = count($pdo->read("sales_2", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 

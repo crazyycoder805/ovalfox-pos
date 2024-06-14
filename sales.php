@@ -844,6 +844,8 @@ foreach ($products as $product) {
 
         let formattedDateTime = `${formattedDate}T${hours}:${minutes}`;
         current_date.val(formattedDateTime);
+        let isIncmp = false;
+        let isIncmpTrue = false;
 
         let initialQuantity = 0;
         <?php 
@@ -929,6 +931,25 @@ foreach ($products as $product) {
 
 
                 loadScreen();
+                $.ajax({
+                    type: "POST",
+                    url: "data.php",
+                    data: {
+                        "__FILE__": "sales2Update",
+                        "invoice_number": $("#invoice_number").val(),
+                        "discount_in_amount": $("#discount_in_amount").val(),
+                        "final_amount": $("#total_payable").val(),
+                        "recevied_amount": $("#amount_received").val(),
+                        "returned_amount": $("#amount_return").val(),
+                        "pending_amount": $("#pending_amount").val(),
+                        "total_amount": $("#final_amount").val(),
+                        "payment_type": $("#payment_type").val(),
+                        "details": $("#details").val(),
+                        "isIncmp": true
+                    },
+
+
+                });
             }
         });
 
@@ -964,9 +985,6 @@ foreach ($products as $product) {
                 return confirmationMessage;
             });
 
-            $(window).on('unload', function() {
-                $("#pBill").click();
-            });
 
 
         }
@@ -1553,7 +1571,6 @@ foreach ($products as $product) {
         //     });
 
         // });
-
         $(document).keydown(function(event) {
             if (event.shiftKey && event.key === 'F') {
                 $("#product").focus();
@@ -1641,7 +1658,7 @@ foreach ($products as $product) {
                         "isItemFree": $("#free_items").is(":checked") ? true : false,
                         "customer_manual": $("#manual_customer").is(":checked") ? $(
                             "#customer_manual").val() : "",
-                        "amountIn": isAmount == "" ? "amount" : isAmount
+                        "amountIn": isAmount == "" ? "amount" : isAmount,
 
                     },
 
@@ -1734,9 +1751,39 @@ foreach ($products as $product) {
                                 $("#discount_amount").prop("checked", true);
                                 isAmount = "amount";
 
-                                loadScreen();
                                 total_discount = 0;
+                                loadScreen();
+                                $.ajax({
+                                    type: "POST",
+                                    url: "data.php",
+                                    data: {
+                                        "__FILE__": "sales2Update",
+                                        "invoice_number": $(
+                                                "#invoice_number")
+                                            .val(),
+                                        "discount_in_amount": $(
+                                                "#discount_in_amount")
+                                            .val(),
+                                        "final_amount": $(
+                                            "#total_payable").val(),
+                                        "recevied_amount": $(
+                                                "#amount_received")
+                                            .val(),
+                                        "returned_amount": $(
+                                            "#amount_return").val(),
+                                        "pending_amount": $(
+                                                "#pending_amount")
+                                            .val(),
+                                        "total_amount": $(
+                                            "#final_amount").val(),
+                                        "payment_type": $(
+                                            "#payment_type").val(),
+                                        "details": $("#details").val(),
+                                        "isIncmp": true
+                                    },
 
+
+                                });
                             }
                         });
                     }
@@ -1762,7 +1809,7 @@ foreach ($products as $product) {
                     "total_amount": $("#final_amount").val(),
                     "payment_type": $("#payment_type").val(),
                     "details": $("#details").val(),
-
+                    "isIncmp": false
                 },
                 success: target => {
                     <?php if ($user[0]['printing_page_size'] == "large") {
