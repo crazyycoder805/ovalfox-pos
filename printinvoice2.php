@@ -321,10 +321,10 @@ $total_price = 0;
 
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start; font-size: 20px !important;width:200px">
-                                        Customer Name. <span style="white-space: nowrap; font-size: 20px !important;">
+                                    <th style="text-align: start; font-size: 30px !important;width:200px">
+                                        Customer Name.
                                             <?php echo $customers[0]['name']; ?>
-                                        </span>
+</span>
 
                                     </th>
                                 </tr>
@@ -340,7 +340,7 @@ $total_price = 0;
                                 <th style="text-align: center;font-size: 20px !important;">Total</th>
                                 <th style="text-align: center;font-size: 20px !important;">Dis</th>
                                 <th style="text-align: center;font-size: 20px !important;">%</th>
-                                <th style="text-align: center;font-size: 20px !important;">Ex.Dis</th>
+                                <th style="text-align: center;font-size: 20px !important;">E.D</th>
 
                                 <th style="text-align: center;font-size: 20px !important;">G.Total</th>
 
@@ -371,16 +371,16 @@ $total_price = 0;
                                     <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo $sale['amount']; ?></td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo $sale['discount']; ?>
+                                        <?php echo round($sale['discount']); ?>
                                     </td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
+                                        <?php echo round(!empty($sale['percentage']) ? $sale['percentage'] : 0); ?></td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo $sale['extra_discount']; ?>
+                                        <?php echo round($sale['extra_discount']); ?>
                                     </td>
 
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo $sale['grand_total']; ?>
+                                        <?php echo round($sale['grand_total']); ?>
                                     </td>
                                     </td>
 
@@ -415,15 +415,19 @@ $total_price = 0;
 
                             <div id="discount-outer">
                                 <span id="discount-text-inner" style="font-weight: bold;">Dicount
-
-                                    (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
+<?php 
+$per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0); 
+?>
+                                    (<?php    
+                                    
+ echo $_GET['amountIn'] == "amount" ? round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2) : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0); ?>%)</span>
                                 <span id="discount-total-price" style="">Rs
-                                    <?php $per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0); echo $per; ?></span>
+                                    <?php $minused = $total_price - $per;echo $minused; ?></span>
                             </div>
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
                                 <b id="total-price-total" style="">Rs
-                                    <?php $minused = $total_price - $per;echo $minused; ?></b>
+                                    <?php echo $_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per; ?></b>
                             </div>
 
                             <div id="rec-box" style="">
@@ -435,7 +439,7 @@ $total_price = 0;
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
                                 Rs
-                                <?php echo $minused - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0); ?>
+                                <?php echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; ?>
                             </div>
                             <div id="rec-box" style="">
                                 <span id="rec-text" style="font-weight: bold;">Prev.</span>
@@ -443,7 +447,7 @@ $total_price = 0;
                                 <span id="rec-total">Rs <?php 
                                     
                                     //echo $minused;
-                                    echo (double)$customers[0]['balance'] - ((double)$minused - (double)$sales_2[0]['recevied_amount']);
+                                    echo $customers[0]['balance'] != 0 ? (round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? (double)$total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2) < 0 ? 0 : round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2)) : 0;
                                     //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
                                     
                                     ?></span>
@@ -480,7 +484,7 @@ $total_price = 0;
     const options = {
         filename: 'small_inv.pdf',
         image: {
-            type: 'jpeg',
+            type: 'pdf',
             quality: 0.98
         },
         html2canvas: {

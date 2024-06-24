@@ -214,7 +214,9 @@ if (isset($_GET['edit_customer'])) {
                                                         <input
                                                             value="<?php echo isset($_GET['edit_customer']) ? $id[0]['balance'] : 0; ?>"
                                                             class="form-control" name="balance" type="number"
-                                                            placeholder="Enter Customer balance" id="balance">
+                                                            placeholder="Enter Customer balance" id="balance"
+                                                            step="0.01">
+
                                                     </div>
                                                     <div class="form-group mb-3">
                                                         <button class="btn btn-primary" type="reset">reset</button>

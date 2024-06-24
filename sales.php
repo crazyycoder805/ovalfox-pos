@@ -373,7 +373,7 @@ foreach ($products as $product) {
                                                                         <input type="password" id="password_sales_1"
                                                                             name="password_sales_1"
                                                                             placeholder="password" />
-                                                                            <button id="deleteBtn">Delete</button>
+                                                                        <button id="deleteBtn">Delete</button>
                                                                     </div>
                                                                 </div>
                                                                 <table style="user-select: none;
@@ -627,11 +627,11 @@ foreach ($products as $product) {
                                     <?php     if ($settings[0]['theme'] == "full_white") {
                             ?>
                                     <div class="splash-radio-button">
-                                        <input id="discount_amount2" name="discountchkbx2" type="radio" checked="">
+                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio" checked="">
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
                                         &nbsp;&nbsp;&nbsp;
-                                        <input id="discount_percentage2" name="discountchkbx2" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage" type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -644,11 +644,11 @@ foreach ($products as $product) {
                             ?>
                                     <div class="ad-radio-button">
 
-                                        <input id="discount_amount2" name="discountchkbx2" type="radio" checked>
+                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio" checked>
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
 
-                                        <input id="discount_percentage2" name="discountchkbx2" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage" type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -845,6 +845,8 @@ foreach ($products as $product) {
 
         let formattedDateTime = `${formattedDate}T${hours}:${minutes}`;
         current_date.val(formattedDateTime);
+        let isDisInAmntorInPer = "amount";
+
         let isIncmp = false;
         let isIncmpTrue = false;
 
@@ -856,7 +858,7 @@ foreach ($products as $product) {
             ?>
         $.ajax({
             type: "POST",
-            url: "data.php",
+            url: "requestsPHP/loadInvoice.php",
             data: {
                 "in": <?php echo $_GET['inv_num']; ?>,
 
@@ -865,7 +867,6 @@ foreach ($products as $product) {
             },
             success: e => {
                 const product = JSON.parse(e);
-                console.log(product);
                 finalAmount = +product[1][0]['total_amount'];
                 totalPayable = +product[1][0]['final_amount'];
 
@@ -879,31 +880,30 @@ foreach ($products as $product) {
                     'final_amount'
                 ] : +product[1][0]['total_amount']));
 
-                console.log(product);
                 $("#amount_received").val(+product[1][0][
                     'recevied_amount'
                 ]);
 
-                $("#amount_return").val(+product[1][0]['returned_amount']);
-                $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
-                    'pending_amount'
-                ] : +product[1][0]['total_amount']));
-                // if (+parseInt($("#amount_received").val() || 0) >= $("#total_payable").val()) {
-                //     $("#amount_return").val(+parseInt($("#amount_received").val() || 0) - (+
-                //         totalPayable != 0 &&
-                //         +
-                //         totalPayable != "" ? +
-                //         totalPayable : +finalAmount));
-                //     //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+                // $("#amount_return").val(+product[1][0]['returned_amount']);
+                // $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
+                //     'pending_amount'
+                // ] : +product[1][0]['total_amount']));
+                if (+parseInt($("#amount_received").val() || 0) >= $("#total_payable").val()) {
+                    $("#amount_return").val(+parseInt($("#amount_received").val() || 0) - (+
+                        totalPayable != 0 &&
+                        +
+                        totalPayable != "" ? +
+                        totalPayable : +finalAmount));
+                    //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
-                //     $("#pending_amount").val(0);
-                // } else {
+                    $("#pending_amount").val(0);
+                } else {
 
-                //     $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
-                //         parseInt($("#amount_received").val() || 0));
-                //     $("#amount_return").val(0);
+                    $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
+                        parseInt($("#amount_received").val() || 0));
+                    $("#amount_return").val(0);
 
-                // }
+                }
 
 
                 $("#current_date").val(product[1][0]['date']);
@@ -934,7 +934,7 @@ foreach ($products as $product) {
                 loadScreen();
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/sales2Update.php",
                     data: {
                         "__FILE__": "sales2Update",
                         "invoice_number": $("#invoice_number").val(),
@@ -946,7 +946,9 @@ foreach ($products as $product) {
                         "total_amount": $("#final_amount").val(),
                         "payment_type": $("#payment_type").val(),
                         "details": $("#details").val(),
-                        "isIncmp": true
+                        "isIncmp": true,
+                        "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+
                     },
 
 
@@ -1005,7 +1007,7 @@ foreach ($products as $product) {
             if ($("#item_code_search").val() == "") {
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/productSelect.php",
                     data: {
                         '__FILE__': "productSelect",
                         product: e.target.value,
@@ -1029,7 +1031,7 @@ foreach ($products as $product) {
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/productSelectItemCode.php",
                     data: {
                         '__FILE__': "productSelectItemCode",
                         productId: e.target.value,
@@ -1066,7 +1068,7 @@ foreach ($products as $product) {
             if (target.target.value != "") {
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/productSelectItemCode.php",
                     data: {
                         '__FILE__': "productSelectItemCode",
                         product: target.target.value,
@@ -1220,10 +1222,9 @@ foreach ($products as $product) {
 
 
 
-        const calculateDiscount = (quantity, unitPrice, discountRate) => {
-            const discountedPrice = ((quantity * unitPrice) - discountRate);
-            let percentage = (quantity * unitPrice) * (1 - (discountRate / 100));
-            // 50 * 0.95
+        const calculateDiscount = (quantity = 0, unitPrice = 0, finalAmount = 0, discountRate,) => {
+            const discountedPrice = quantity != 0 && unitPrice != 0 ? ((quantity * unitPrice) - discountRate) : ((finalAmount) - discountRate);
+            let percentage = quantity != 0 && unitPrice != 0 ? (quantity * unitPrice) * (1 - (discountRate / 100)): (finalAmount) * (1 - (discountRate / 100));
             return {
                 discountedPrice,
                 percentage
@@ -1266,7 +1267,7 @@ foreach ($products as $product) {
             if (inputValue < 0) {
                 e.target.value = 0;
             }
-            const result = calculateDiscount(+quantity.val(), +unit_price.val(), +discount.val());
+            const result = calculateDiscount(+quantity.val(), +unit_price.val(), 0, +discount.val());
             total_discount = isAmount == "" ? +result
                 .discountedPrice : (isAmount == "amount" ? +result.discountedPrice : +result
                     .percentage);
@@ -1291,7 +1292,7 @@ foreach ($products as $product) {
 
         });
         $("#discount_amount").on("click", e => {
-            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
+            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), 0, +$(
                 "#discount").val());
             total_amount.val(resultDis.discountedPrice);
             total_discount = resultDis.discountedPrice;
@@ -1301,7 +1302,7 @@ foreach ($products as $product) {
 
         });
         $("#discount_percentage").on("click", e => {
-            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), +$(
+            const resultDis = calculateDiscount(+$("#quantity").val(), +$("#unit_price").val(), 0, +$(
                 "#discount").val());
             total_amount.val(resultDis.percentage);
             total_discount = resultDis.percentage;
@@ -1338,31 +1339,50 @@ foreach ($products as $product) {
 
 
 
-
         $("#discount_in_amount").on("input", e => {
             let inputValue = parseInt(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 0;
             }
-            $("#total_payable").val(+finalAmount - +parseInt(e.target.value || 0));
-            totalPayable = +finalAmount - +parseInt(e.target.value || 0);
+            const result = calculateDiscount(0, 0, finalAmount, +e.target.value);
+
+            
+            $("#total_payable").val(isDisInAmntorInPer == "" ? +result
+                .discountedPrice : (isDisInAmntorInPer == "amount" ? +result.discountedPrice : +result
+                    .percentage));
+            totalPayable = isDisInAmntorInPer == "" ? +result
+                .discountedPrice : (isDisInAmntorInPer == "amount" ? +result.discountedPrice : +result
+                    .percentage);
 
             $("#amount_received").val('');
 
             $("#amount_return").val('');
-            $("#pending_amount").val('');
+            $("#pending_amount").val(totalPayable);
 
         });
 
 
         $("#discount_amount2").on("click", e => {
-            $("#total_payable").val(+finalAmount - +$("#discount_in_amount").val());
+            const resultDis = calculateDiscount(0, 0, finalAmount, +$("#discount_in_amount").val());
+            $("#total_payable").val(resultDis.discountedPrice);
+            isDisInAmntorInPer = e.target.value;
+            totalPayable = resultDis.discountedPrice;
+            $("#amount_received").val('');
 
-
+            $("#amount_return").val('');
+            $("#pending_amount").val(totalPayable);
         });
         $("#discount_percentage2").on("click", e => {
 
-            $("#total_payable").val((finalAmount) * (1 - (+$("#discount_in_amount").val() / 100)));
+            const resultDis = calculateDiscount(0, 0, finalAmount, +$("#discount_in_amount").val());
+            $("#total_payable").val(resultDis.percentage);
+            isDisInAmntorInPer = e.target.value;
+            totalPayable = resultDis.percentage;
+
+            $("#amount_received").val('');
+
+            $("#amount_return").val('');
+            $("#pending_amount").val(totalPayable);
         });
 
 
@@ -1391,7 +1411,7 @@ foreach ($products as $product) {
         $(document).on("click", "#removeItem", e => {
             $.ajax({
                 type: "POST",
-                url: "data.php",
+                url: "requestsPHP/deleteProductSales1.php",
                 data: {
                     "__FILE__": "deleteProductSales1",
                     "salesId": e.target.value,
@@ -1407,7 +1427,7 @@ foreach ($products as $product) {
 
                     $.ajax({
                         type: "POST",
-                        url: "data.php",
+                        url: "requestsPHP/productFetch.php",
                         data: {
                             "__FILE__": "productFetch",
                             "invoice_number": $("#invoice_number").val(),
@@ -1456,7 +1476,7 @@ foreach ($products as $product) {
 
             $.ajax({
                 type: "POST",
-                url: "data.php",
+                url: "requestsPHP/selectTypeQuantity.php",
                 data: {
                     "__FILE__": "selectTypeQuantity",
                     "typeQuantity": e.target.value,
@@ -1487,7 +1507,7 @@ foreach ($products as $product) {
         $('#type').on("input", e => {
             $.ajax({
                 type: "POST",
-                url: "data.php",
+                url: "requestsPHP/typeQ.php",
                 data: {
                     "__FILE__": "typeQ",
                     "typeQuantity": toggleValue,
@@ -1541,7 +1561,7 @@ foreach ($products as $product) {
         // $("#invoice_number").on("change", e => {
         //     $.ajax({
         //         type: "POST",
-        //         url: "data.php",
+        //         url: "requestsPHP/data.php",
         //         data: {
         //             "in": e.target.value,
 
@@ -1630,7 +1650,7 @@ foreach ($products as $product) {
 
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/productAdd.php",
                     data: {
                         "__FILE__": "productAdd",
                         "invoice_number": $("#invoice_number").val(),
@@ -1699,7 +1719,7 @@ foreach ($products as $product) {
 
                         $.ajax({
                             type: "POST",
-                            url: "data.php",
+                            url: "requestsPHP/productFetch.php",
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
@@ -1756,7 +1776,7 @@ foreach ($products as $product) {
                                 loadScreen();
                                 $.ajax({
                                     type: "POST",
-                                    url: "data.php",
+                                    url: "requestsPHP/sales2Update.php",
                                     data: {
                                         "__FILE__": "sales2Update",
                                         "invoice_number": $(
@@ -1780,7 +1800,9 @@ foreach ($products as $product) {
                                         "payment_type": $(
                                             "#payment_type").val(),
                                         "details": $("#details").val(),
-                                        "isIncmp": true
+                                        "isIncmp": true,
+                                        "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+
                                     },
 
 
@@ -1798,7 +1820,7 @@ foreach ($products as $product) {
         $("#pBill").on("click", event => {
             $.ajax({
                 type: "POST",
-                url: "data.php",
+                url: "requestsPHP/sales2Update.php",
                 data: {
                     "__FILE__": "sales2Update",
                     "invoice_number": $("#invoice_number").val(),
@@ -1810,14 +1832,16 @@ foreach ($products as $product) {
                     "total_amount": $("#final_amount").val(),
                     "payment_type": $("#payment_type").val(),
                     "details": $("#details").val(),
-                    "isIncmp": false
+                    "isIncmp": false,
+                    "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+
                 },
                 success: target => {
                     <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
                     $(window).off('beforeunload');
 
-                    openPopup(`printinvoice1.php?inv=${$("#invoice_number").val()}`);
+                    openPopup(`printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`);
                     location.href = `sales.php`;
 
                     <?php 
@@ -1825,7 +1849,7 @@ foreach ($products as $product) {
                         ?>
                     $(window).off('beforeunload');
 
-                    openPopup(`printinvoice2.php?inv=${$("#invoice_number").val()}`);
+                    openPopup(`printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`);
                     location.href = `sales.php`;
 
                     <?php } ?>
@@ -1874,7 +1898,7 @@ foreach ($products as $product) {
             if (showConfirmation()) {
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/salesDelete.php",
                     data: {
                         "__FILE__": "salesDelete",
                         "invoice_number": $("#invoice_number").val(),
@@ -1913,7 +1937,7 @@ foreach ($products as $product) {
         $("#customer_name").on("change", e => {
             $.ajax({
                 type: "POST",
-                url: "data.php",
+                url: "requestsPHP/showCustomerData.php",
                 data: {
                     '__FILE__': "showCustomerData",
                     "cusId": e.target.value
@@ -1947,7 +1971,7 @@ foreach ($products as $product) {
 
                 $.ajax({
                     type: "POST",
-                    url: "data.php",
+                    url: "requestsPHP/runtimeTableDataEdit.php",
                     data: {
                         "__FILE__": "runtimeTableDataEdit",
                         "target": `{"${eTarget.target.id}": "${eTarget.target.textContent}"}`,
@@ -1958,7 +1982,7 @@ foreach ($products as $product) {
 
                         $.ajax({
                             type: "POST",
-                            url: "data.php",
+                            url: "requestsPHP/productFetch.php",
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
@@ -2183,7 +2207,8 @@ foreach ($products as $product) {
         });
 
         $("#deleteBtn").on("click", e => {
-            if ($("#password_sales_1").val() == "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
+            if ($("#password_sales_1").val() ==
+                "<?php echo $_SESSION['ovalfox_pos_cp_sales_1_password'] ?>") {
                 $(".overlay-cus").prop("hidden", true);
             } else {
                 $(".overlay-cus").prop("hidden", false);
@@ -2202,12 +2227,12 @@ foreach ($products as $product) {
             <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
 
-            openPopup(`printinvoice1.php?inv=${$(e.target).data("cus")}`);
+            openPopup(`printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
             <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
 
-            openPopup(`printinvoice2.php?inv=${$(e.target).data("cus")}`);
+            openPopup(`printinvoice2.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
 
             <?php } ?>
         });
@@ -2215,7 +2240,7 @@ foreach ($products as $product) {
         // $(document).on("click", "#editCustomer", e => {
         //     $.ajax({
         //         type: "POST",
-        //         url: "data.php",
+        //         url: "requestsPHP/data.php",
         //         data: {
         //             "in": $(e.target).data("cus"),
 
