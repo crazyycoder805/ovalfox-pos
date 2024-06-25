@@ -627,11 +627,13 @@ foreach ($products as $product) {
                                     <?php     if ($settings[0]['theme'] == "full_white") {
                             ?>
                                     <div class="splash-radio-button">
-                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio" checked="">
+                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio"
+                                            checked="">
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
                                         &nbsp;&nbsp;&nbsp;
-                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage"
+                                            type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -644,11 +646,13 @@ foreach ($products as $product) {
                             ?>
                                     <div class="ad-radio-button">
 
-                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio" checked>
+                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio"
+                                            checked>
                                         <label for="discount_amount2" class="radio-label">In
                                             Amount</label>
 
-                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage" type="radio">
+                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage"
+                                            type="radio">
                                         <label for="discount_percentage2" class="radio-label">In
                                             Percentage</label>
                                     </div>
@@ -888,19 +892,19 @@ foreach ($products as $product) {
                 // $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
                 //     'pending_amount'
                 // ] : +product[1][0]['total_amount']));
-                if (+parseInt($("#amount_received").val() || 0) >= $("#total_payable").val()) {
-                    $("#amount_return").val(+parseInt($("#amount_received").val() || 0) - (+
+                if (+parseFloat($("#amount_received").val() || 0) >= $("#total_payable").val()) {
+                    $("#amount_return").val(+parseFloat($("#amount_received").val() || 0) - (+
                         totalPayable != 0 &&
                         +
                         totalPayable != "" ? +
                         totalPayable : +finalAmount));
-                    //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+                    //$("#amount_return").val($("#type").val() != "rf" ? parseFloat($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseFloat($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
                     $("#pending_amount").val(0);
                 } else {
 
                     $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
-                        parseInt($("#amount_received").val() || 0));
+                        parseFloat($("#amount_received").val() || 0));
                     $("#amount_return").val(0);
 
                 }
@@ -947,7 +951,8 @@ foreach ($products as $product) {
                         "payment_type": $("#payment_type").val(),
                         "details": $("#details").val(),
                         "isIncmp": true,
-                        "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+                        "amountIn": isDisInAmntorInPer == "" ? "amount" :
+                            isDisInAmntorInPer,
 
                     },
 
@@ -1121,7 +1126,7 @@ foreach ($products as $product) {
 
 
         $("#quantity").on('input', e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue <= 0) {
                 e.target.value = 1;
             }
@@ -1222,9 +1227,11 @@ foreach ($products as $product) {
 
 
 
-        const calculateDiscount = (quantity = 0, unitPrice = 0, finalAmount = 0, discountRate,) => {
-            const discountedPrice = quantity != 0 && unitPrice != 0 ? ((quantity * unitPrice) - discountRate) : ((finalAmount) - discountRate);
-            let percentage = quantity != 0 && unitPrice != 0 ? (quantity * unitPrice) * (1 - (discountRate / 100)): (finalAmount) * (1 - (discountRate / 100));
+        const calculateDiscount = (quantity = 0, unitPrice = 0, finalAmount = 0, discountRate, ) => {
+            const discountedPrice = quantity != 0 && unitPrice != 0 ? ((quantity * unitPrice) -
+                discountRate) : ((finalAmount) - discountRate);
+            let percentage = quantity != 0 && unitPrice != 0 ? (quantity * unitPrice) * (1 - (discountRate /
+                100)) : (finalAmount) * (1 - (discountRate / 100));
             return {
                 discountedPrice,
                 percentage
@@ -1246,8 +1253,8 @@ foreach ($products as $product) {
         //     extra_discount.val('');
         // });
         // extra_discount.on("input", e => {
-        //     const extraDiscountValue = parseInt(e.target.value || 0);
-        //     const total = parseInt(total_discount || 0);
+        //     const extraDiscountValue = parseFloat(e.target.value || 0);
+        //     const total = parseFloat(total_discount || 0);
         //     const result = calculateExtraDiscount(total, extraDiscountValue);
         //     total_amount.val(result.extraDiscountedPrice);
         // });
@@ -1263,7 +1270,7 @@ foreach ($products as $product) {
         let isAmount = "";
 
         discount.on("input", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 0;
             }
@@ -1277,11 +1284,11 @@ foreach ($products as $product) {
             extra_discount.val('');
         });
         extra_discount.on("input", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 0;
             }
-            const extraDiscountValue = parseInt(e.target.value || 0);
+            const extraDiscountValue = parseFloat(e.target.value || 0);
             const result = calculateExtraDiscount(total_discount != 0 ? ($("#extra_dsicount").val() ==
                     0 ? +quantity
                     .val() * +unit_price.val() : +total_discount) : +quantity
@@ -1321,16 +1328,16 @@ foreach ($products as $product) {
         // $("#discount_amount").on("click", e => {
         //     const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
         //         .val());
-        //     const extraDiscountValue = parseInt(extra_discount.val() || 0);
-        //     const total = parseInt(total_discount || 0);
+        //     const extraDiscountValue = parseFloat(extra_discount.val() || 0);
+        //     const total = parseFloat(total_discount || 0);
         //     const result = calculateExtraDiscount(total, extraDiscountValue);
         //     total_amount.val(result.extraDiscountedPrice);
         // });
         // $("#discount_percentage").on("click", e => {
         //     const resultDis = calculateDiscount(quantity.val(), unit_price.val(), discount
         //         .val());
-        //     const extraDiscountValue = parseInt(extra_discount.val() || 0);
-        //     const total = parseInt(total_discount || 0);
+        //     const extraDiscountValue = parseFloat(extra_discount.val() || 0);
+        //     const total = parseFloat(total_discount || 0);
         //     const result = calculateExtraDiscount(total, extraDiscountValue);
         //     total_amount.val(extra_discount.val() != 0 && extra_discount.val() != "" &&
         //         extra_discount
@@ -1340,15 +1347,16 @@ foreach ($products as $product) {
 
 
         $("#discount_in_amount").on("input", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 0;
             }
             const result = calculateDiscount(0, 0, finalAmount, +e.target.value);
 
-            
+
             $("#total_payable").val(isDisInAmntorInPer == "" ? +result
-                .discountedPrice : (isDisInAmntorInPer == "amount" ? +result.discountedPrice : +result
+                .discountedPrice : (isDisInAmntorInPer == "amount" ? +result.discountedPrice : +
+                    result
                     .percentage));
             totalPayable = isDisInAmntorInPer == "" ? +result
                 .discountedPrice : (isDisInAmntorInPer == "amount" ? +result.discountedPrice : +result
@@ -1388,21 +1396,22 @@ foreach ($products as $product) {
 
 
         $("#amount_received").on("input", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 0;
+
             }
-            if (+parseInt(e.target.value || 0) >= $("#total_payable").val()) {
-                $("#amount_return").val(+parseInt(e.target.value || 0) - (+totalPayable != 0 && +
+            if (+parseFloat(e.target.value || 0) >= $("#total_payable").val()) {
+                $("#amount_return").val(+parseFloat(e.target.value || 0) - (+totalPayable != 0 && +
                     totalPayable != "" ? +
                     totalPayable : +finalAmount));
-                //$("#amount_return").val($("#type").val() != "rf" ? parseInt(e.target.value || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt(e.target.value || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+                //$("#amount_return").val($("#type").val() != "rf" ? parseFloat(e.target.value || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseFloat(e.target.value || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
                 $("#pending_amount").val(0);
             } else {
 
                 $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
-                    parseInt(e.target.value || 0));
+                    parseFloat(e.target.value || 0));
                 $("#amount_return").val(0);
 
             }
@@ -1440,16 +1449,16 @@ foreach ($products as $product) {
                             $("#total_quantity_added").text(product[2]);
                             finalAmount = product[3];
                             totalPayable = product[3];
-                            if (+parseInt($("#amount_received").val() ||
+                            if (+parseFloat($("#amount_received").val() ||
                                     0) >= $("#total_payable").val()) {
-                                $("#amount_return").val(+parseInt($(
+                                $("#amount_return").val(+parseFloat($(
                                         "#amount_received").val() ||
                                     0) - (+
                                     totalPayable != 0 &&
                                     +
                                     totalPayable != "" ? +
                                     totalPayable : +finalAmount));
-                                //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+                                //$("#amount_return").val($("#type").val() != "rf" ? parseFloat($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseFloat($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
                                 $("#pending_amount").val(0);
                             } else {
@@ -1457,7 +1466,7 @@ foreach ($products as $product) {
                                 $("#pending_amount").val((+totalPayable !=
                                         0 ? +totalPayable : +finalAmount
                                     ) - +
-                                    parseInt($("#amount_received")
+                                    parseFloat($("#amount_received")
                                         .val() || 0));
                                 $("#amount_return").val(0);
 
@@ -1535,7 +1544,7 @@ foreach ($products as $product) {
 
 
         unit_price.on("input", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue < 0) {
                 e.target.value = 1;
             }
@@ -1551,7 +1560,7 @@ foreach ($products as $product) {
 
         });
         $("#invoice_number").on("change", e => {
-            let inputValue = parseInt(e.target.value);
+            let inputValue = parseFloat(e.target.value);
             if (inputValue <= 0) {
                 e.target.value = 1;
             }
@@ -1593,18 +1602,23 @@ foreach ($products as $product) {
 
         // });
         $(document).keydown(function(event) {
-            if (event.shiftKey && event.key === 'F') {
-                $("#product").focus();
-                $("#product").select2("open");
-                setTimeout(function() {
-                    var searchField = $(
-                        '.select2-container--open .select2-search__field');
-                    if (searchField.length) {
-                        searchField[0].focus();
+            if (event.key === '.') {
+                $(document).one('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        $("#product").focus();
+                        $("#product").select2("open");
+                        setTimeout(function() {
+                            var searchField = $(
+                                '.select2-container--open .select2-search__field');
+                            if (searchField.length) {
+                                searchField[0].focus();
+                            }
+                        }, 0.1);
                     }
-                }, 0.1);
+                });
             }
         });
+
         let A = 0;
         $("#wholeFormBtn").on("click", e => {
             A = 1;
@@ -1801,7 +1815,9 @@ foreach ($products as $product) {
                                             "#payment_type").val(),
                                         "details": $("#details").val(),
                                         "isIncmp": true,
-                                        "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+                                        "amountIn": isDisInAmntorInPer ==
+                                            "" ? "amount" :
+                                            isDisInAmntorInPer,
 
                                     },
 
@@ -1841,7 +1857,9 @@ foreach ($products as $product) {
                         ?>
                     $(window).off('beforeunload');
 
-                    openPopup(`printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`);
+                    openPopup(
+                        `printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                    );
                     location.href = `sales.php`;
 
                     <?php 
@@ -1849,7 +1867,9 @@ foreach ($products as $product) {
                         ?>
                     $(window).off('beforeunload');
 
-                    openPopup(`printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`);
+                    openPopup(
+                        `printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                    );
                     location.href = `sales.php`;
 
                     <?php } ?>
@@ -1950,6 +1970,110 @@ foreach ($products as $product) {
 
         });
         let focusSet = false;
+        // Function to toggle active cell class
+        // Function to toggle active cell class
+        function toggleActiveCell($cell) {
+            $('#itemAddedtable td').removeClass('active-cell');
+            $cell.addClass('active-cell');
+        }
+
+        // Function to find the next editable cell in a given direction
+        function findNextEditableCell($startCell, direction) {
+            let $cell = $startCell;
+
+            switch (direction) {
+                case 'left':
+                    while ($cell.prev('td').length > 0) {
+                        $cell = $cell.prev('td');
+                        if ($cell.is('[contenteditable="true"]')) {
+                            return $cell;
+                        }
+                    }
+                    break;
+                case 'right':
+                    while ($cell.next('td').length > 0) {
+                        $cell = $cell.next('td');
+                        if ($cell.is('[contenteditable="true"]')) {
+                            return $cell;
+                        }
+                    }
+                    break;
+                case 'up':
+                    let $row = $cell.closest('tr');
+                    let cellIndex = $cell.index();
+                    while ($row.prev('tr').length > 0) {
+                        $row = $row.prev('tr');
+                        $cell = $row.children().eq(cellIndex);
+                        if ($cell.is('[contenteditable="true"]')) {
+                            return $cell;
+                        }
+                    }
+                    break;
+                case 'down':
+                    let $rowDown = $cell.closest('tr');
+                    let cellIndexDown = $cell.index();
+                    while ($rowDown.next('tr').length > 0) {
+                        $rowDown = $rowDown.next('tr');
+                        $cell = $rowDown.children().eq(cellIndexDown);
+                        if ($cell.is('[contenteditable="true"]')) {
+                            return $cell;
+                        }
+                    }
+                    break;
+            }
+
+            return null; // No editable cell found
+        }
+
+        // Keydown event handler
+        $(document).on("keydown", "#itemAddedtable td", function(e) {
+            let $this = $(this);
+
+            switch (e.which) {
+                case 37: // left arrow key
+                    let $leftCell = findNextEditableCell($this, 'left');
+                    if ($leftCell) {
+                        $leftCell.focus();
+                        toggleActiveCell($leftCell);
+                    }
+                    break;
+
+                case 38: // up arrow key
+                    let $upCell = findNextEditableCell($this, 'up');
+                    if ($upCell) {
+                        $upCell.focus();
+                        toggleActiveCell($upCell);
+                    }
+                    break;
+
+                case 39: // right arrow key
+                    let $rightCell = findNextEditableCell($this, 'right');
+                    if ($rightCell) {
+                        $rightCell.focus();
+                        toggleActiveCell($rightCell);
+                    }
+                    break;
+
+                case 40: // down arrow key
+                    let $downCell = findNextEditableCell($this, 'down');
+                    if ($downCell) {
+                        $downCell.focus();
+                        toggleActiveCell($downCell);
+                    }
+                    break;
+
+                default:
+                    return;
+            }
+            e.preventDefault();
+        });
+
+        // Focus event handler for mouse clicks
+        $(document).on("focus", "#itemAddedtable td[contenteditable='true']", function() {
+            let $this = $(this);
+            toggleActiveCell($this);
+        });
+
 
         $(document).on('keydown', "#itemAddedtable td", eTarget => {
             if (eTarget.keyCode == 13) {
@@ -1958,7 +2082,7 @@ foreach ($products as $product) {
 
 
 
-                let inputValue = parseInt(eTarget.target.textContent);
+                let inputValue = parseFloat(eTarget.target.textContent);
                 if (!eTarget.target.id.match(/discountTabledData/) && !eTarget.target.id.match(
                         /extraTabledData/) && !eTarget
                     .target.id.match(/percentageTabledData/)) {
@@ -2008,16 +2132,16 @@ foreach ($products as $product) {
                                     .val());
                                 $("#pending_amount").val($("#final_amount")
                                     .val());
-                                if (+parseInt($("#amount_received").val() ||
+                                if (+parseFloat($("#amount_received").val() ||
                                         0) >= $("#total_payable").val()) {
-                                    $("#amount_return").val(+parseInt($(
+                                    $("#amount_return").val(+parseFloat($(
                                             "#amount_received").val() ||
                                         0) - (+
                                         totalPayable != 0 &&
                                         +
                                         totalPayable != "" ? +
                                         totalPayable : +finalAmount));
-                                    //$("#amount_return").val($("#type").val() != "rf" ? parseInt($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseInt($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
+                                    //$("#amount_return").val($("#type").val() != "rf" ? parseFloat($("#amount_received").val() || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseFloat($("#amount_received").val() || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
                                     $("#pending_amount").val(0);
                                 } else {
@@ -2025,7 +2149,7 @@ foreach ($products as $product) {
                                     $("#pending_amount").val((+totalPayable !=
                                             0 ? +totalPayable : +finalAmount
                                         ) - +
-                                        parseInt($("#amount_received")
+                                        parseFloat($("#amount_received")
                                             .val() || 0));
                                     $("#amount_return").val(0);
 
@@ -2126,9 +2250,9 @@ foreach ($products as $product) {
             }
         });
 
-        $(document).on("blur", "#itemAddedtable td", eTarget => {
+        // $(document).on("blur", "#itemAddedtable td", eTarget => {
 
-        });
+        // });
 
         $("#customer_name").on("input", e => {
 
@@ -2227,12 +2351,14 @@ foreach ($products as $product) {
             <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
 
-            openPopup(`printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
+            openPopup(
+                `printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
             <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
 
-            openPopup(`printinvoice2.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
+            openPopup(
+                `printinvoice2.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
 
             <?php } ?>
         });

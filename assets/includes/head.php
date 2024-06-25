@@ -63,9 +63,9 @@ if (isset($_POST["logout"])) {
 
 
     <style>
-        .select2-dropdown {
-            background-color: black !important;
-        }
+    .select2-dropdown {
+        background-color: black !important;
+    }
     </style>
 
     <?php } else  if ($settings[0]['theme'] == "light"){ ?>
@@ -75,9 +75,9 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/icon-fonts_light_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/style_light_white.css">
     <style>
-        .select2-dropdown {
-            background-color: white !important;
-        }
+    .select2-dropdown {
+        background-color: white !important;
+    }
     </style>
     <?php } else if($settings[0]['theme'] == 'full_white') { ?>
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fonts_full_white.css">
@@ -86,9 +86,14 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/icon-fa_full_white.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/sty.css">
     <style>
-        .select2-dropdown {
-            background-color: white !important;
-        }
+    .select2-dropdown {
+        background-color: white !important;
+    }
+
+    .active-cell {
+        background-color: grey !important;
+        color: white !important;
+    }
     </style>
     <?php } ?>
     <link rel="shortcut icon" type="image/png" href="assets/images/ovalfox/icon.png">

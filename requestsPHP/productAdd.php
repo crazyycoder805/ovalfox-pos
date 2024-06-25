@@ -73,8 +73,8 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
                 $discount = empty($sales_1[0]['discount']) ? (double)$_POST['discount'] : (double)$sales_1[0]['discount'];
                 $extra_discount = empty($sales_1[0]['extra_discount']) ? (double)$_POST['extra_discount'] : (double)$sales_1[0]['extra_discount'];
                 // Fetch and validate quantity and item price
-                $quantity = intval($_POST['quantity']);
-                $item_price = intval($_POST['item_price']);
+                $quantity = (double)($_POST['quantity']);
+                $item_price = (double)($_POST['item_price']);
 
                 // Calculate total price before any discounts
                 $total_price_before_discounts = $quantity * $item_price;
@@ -119,8 +119,8 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
 
             $discount = (double)$sales_1[0]['discount'];
             $extra_discount = (double)$sales_1[0]['extra_discount'];
-            $quantity = intval($qun);
-            $item_price = intval($sales_1[0]['item_price']);
+            $quantity = (double)($qun);
+            $item_price = (double)($sales_1[0]['item_price']);
 
             $total_price_before_discounts = $quantity * $item_price;
             $discount_percentage = 0;
@@ -171,8 +171,8 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
                 $discount = empty($sales_1[0]['discount']) ? (double)($_POST['discount']) : (double)($sales_1[0]['discount']);
                 $extra_discount = empty($sales_1[0]['extra_discount']) ? (double)($_POST['extra_discount']) : (double)($sales_1[0]['extra_discount']);
                 // Fetch and validate quantity and item price
-                $quantity = intval($_POST['quantity']);
-                $item_price = intval($_POST['item_price']);
+                $quantity = (double)($_POST['quantity']);
+                $item_price = (double)($_POST['item_price']);
 
                 // Calculate total price before any discounts
                 $total_price_before_discounts = $quantity * $item_price;
@@ -196,7 +196,7 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
                 'extra_discount' => empty($_POST['extra_discount']) ? 0 : $_POST['extra_discount']]);
             } else {
                 $discount2 = $_POST['discount'] == 0 ? 0 :
-                (((intval($_POST['quantity']) * intval($_POST['item_price'])) * (1 - ((double)($_POST['discount']) / 100))));
+                ((((double)($_POST['quantity']) * (double)($_POST['item_price'])) * (1 - ((double)($_POST['discount']) / 100))));
                 $percentageCut = $_POST['discount'] == 0 ? 0 : ($_POST['quantity'] * $_POST['item_price']) - $discount2;
 
 
@@ -218,8 +218,8 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
 
             $discount = (double)$sales_1[0]['discount'];
             $extra_discount = (double)$sales_1[0]['extra_discount'];
-            $quantity = intval($qun);
-            $item_price = intval($sales_1[0]['item_price']);
+            $quantity = (double)($qun);
+            $item_price = (double)($sales_1[0]['item_price']);
 
             $total_price_before_discounts = $quantity * $item_price;
             $discount_percentage = 0;
@@ -260,10 +260,10 @@ foreach ($sales_1 as $key => $sale) {
 
 <tr>
 
-    <td style='font-size: 13px !important;font-weight:bolder;'><?php echo $key; ?></td>
+    <td style='font-size: 21px !important;font-weight:bolder;'><?php echo $key; ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='item_codeTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['item_code']; ?></td>
-    <td style='font-size: 13px !important;font-weight:bolder;' id='item_nameTabledData<?php echo $sale['id'];?>'>
+    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='item_nameTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['item_name']; ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='quantityTabledData<?php echo $sale['id'];?>'
         <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
@@ -275,7 +275,7 @@ foreach ($sales_1 as $key => $sale) {
     <td style='font-size: 13px !important;font-weight:bolder;' id='amountTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['amount']; ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;'
-        <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>
+        
         id='discountTabledData<?php echo $sale['id'];?>'>
         <?php echo $sale['discount']; ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='extra_discountTabledData<?php echo $sale['id'];?>'

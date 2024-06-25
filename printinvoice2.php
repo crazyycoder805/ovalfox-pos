@@ -322,7 +322,7 @@ $total_price = 0;
                                 </tr>
                                 <tr>
                                     <th style="text-align: start; font-size: 30px !important;width:200px">
-                                        Customer Name.
+                                        CUST.
                                             <?php echo $customers[0]['name']; ?>
 </span>
 
@@ -367,20 +367,20 @@ $total_price = 0;
                                     </td>
 
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo $sale['item_price']; ?></td>
+                                        <?php echo round($sale['item_price'], 2); ?></td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo $sale['amount']; ?></td>
+                                        <?php echo round($sale['amount'], 2); ?></td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['discount']); ?>
+                                        <?php echo round($sale['discount'], 2); ?>
                                     </td>
                                     <td style="text-align: center;font-size: 23px !important;">
                                         <?php echo round(!empty($sale['percentage']) ? $sale['percentage'] : 0); ?></td>
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['extra_discount']); ?>
+                                        <?php echo round($sale['extra_discount'], 2); ?>
                                     </td>
 
                                     <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['grand_total']); ?>
+                                        <?php echo round($sale['grand_total'], 2); ?>
                                     </td>
                                     </td>
 

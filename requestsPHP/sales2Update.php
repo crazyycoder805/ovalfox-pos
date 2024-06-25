@@ -5,10 +5,10 @@ require_once '../assets/includes/pdo.php';
 $customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 $ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$currentBalance = intval($customer[0]['balance']);
-$previousPendingAmount = intval($customerSales[0]['pending_amount']);
+$currentBalance = (double)($customer[0]['balance']);
+$previousPendingAmount = (double)($customerSales[0]['pending_amount']);
 
-$newPendingAmount = intval($_POST['pending_amount']);
+$newPendingAmount = (double)($_POST['pending_amount']);
 
 if ($newPendingAmount != $previousPendingAmount) {
     $balanceAdjustment = ($newPendingAmount) - $previousPendingAmount;

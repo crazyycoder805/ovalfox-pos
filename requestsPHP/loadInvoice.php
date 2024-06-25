@@ -20,15 +20,15 @@ foreach ($sales_1 as $key => $sale) {
 
     $key += 1;
     $html .= "   <tr>
-    <td style='font-size: 13px !important;font-weight:bolder;'>{$key}</td>
+    <td style='font-size: 21px !important;font-weight:bolder;'>{$key}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
-    <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
-    <td style='font-size: 13px !important;font-weight:bolder;' id='"."discountTabledData{$sale['id']}'  ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['discount']}</td>
+    <td style='font-size: 13px !important;font-weight:bolder;' id='"."discountTabledData{$sale['id']}' >{$sale['discount']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;'  id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."grandTotalTabledData{$sale['id']}'>{$gt}</td>
