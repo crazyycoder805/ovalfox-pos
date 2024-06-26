@@ -1721,7 +1721,7 @@ foreach ($products as $product) {
                         $("#final_amount").val(finalAmount);
                         $("#total_payable").val($("#final_amount").val());
                         $("#pending_amount").val($("#final_amount").val());
-
+                        totalPayable = finalAmount;
 
                         $("#extra_discount").val('');
                         $("#amount_received").val('');
@@ -1975,7 +1975,15 @@ foreach ($products as $product) {
         function toggleActiveCell($cell) {
             $('#itemAddedtable td').removeClass('active-cell');
             $cell.addClass('active-cell');
+
+            // Set cursor position to the end of the cell content
+            let range = document.createRange();
+            let selection = window.getSelection();
+            range.selectNodeContents($cell[0]);
+            selection.removeAllRanges();
+            selection.addRange(range);
         }
+
 
         // Function to find the next editable cell in a given direction
         function findNextEditableCell($startCell, direction) {
@@ -2348,9 +2356,10 @@ foreach ($products as $product) {
             window.open(url, windowName, windowFeatures);
         }
         $(document).on("click", "#printCustomer", e => {
+            e.preventDefault();
+
             <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
-
             openPopup(
                 `printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
             <?php 

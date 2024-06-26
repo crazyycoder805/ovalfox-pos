@@ -43,14 +43,23 @@ if ($name == "index.php") {
 
 <?php 
 
+
+// Extract dates and amounts
+$dates = array_column($sales_2, 'date');
+$amounts = array_column($sales_2, 'final_amount');
+
+// Convert PHP arrays to JavaScript arrays
+$dates_js = json_encode($dates);
+$amounts_js = json_encode($amounts);
+?>
+
 ?>
 <script>
 $(document).ready(e => {
     function chartL() {
         var options = {
             chart: {
-                
-                type: 'line', // Change to 'line' for a line chart
+                type: 'area', // Line chart
                 fontFamily: 'Poppins, sans-serif',
                 toolbar: {
                     show: true
@@ -58,34 +67,156 @@ $(document).ready(e => {
                 zoom: {
                     enabled: true
                 },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
             },
             dataLabels: {
-                enabled: true // If you want data labels, set this to true
+                enabled: true, // If you want data labels, set this to true
+                style: {
+                    fontSize: '12px',
+                    colors: ['#000000']
+                }
             },
             xaxis: {
-                categories: ['Customers', 'Today orders', 'Total sales', 'Today sales', 'Today purchase',
-                    'Today gernel expenses'
-                ], // X-axis labels
+                categories: <?php echo $dates_js; ?>, // X-axis labels with dates
                 labels: {
                     style: {
-                        colors: '#000000' // Black color for labels
+                        colors: '#000000', // Black color for labels
+                        fontSize: '12px'
+                    }
+                },
+                title: {
+                    text: 'Date',
+                    style: {
+                        color: '#000000',
+                        fontSize: '14px'
+                    }
+                },
+                crosshairs: {
+                    show: true,
+                    width: 1,
+                    position: 'back',
+                    opacity: 0.9,
+                    stroke: {
+                        color: '#b6b6b6',
+                        width: 1,
+                        dashArray: 3
                     }
                 }
             },
             yaxis: {
                 title: {
-                    text: 'Value' // Y-axis label
-
+                    text: 'Value', // Y-axis label
+                    style: {
+                        color: '#000000',
+                        fontSize: '14px'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#000000', // Black color for labels
+                        fontSize: '12px'
+                    }
+                }
+            },
+            tooltip: {
+                enabled: true,
+                theme: 'dark',
+                x: {
+                    format: 'dd MMM yyyy'
+                },
+                y: {
+                    formatter: function(value) {
+                        return value.toFixed(2); // Format y-axis values to 2 decimal places
+                    }
+                }
+            },
+            grid: {
+                show: true,
+                borderColor: '#e0e0e0',
+                strokeDashArray: 4,
+                xaxis: {
+                    lines: {
+                        show: true
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: true
+                    }
+                }
+            },
+            markers: {
+                size: 5,
+                colors: ['#1b4962'],
+                strokeColor: '#ffffff',
+                strokeWidth: 2,
+                hover: {
+                    size: 7
                 }
             },
             colors: ['#1b4962'], // Blue color for the line
             series: [{
                 name: 'Value',
-                data: [<?php echo $total_customers; ?>, <?php echo count($today_orders); ?>,
-                    <?php echo $total_sales; ?>,
-                    <?php echo $today_sales; ?>, <?php echo $today_purchase; ?>,
-                    <?php echo $today_gernel_expenses; ?>
-                ]
+                data: <?php echo $amounts_js; ?> // Series data with amounts
+            }],
+            legend: {
+                show: true,
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5,
+                labels: {
+                    colors: '#000000',
+                    useSeriesColors: false
+                },
+                markers: {
+                    width: 12,
+                    height: 12,
+                    strokeWidth: 0,
+                    radius: 12
+                }
+            },
+            annotations: {
+                yaxis: [{
+                    y: 30,
+                    borderColor: '#ff4560',
+                    label: {
+                        borderColor: '#ff4560',
+                        style: {
+                            color: '#fff',
+                            background: '#ff4560'
+                        },
+                        text: 'Y-axis annotation'
+                    }
+                }],
+                xaxis: [{
+                    x: new Date('01 Jan 2021').getTime(),
+                    borderColor: '#775dd0',
+                    label: {
+                        borderColor: '#775dd0',
+                        style: {
+                            color: '#fff',
+                            background: '#775dd0'
+                        },
+                        text: 'X-axis annotation'
+                    }
+                }]
+            },
+            responsive: [{
+                breakpoint: 600,
+                options: {
+                    chart: {
+                        width: '100%'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
             }]
         };
 
@@ -98,6 +229,7 @@ $(document).ready(e => {
     }
 
     chartL();
+
 
 
 

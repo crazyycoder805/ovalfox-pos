@@ -277,7 +277,7 @@ foreach ($sales_1 as $key => $sale) {
     <td style='font-size: 13px !important;font-weight:bolder;'
         
         id='discountTabledData<?php echo $sale['id'];?>'>
-        <?php echo $sale['discount']; ?></td>
+        <?php echo round($sale['discount'], 2); ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='extra_discountTabledData<?php echo $sale['id'];?>'
         <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['extra_discount']; ?></td>
