@@ -24,9 +24,9 @@ if (isset($_POST['add_customer_btn'])) {
 
             if ($image_result && $pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
             'cnic' => $_POST['cnic'], 'area' => $_POST['area'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
+            'balance' => $_POST['balance'], 'image' => $image_result['filename']])) {
                 $success = "Customer added.";
-                                        header("Location:{$name}");
+                                        header("Location:customers.php");
 
             } else {
                 $error = "Something went wrong.";
@@ -34,9 +34,9 @@ if (isset($_POST['add_customer_btn'])) {
         } else {
             if ($pdo->create("customers", ['name' => $_POST['name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
             'cnic' => $_POST['cnic'], 'area' => $_POST['area'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
+            'balance' => $_POST['balance']])) {
                 $success = "Customer added.";
-                                        header("Location:{$name}");
+                                        header("Location:customers.php");
 
             } else {
                 $error = "Something went wrong.";
@@ -54,18 +54,18 @@ if (isset($_POST['add_customer_btn'])) {
 
             if ($image_result && $pdo->update("customers", ['id' => $_GET['edit_customer']], 
             ['name' => $_POST['name'], 'area' => $_POST['area'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 'address' => $_POST['address'], 
-            'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head'], 'image' => $image_result['filename']])) {
+            'balance' => $_POST['balance'], 'image' => $image_result['filename']])) {
                 $success = "Customer updated.";
-                                        header("Location:{$name}");
+                                        header("Location:customers.php");
 
             } else {
                 $error = "Something went wrong. or can't update this because no changes was found";
             }
         } else {
             if ($pdo->update("customers", ['id' => $_GET['edit_customer']], ['name' => $_POST['name'], 'cnic' => $_POST['cnic'], 'phone' => $_POST['phone'], 
-            'address' => $_POST['address'], 'area' => $_POST['area'], 'balance' => $_POST['balance'], 'bill_head' => $_POST['bill_head']])) {
+            'address' => $_POST['address'], 'area' => $_POST['area'], 'balance' => $_POST['balance']])) {
                 $success = "Customer updated.";
-                                        header("Location:{$name}");
+                                        header("Location:customers.php");
 
             } else {
                 $error = "Something went wrong. or can't update this because no changes was found";
@@ -79,7 +79,7 @@ if (isset($_POST['add_customer_btn'])) {
 } else if (isset($_GET['delete_customer'])) {
     if ($pdo->delete("customers", $_GET['delete_customer'])) {
         $success = "Customer deleted.";
-                              header("Location:{$name}");
+                              header("Location:customers.php");
 
     } else {
         $error = "Something went wrong.";

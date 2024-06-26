@@ -416,13 +416,17 @@ $total_price = 0;
                             <div id="discount-outer">
                                 <span id="discount-text-inner" style="font-weight: bold;">Dicount
 <?php 
-$per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0); 
+function calculate_cut($original_amount, $percentage_cut) {
+    return $original_amount * ($percentage_cut / 100);
+}
+$per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
+$percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
 ?>
                                     (<?php    
                                     
- echo $_GET['amountIn'] == "amount" ? round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2) : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0); ?>%)</span>
+ echo $_GET['amountIn'] == "amount" ? $percetage : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0); ?>%)</span>
                                 <span id="discount-total-price" style="">Rs
-                                    <?php $minused = $total_price - $per;echo $minused; ?></span>
+                                    <?php $minused = $total_price - $per;echo $_GET['amountIn'] == "amount" ? calculate_cut($total_price, $percetage) : $minused; ?></span>
                             </div>
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
