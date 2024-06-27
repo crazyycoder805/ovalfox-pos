@@ -184,6 +184,15 @@ foreach ($products as $product) {
                                         </div>
 
                                     </form>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div class="form-group mb-3">
+                                                <button id="printbtnsales1itemwise" class="btn btn-danger" type="button"><i
+                                                        class="fa fa-print"></i> Print</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
@@ -207,11 +216,13 @@ foreach ($products as $product) {
     <?php require_once 'assets/includes/javascript.php'; ?>
 
     <script>
+    let searchedValue = "";
+
     $(document).ready(e => {
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_item_wise.php",
                 data: {
                     "__FILE__": "search_item_wise",
                     "search_item_wise": e.target.value,
@@ -225,15 +236,20 @@ foreach ($products as $product) {
 
                 },
                 success: e => {
-                    $("#data").html(e);
+                    const items = JSON.parse(e);
+                    $("#data").html(items[0]);
                     $('#search_table').DataTable();
+                    searchedValue = items[1];
 
                 }
 
             });
 
         });
-
+        $("#printbtnsales1itemwise").on("click", e => {
+            location.href =
+                `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=search_item_wise`;
+        });
     });
     </script>
 </body>

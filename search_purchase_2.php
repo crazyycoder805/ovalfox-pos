@@ -123,7 +123,7 @@
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_purchase_2.php",
                 data: {
                     "__FILE__": "search_purchase_2",
                     "search_purchase_2": e.target.value,

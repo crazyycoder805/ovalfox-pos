@@ -61,7 +61,6 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/style_dark.css">
 
 
-
     <style>
     .select2-dropdown {
         background-color: black !important;

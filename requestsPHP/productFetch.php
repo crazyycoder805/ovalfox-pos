@@ -3,7 +3,6 @@ session_start();
 require_once '../assets/includes/pdo.php';
 
 $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = '{$_POST['invoice_number']}' AND company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}' ORDER BY id DESC");
 
     $all_over_qty = [];
 
@@ -23,7 +22,7 @@ $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 
         $gt = !empty($sale['grand_total']) ? $sale['grand_total'] : $sale['amount'];
         $html .= "
         <tr>
-    <td style='font-size: 21px !important;font-weight:bolder;'>{$key}</td>
+    <td style='font-size: 21px !important;font-weight:bolder;' id='itemMainKey_{$sale['id']}'>{$key}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
     <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
@@ -65,6 +64,6 @@ $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 
 
     $amountGrand = array_sum($amountGrand);
 
-$data = [$html, count($sales_1), $all_over_qty, $amountGrand];
+$data = [$html, count($sales_1), $all_over_qty, $amountGrand, isset($_POST['updatedRowId']) ? $_POST['updatedRowId'] : 0];
 
 echo json_encode($data);

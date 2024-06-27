@@ -159,7 +159,7 @@ $bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_sales_1.php",
                 data: {
                     "__FILE__": "search_sales_1",
                     "search_sales_1": e.target.value,

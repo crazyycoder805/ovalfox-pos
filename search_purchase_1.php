@@ -164,7 +164,7 @@ foreach ($suppliers as $sp) {
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_purchase_1.php",
                 data: {
                     "__FILE__": "search_purchase_1",
                     "search_purchase_1": e.target.value,

@@ -173,7 +173,7 @@ $customers = $pdo->read("customers", ['company_profile_id'=>$_SESSION['ovalfox_p
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_sales_2.php",
                 data: {
                     "__FILE__": "search_sales_2",
                     "search_sales_2": e.target.value,

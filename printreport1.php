@@ -205,6 +205,36 @@ if (!isset($s) || !isset($t)) {
 
             $data = $jsonDecoded;
             $rp_name = "Purchase Report";
+        }else if ($t == "search_daily") {
+
+            $base64Decoded = base64_decode($_GET['s']);
+
+
+
+            $utf8Encoded = mb_convert_encoding($base64Decoded, 'UTF-8', 'UTF-8');
+
+            $jsonDecoded = json_decode($utf8Encoded, true);
+
+
+
+
+            $data = $jsonDecoded;
+            $rp_name = "Search Daily Report";
+        } else if ($t == "search_item_wise") {
+
+            $base64Decoded = base64_decode($_GET['s']);
+
+
+
+            $utf8Encoded = mb_convert_encoding($base64Decoded, 'UTF-8', 'UTF-8');
+
+            $jsonDecoded = json_decode($utf8Encoded, true);
+
+
+
+
+            $data = $jsonDecoded;
+            $rp_name = "Search Item Wise Report";
         }
         
 }
@@ -918,6 +948,224 @@ if (!isset($s) || !isset($t)) {
                     </th>
                     <th style="padding-left: 10px;">
                         Total Pending Amount: <?php echo $totalPendingAmnt; ?>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <?php } else if ($t == "search_daily") {
+        ?>
+        <table style="border-collapse: collapse;width: 100% !important;">
+            <thead style="background-color: grey !important;color: white;">
+                <tr>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Oprtr</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">TotalAmount</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">FinalAmount</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">ReceviedAmnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">ReturnedAmnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">PendingAmnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Status</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Details</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <?php 
+                 $totalItems = count($data);
+                 $totalAmnt = [];
+                 $totalFinalAmnt = [];
+                 $totalReceviedAmnt = [];
+                 $totalReturnedAmnt = [];
+                 $totalPendingAmnt = [];
+
+                foreach ($data as $d) {
+                    $customer = $pdo->read("customers", ['id' => $d['customer_name']]);
+                    $booker_name = $pdo->read("access", ['id' => $d['booker_name']]);
+                    $operator = $pdo->read("access", ['id' => $d['operator_name']]);
+                    $totalAmnt[] = $d['total_amount'];
+                    $totalFinalAmnt[] = $d['final_amount'];
+                    $totalReceviedAmnt[] = $d['recevied_amount'];
+                    $totalReturnedAmnt[] = $d['returned_amount'];
+                    $totalPendingAmnt[] = $d['pending_amount'];
+            ?>
+                <tr>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['id']; ?></td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['invoice_number']; ?>
+                    </td>
+
+
+                    <td style=" border-bottom: 1px solid black;"><?php echo $customer[0]['name']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $booker_name[0]['username']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $operator[0]['username']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $d['date']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['total_amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $d['discount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['final_amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['recevied_amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['returned_amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['pending_amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['status']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['details']; ?>
+                    </td>
+
+                </tr>
+                <?php } 
+                $totalAmnt = array_sum($totalAmnt);
+                $totalFinalAmnt = array_sum($totalFinalAmnt);
+                $totalReceviedAmnt = array_sum($totalReceviedAmnt);
+                $totalReturnedAmnt = array_sum($totalReturnedAmnt);
+                $totalPendingAmnt = array_sum($totalPendingAmnt);
+
+                ?>
+
+            </tbody>
+
+        </table>
+        <table>
+            <tfoot>
+                <tr>
+                    <th>
+                        Total Items: <?php echo $totalItems; ?>
+                    </th>
+                
+                    <th style="padding-left: 10px;">
+                        Total Amount: <?php echo $totalAmnt; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Final Amount: <?php echo $totalFinalAmnt; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Recevied Amount: <?php echo $totalReceviedAmnt; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Returned Amount: <?php echo $totalReturnedAmnt; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Pending Amount: <?php echo $totalPendingAmnt; ?>
+                    </th>
+                </tr>
+            </tfoot>
+        </table>
+
+        <?php } else if ($t == "search_item_wise") {
+        ?>
+        <table style="border-collapse: collapse;width: 100% !important;">
+            <thead style="background-color: grey !important;color: white;">
+                <tr>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
+
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Oprtr</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">itemCode</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">itemName</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">itemPrice</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Qty</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Amnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ex.Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">%</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;">G.Total</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <?php 
+                $totalItems = count($data);
+                $totalQuantity = [];
+                $totalAmnt = [];
+                $totalGrand = [];
+
+                foreach ($data as $d) {
+                    $customer = $pdo->read("customers", ['id' => $d['customer_name']]);
+                    $booker_name = $pdo->read("access", ['id' => $d['booker_name']]);
+                    $operator = $pdo->read("access", ['id' => $d['operator_name']]);
+                    
+                    $totalQuantity[] = $d['quantity'];
+                    $totalAmnt[] = $d['amount'];
+                    $totalGrand[] = $d['grand_total'];
+            ?>
+                <tr>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['id']; ?></td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['invoice_number']; ?>
+                    </td>
+
+                    <td style=" border-bottom: 1px solid black;"><?php echo $customer[0]['name']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $booker_name[0]['username']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $operator[0]['username']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $d['date']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_code']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;"><?php echo $d['item_name']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_price']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['quantity']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['amount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['discount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['extra_discount']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['percentage']; ?>
+                    </td>
+                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['grand_total']; ?>
+                    </td>
+
+                </tr>
+                <?php } 
+                $totalAmnt = array_sum($totalAmnt);
+                $totalGrand = array_sum($totalGrand);
+                $totalQuantity = array_sum($totalQuantity);
+                ?>
+
+            </tbody>
+
+
+
+        </table>
+        <table>
+            <tfoot>
+                <tr>
+                    <th>
+                        Total Items: <?php echo $totalItems; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Quantity: <?php echo $totalQuantity; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Total Amount: <?php echo $totalAmnt; ?>
+                    </th>
+                    <th style="padding-left: 10px;">
+                        Grand Total: <?php echo $totalGrand; ?>
                     </th>
                 </tr>
             </tfoot>

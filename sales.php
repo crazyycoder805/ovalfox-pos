@@ -129,9 +129,10 @@ echo $maxedInvoiceNumber;
 if (isset($_GET['inv_num'])) {
 ?>
                                     <label class="col-form-label">Customer name</label>
-
                                     <input type="text" class="form-control" disabled
-                                        value="<?php echo $customer_inv[0]['name']; ?>" name="customer_name"
+                                        value="<?php echo $customer_inv[0]['name']; ?>">
+                                    <input type="text" hidden class="form-control" disabled
+                                        value="<?php echo $customer_inv[0]['id']; ?>" name="customer_name"
                                         id="customer_name">
                                     <?php } else { ?>
                                     <label class="col-form-label">Customer name</label>
@@ -166,7 +167,10 @@ foreach ($customers as $customer) {
 if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") || (isset($_GET['inv_num']))) {
 ?>
                                     <input type="text" class="form-control" disabled
-                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>"
+                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>">
+
+                                    <input hidden type="text" class="form-control" disabled
+                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_user_id'] : $booker_inv[0]['id']; ?>"
                                         name="booker_name" id="booker_name">
 
                                     <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
@@ -2110,6 +2114,7 @@ foreach ($products as $product) {
                         "invoice_number": $("#invoice_number").val()
                     },
                     success: runtimeTableDataEditE => {
+                        const product = JSON.parse(runtimeTableDataEditE);
 
 
                         $.ajax({
@@ -2118,7 +2123,7 @@ foreach ($products as $product) {
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
-
+                                'updatedRowId': product[0]
                             },
                             complete: (jq) => {
                                 focusSet = true;
@@ -2126,7 +2131,16 @@ foreach ($products as $product) {
                             },
                             success: e => {
                                 const product = JSON.parse(e);
+
                                 $("#data").html(product[0]);
+                                const regexPattern = new RegExp(
+                                    `itemMainKey_${product[4]}`);
+
+                                console.log($(
+                                    document
+                                ).find(
+                                    `#${product[0].match(regexPattern)[0]}`
+                                    ).addClass("active-cell"));
                                 // let html = ;
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[
@@ -2250,6 +2264,7 @@ foreach ($products as $product) {
                                 //     $("#unit_price").focus();
                                 //     focusSet = true;
                                 // }
+
                             }
                         });
 

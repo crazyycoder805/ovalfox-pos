@@ -140,7 +140,7 @@ foreach ($customers as $customer) {
         $("#search").on("click", e => {
             $.ajax({
                 type: "POST",
-                url: "search.php",
+                url: "reportingRequests/search_ledger.php",
                 data: {
                     "__FILE__": "search_ledger",
                     "search_ledger": e.target.value,
