@@ -1,8 +1,14 @@
 <?php
 session_start();
 require_once '../assets/includes/pdo.php';
+$sales_1 = "";
+if (isset($_POST['desc']) && $_POST['desc'] == "true") {
+    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 
-$sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+} else {
+    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+
+}
 
     $all_over_qty = [];
 

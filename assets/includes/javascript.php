@@ -39,7 +39,6 @@ $(document).ready(function() {
 if ($name == "index.php") {
 ?>
 <script src="assets/js/apexchart/apexcharts.min.js"></script>
-<script src="assets/js/apexchart/chart.js"></script>
 
 <?php 
 
@@ -53,16 +52,24 @@ $dates_js = json_encode($dates);
 $amounts_js = json_encode($amounts);
 ?>
 
-?>
 <script>
 $(document).ready(e => {
     function chartL() {
         var options = {
             chart: {
-                type: 'area', // Line chart
+                type: 'area',
                 fontFamily: 'Poppins, sans-serif',
                 toolbar: {
-                    show: true
+                    show: true,
+                    tools: {
+                        download: true,
+                        selection: true,
+                        zoom: true,
+                        zoomin: true,
+                        zoomout: true,
+                        pan: true,
+                        reset: true
+                    }
                 },
                 zoom: {
                     enabled: true
@@ -73,18 +80,41 @@ $(document).ready(e => {
                     speed: 800
                 }
             },
+            title: {
+                text: 'Chart',
+                align: 'left',
+                style: {
+                    fontSize: '20px',
+                    color: '#000000'
+                }
+            },
+            subtitle: {
+                text: 'Sales chart',
+                align: 'left',
+                margin: 10,
+                offsetX: 0,
+                offsetY: 30,
+                floating: false,
+                style: {
+                    fontSize: '14px',
+                    color: '#666666'
+                }
+            },
             dataLabels: {
-                enabled: true, // If you want data labels, set this to true
+                enabled: true,
                 style: {
                     fontSize: '12px',
                     colors: ['#000000']
+                },
+                formatter: function(val) {
+                    return val.toFixed(2);
                 }
             },
             xaxis: {
-                categories: <?php echo $dates_js; ?>, // X-axis labels with dates
+                categories: <?php echo $dates_js; ?>,
                 labels: {
                     style: {
-                        colors: '#000000', // Black color for labels
+                        colors: '#000000',
                         fontSize: '12px'
                     }
                 },
@@ -107,9 +137,9 @@ $(document).ready(e => {
                     }
                 }
             },
-            yaxis: {
+            yaxis: [{
                 title: {
-                    text: 'Value', // Y-axis label
+                    text: 'Primary Value',
                     style: {
                         color: '#000000',
                         fontSize: '14px'
@@ -117,11 +147,26 @@ $(document).ready(e => {
                 },
                 labels: {
                     style: {
-                        colors: '#000000', // Black color for labels
+                        colors: '#000000',
                         fontSize: '12px'
                     }
                 }
-            },
+            }, {
+                opposite: true,
+                title: {
+                    text: 'Secondary Value',
+                    style: {
+                        color: '#000000',
+                        fontSize: '14px'
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#000000',
+                        fontSize: '12px'
+                    }
+                }
+            }],
             tooltip: {
                 enabled: true,
                 theme: 'dark',
@@ -130,7 +175,12 @@ $(document).ready(e => {
                 },
                 y: {
                     formatter: function(value) {
-                        return value.toFixed(2); // Format y-axis values to 2 decimal places
+                        return 'Value: ' + value.toFixed(2);
+                    },
+                    title: {
+                        formatter: function(seriesName) {
+                            return seriesName + " (per unit): ";
+                        }
                     }
                 }
             },
@@ -147,6 +197,12 @@ $(document).ready(e => {
                     lines: {
                         show: true
                     }
+                },
+                padding: {
+                    top: 10,
+                    right: 30,
+                    bottom: 10,
+                    left: 10
                 }
             },
             markers: {
@@ -158,10 +214,10 @@ $(document).ready(e => {
                     size: 7
                 }
             },
-            colors: ['#1b4962'], // Blue color for the line
+            colors: ['#1b4962'],
             series: [{
                 name: 'Value',
-                data: <?php echo $amounts_js; ?> // Series data with amounts
+                data: <?php echo $amounts_js; ?>
             }],
             legend: {
                 show: true,
@@ -206,6 +262,15 @@ $(document).ready(e => {
                         text: 'X-axis annotation'
                     }
                 }]
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.9,
+                    stops: [0, 90, 100]
+                }
             },
             responsive: [{
                 breakpoint: 600,

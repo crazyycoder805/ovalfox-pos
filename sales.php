@@ -487,8 +487,7 @@ foreach ($products as $product) {
 
                                         <input style="font-size: 13px;" class="form-control" class="" name="quantity"
                                             type="number" placeholder="Quantity" id="quantity">
-                                        <?php     if ($settings[0]['theme'] == "full_white") {
-?>
+
                                         <div class="d-flex flex-row">
 
                                             <div class="splash-radio-button">
@@ -501,20 +500,7 @@ foreach ($products as $product) {
 
                                         </div>
 
-                                        <?php } ?>
-                                        <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-?>
-                                        <div class="ad-radio-button">
-                                            <input class="radio" id="piece" value="piece" name="qua" type="radio"
-                                                checked>
-                                            <label for="piece" class="radio-label">Piece</label>
-                                            &nbsp;&nbsp;
-                                            <input class="radio" id="box" value="box" name="qua" type="radio">
-                                            <label for="box" class="radio-label">Box</label>
-                                        </div>
-
-
-                                        <?php } ?>
+                                      
 
                                     </div>
                                 </div>
@@ -547,8 +533,7 @@ foreach ($products as $product) {
                                         placeholder="Discount" id="discount">
                                     <!-- <label class="col-form-label">(<strong style="color: red;">Press
                 Enter</strong>)</label> -->
-                                    <?php     if ($settings[0]['theme'] == "full_white") {
-                            ?>
+                               
                                     <div class="splash-radio-button">
                                         <input id="discount_amount" name="discountchkbx1" value="amount" type="radio"
                                             checked="">
@@ -563,21 +548,6 @@ foreach ($products as $product) {
 
 
 
-
-                                    <?php } ?>
-                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                            ?>
-                                    <div class="ad-radio-button">
-
-                                        <input id="discount_amount" name="discountchkbx1" type="radio" checked>
-                                        <label for="discount_amount" class="radio-label">In
-                                            Amount</label>
-
-                                        <input id="discount_percentage" name="discountchkbx1" type="radio">
-                                        <label for="discount_percentage" class="radio-label">In
-                                            Percentage</label>
-                                    </div>
-                                    <?php } ?>
 
 
 
@@ -628,8 +598,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
                                         placeholder="Discount" id="discount_in_amount">
-                                    <?php     if ($settings[0]['theme'] == "full_white") {
-                            ?>
+                           
                                     <div class="splash-radio-button">
                                         <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio"
                                             checked="">
@@ -645,22 +614,7 @@ foreach ($products as $product) {
 
 
 
-                                    <?php } ?>
-                                    <?php     if ($settings[0]['theme'] == "dark" || $settings[0]['theme'] == "light") {
-                            ?>
-                                    <div class="ad-radio-button">
-
-                                        <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio"
-                                            checked>
-                                        <label for="discount_amount2" class="radio-label">In
-                                            Amount</label>
-
-                                        <input id="discount_percentage2" name="discountchkbx2" value="percentage"
-                                            type="radio">
-                                        <label for="discount_percentage2" class="radio-label">In
-                                            Percentage</label>
-                                    </div>
-                                    <?php } ?>
+                               
                                 </div>
                             </div>
 
@@ -1741,7 +1695,7 @@ foreach ($products as $product) {
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
-
+                                "desc" : true
                             },
                             complete: () => {
                                 A = 0;

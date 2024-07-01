@@ -187,8 +187,12 @@ foreach ($products as $product) {
                                     <div class="row">
                                         <div class="col-md">
                                             <div class="form-group mb-3">
-                                                <button id="printbtnsales1itemwise" class="btn btn-danger" type="button"><i
-                                                        class="fa fa-print"></i> Print</button>
+                                                <form method="post" action="printreport1.php">
+                                                    <button id="printbtnsales1itemwise" class="btn btn-danger"
+                                                        type="submit"><i class="fa fa-print"></i> Print</button>
+                                                    <input hidden type="text" name="s" id="s" />
+                                                    <input hidden type="text" name="t" id="t" value="search_item_wise" />
+                                                </form>
 
                                             </div>
                                         </div>
@@ -240,16 +244,18 @@ foreach ($products as $product) {
                     $("#data").html(items[0]);
                     $('#search_table').DataTable();
                     searchedValue = items[1];
-
+                    $("#s").val(btoa(JSON.stringify(searchedValue)));
                 }
 
             });
 
         });
-        $("#printbtnsales1itemwise").on("click", e => {
-            location.href =
-                `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=search_item_wise`;
-        });
+
+
+        // $("#printbtnsales1itemwise").on("click", e => {
+        //     location.href =
+        //         `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=search_item_wise`;
+        // });
     });
     </script>
 </body>

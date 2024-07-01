@@ -48,42 +48,12 @@ if (isset($_POST["logout"])) {
 
     <link rel="stylesheet" href="assets/css/swiper.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/nice-select.css">
-    <?php 
-    $settings = $pdo->read("settings");
-    ?>
-    <?php 
-    if ($settings[0]['theme'] == "dark") {
-    ?>
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/fonts_dark.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/bootstrap_dark.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/font-aws_dark.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/icon-fonts_dark.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/dark/style_dark.css">
 
-
-    <style>
-    .select2-dropdown {
-        background-color: black !important;
-    }
-    </style>
-
-    <?php } else  if ($settings[0]['theme'] == "light"){ ?>
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/fonts_light_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/bootstrap_light_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/font-aws_light_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/icon-fonts_light_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/light_white/style_light_white.css">
-    <style>
-    .select2-dropdown {
-        background-color: white !important;
-    }
-    </style>
-    <?php } else if($settings[0]['theme'] == 'full_white') { ?>
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fonts_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/boot_strap_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/font-aws_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/icon-fa_full_white.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/sty.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_fnts.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_bs.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_fa.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_ifa.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_style.css">
     <style>
     .select2-dropdown {
         background-color: white !important;
@@ -94,7 +64,6 @@ if (isset($_POST["logout"])) {
         color: white !important;
     }
     </style>
-    <?php } ?>
     <link rel="shortcut icon" type="image/png" href="assets/images/ovalfox/icon.png">
     <link rel="stylesheet" id="theme-change" type="text/css" href="#">
     <link rel="stylesheet" href="assets/css/selectorCustom.css" />
@@ -104,5 +73,7 @@ if (isset($_POST["logout"])) {
     <link rel="stylesheet" type="text/css" href="assets/css/auth.css">
 
     <?php } ?>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.49.2/apexcharts.min.css"
+        integrity="sha512-YEwcgX5JXVXKtpXI4oXqJ7GN9BMIWq1rFa+VWra73CVrKds7s+KcOfHz5mKzddIOLKWtuDr0FzlTe7LWZ3MTXw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>

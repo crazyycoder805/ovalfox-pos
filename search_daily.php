@@ -160,9 +160,13 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                                     <div class="row">
                                         <div class="col-md">
                                             <div class="form-group mb-3">
-                                                <button id="printbtnsalesdaily" class="btn btn-danger"
-                                                    type="button"><i class="fa fa-print"></i> Print</button>
+                                                <form method="post" action="printreport1.php">
 
+                                                    <button id="printbtnsalesdaily" class="btn btn-danger"
+                                                        type="submit"><i class="fa fa-print"></i> Print</button>
+                                                    <input hidden type="text" name="s" id="s" />
+                                                    <input hidden type="text" name="t" id="t" value="search_daily" />
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -213,16 +217,17 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
                     $("#data").html(items[0]);
                     $('#search_table').DataTable();
                     searchedValue = items[1];
+                    $("#s").val(btoa(JSON.stringify(searchedValue)));
 
                 }
 
             });
 
         });
-        $("#printbtnsalesdaily").on("click", e => {
-            location.href =
-                `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=search_daily`;
-        });
+        // $("#printbtnsalesdaily").on("click", e => {
+        //     location.href =
+        //         `printreport1.php?s=${btoa(JSON.stringify(searchedValue))}&t=search_daily`;
+        // });
     });
     </script>
 </body>
