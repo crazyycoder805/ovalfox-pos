@@ -163,29 +163,7 @@ if (isset($_GET['edit_ledger'])) {
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md">
 
-                                                    <div class="form-group">
-                                                        <label for="total_amount" class="col-form-label">Total
-                                                            amount</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['total_amount'] : null; ?>"
-                                                            class="form-control" name="total_amount" type="number"
-                                                            placeholder="Enter Ledger Total Amount" id="total_amount">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
-
-                                                    <div class="form-group">
-                                                        <label for="recevied_amount" class="col-form-label">Recevied
-                                                            amount</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['recevied_amount'] : null; ?>"
-                                                            class="form-control" name="recevied_amount" type="number"
-                                                            placeholder="Enter ledger Recevied Amount"
-                                                            id="recevied_amount">
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-md">
 
@@ -316,8 +294,8 @@ if (isset($_GET['edit_ledger'])) {
                                                     </tbody>
                                                 </table>
                                                 <div class="form-group mb-3">
-                                                    <button id="printbtnledger" class="btn btn-danger"
-                                                        type="button"><i class="fa fa-print"></i> Print</button>
+                                                    <button id="printbtnledger" class="btn btn-danger" type="button"><i
+                                                            class="fa fa-print"></i> Print</button>
 
                                                 </div>
                                             </div>

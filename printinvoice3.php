@@ -262,9 +262,9 @@ $total_price = 0;
                 <p id="bbtn"><a href="sales.php">Back</a></p>
                 <h3 style="text-align: end; font-size: 20px !important;">
                     <?php echo $sales_2[0]['status']; ?>
-</h3>
-<h4 style="font-size: 30px !important;text-align: center;">
-                    Simple INV
+                </h3>
+                <h4 style="font-size: 30px !important;text-align: center;">
+                    Gateway INV
                 </h4>
                 <h1 style="font-size: 50px !important;" id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
@@ -326,8 +326,8 @@ $total_price = 0;
                                 <tr>
                                     <th style="text-align: start; font-size: 30px !important;width:200px">
                                         CUST.
-                                            <?php echo $customers[0]['name']; ?>
-</span>
+                                        <?php echo $customers[0]['name']; ?>
+                                        </span>
 
                                     </th>
                                 </tr>
@@ -339,13 +339,7 @@ $total_price = 0;
                                 <th style="text-align: center;font-size: 20px !important;">SR</th>
                                 <th style="text-align: center;font-size: 20px !important;">Description</th>
                                 <th style="text-align: center;font-size: 20px !important;">Qty</th>
-                                <th style="text-align: center;font-size: 20px !important;">Rate</th>
-                                <th style="text-align: center;font-size: 20px !important;">Total</th>
-                                <th style="text-align: center;font-size: 20px !important;">Dis</th>
-                                <th style="text-align: center;font-size: 20px !important;">%</th>
-                                <th style="text-align: center;font-size: 20px !important;">E.D</th>
 
-                                <th style="text-align: center;font-size: 20px !important;">G.Total</th>
 
                             </thead>
                             <tbody>
@@ -369,23 +363,7 @@ $total_price = 0;
                                         <?php echo $sale['quantity']; ?>
                                     </td>
 
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['item_price'], 2); ?></td>
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['amount'], 2); ?></td>
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['discount'], 2); ?>
-                                    </td>
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round(!empty($sale['percentage']) ? $sale['percentage'] : 0); ?></td>
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['extra_discount'], 2); ?>
-                                    </td>
 
-                                    <td style="text-align: center;font-size: 23px !important;">
-                                        <?php echo round($sale['grand_total'], 2); ?>
-                                    </td>
-                                    </td>
 
 
                                 </tr>
@@ -409,67 +387,7 @@ $total_price = 0;
 
 
                         </div>
-                        <div id="sub-total" style="width: 100%;">
-                            <div id="sub-total-inner">
-                                <span id="sub-total-text" style="font-weight: bold;">Sub Total</span>
-                                <span id="sub-total-price">Rs <?php echo $total_price; ?></span>
-                            </div>
 
-
-                            <div id="discount-outer">
-                                <span id="discount-text-inner" style="font-weight: bold;">Dicount
-<?php 
-function calculate_cut($original_amount, $percentage_cut) {
-    return $original_amount * ($percentage_cut / 100);
-}
-$per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
-$percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
-?>
-                                    (<?php    
-                                    
- echo $_GET['amountIn'] == "amount" ? $percetage : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0); ?>%)</span>
-                                <span id="discount-total-price" style="">Rs
-                                    <?php $minused = $total_price - $per;echo $_GET['amountIn'] == "amount" ? calculate_cut($total_price, $percetage) : $minused; ?></span>
-                            </div>
-                            <div id="total-box" style="">
-                                <span id="total-text" style=""><b>Total</b></span>
-                                <b id="total-price-total" style="">Rs
-                                    <?php echo $_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per; ?></b>
-                            </div>
-
-                            <div id="rec-box" style="">
-                                <span id="rec-text" style="font-weight: bold;">Received</span>
-
-                                <span id="rec-total">Rs
-                                    <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
-                            </div>
-                            <div id="bala-box" style="">
-                                <span id="bala-text" style="font-weight: bold;">Final Amount</span>
-                                Rs
-                                <?php echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; ?>
-                            </div>
-                            <div id="rec-box" style="">
-                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
-
-                                <span id="rec-total">Rs <?php 
-                                    
-                                    //echo $minused;
-                                    echo $customers[0]['balance'] != 0 ? (round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? (double)$total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2) < 0 ? 0 : round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2)) : 0;
-                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
-                                    
-                                    ?></span>
-                            </div>
-
-
-
-
-                            <div id="cb-box" style=" 
-                ">
-                                <span id="cb-text" style="font-weight: bold;">Current Balance</span>
-                                <b> Rs
-                                    <?php echo $customers[0]['balance']; ?></b>
-                            </div>
-                        </div>
 
 
                     </div>

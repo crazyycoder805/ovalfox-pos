@@ -2,7 +2,7 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 
-    $customerSales2 = $pdo->read("sales_2", ['customer_name' => $_POST['cusId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+    $customerSales2 = $pdo->customQuery("SELECT *  FROM sales_2 WHERE customer_name = {$_POST['cusId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
     foreach ($customerSales2 as $index => $cs) {
         $index += 1;
         $customer = $pdo->read("customers" , ['id' => $cs['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);

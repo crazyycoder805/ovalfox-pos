@@ -409,7 +409,7 @@ $today_gernel_expenses = count($pdo->customQuery("SELECT * FROM gernel_expenses 
                 </div>
                 <div class="row" >
                     <div class="col-md">
-                        <div class="card chart-card" style="background-color: grey;">
+                        <div class="card chart-card">
                             <div class="card-header">
                                 <h4 class="has-btn">Total Revanue <span></span></h4>
                             </div>

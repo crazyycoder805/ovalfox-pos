@@ -500,7 +500,7 @@ foreach ($products as $product) {
 
                                         </div>
 
-                                      
+
 
                                     </div>
                                 </div>
@@ -533,7 +533,7 @@ foreach ($products as $product) {
                                         placeholder="Discount" id="discount">
                                     <!-- <label class="col-form-label">(<strong style="color: red;">Press
                 Enter</strong>)</label> -->
-                               
+
                                     <div class="splash-radio-button">
                                         <input id="discount_amount" name="discountchkbx1" value="amount" type="radio"
                                             checked="">
@@ -598,7 +598,7 @@ foreach ($products as $product) {
                                     <label class="col-form-label">Discount</label>
                                     <input class="form-control" class="" name="discount_in_amount" type="number"
                                         placeholder="Discount" id="discount_in_amount">
-                           
+
                                     <div class="splash-radio-button">
                                         <input id="discount_amount2" name="discountchkbx2" value="amount" type="radio"
                                             checked="">
@@ -614,7 +614,7 @@ foreach ($products as $product) {
 
 
 
-                               
+
                                 </div>
                             </div>
 
@@ -680,6 +680,22 @@ foreach ($products as $product) {
                         </div>
                         <div class="row">
                             <div class="col-md">
+                                <label class="col-form-label">Invoice</label>
+
+                                <select class="select2 form-control select-opt" name="inv_type" id="inv_type">
+                                    <option selected value="si">
+                                        Simple
+                                    </option>
+                                    <option value="gw">
+                                        Gateway
+                                    </option>
+
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
                                 <div class="form-group">
                                     <label class="col-form-label">Details</label>
                                     <textarea rows="1" cols="1" class="form-control" name="details" id="details"
@@ -704,6 +720,7 @@ foreach ($products as $product) {
 
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -908,7 +925,7 @@ foreach ($products as $product) {
                         "total_amount": $("#final_amount").val(),
                         "payment_type": $("#payment_type").val(),
                         "details": $("#details").val(),
-                        "isIncmp": true,
+                        "isIncmp": false,
                         "amountIn": isDisInAmntorInPer == "" ? "amount" :
                             isDisInAmntorInPer,
 
@@ -1695,7 +1712,7 @@ foreach ($products as $product) {
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
-                                "desc" : true
+                                "desc": true
                             },
                             complete: () => {
                                 A = 0;
@@ -1816,7 +1833,9 @@ foreach ($products as $product) {
                     $(window).off('beforeunload');
 
                     openPopup(
-                        `printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                        $("#inv_type").val() == "si" ?
+                        `printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
+                        `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
                     );
                     location.href = `sales.php`;
 
@@ -1826,7 +1845,9 @@ foreach ($products as $product) {
                     $(window).off('beforeunload');
 
                     openPopup(
-                        `printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                        $("#inv_type").val() == "si" ?
+                        `printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
+                        `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
                     );
                     location.href = `sales.php`;
 
@@ -2094,7 +2115,7 @@ foreach ($products as $product) {
                                     document
                                 ).find(
                                     `#${product[0].match(regexPattern)[0]}`
-                                    ).addClass("active-cell"));
+                                ).addClass("active-cell"));
                                 // let html = ;
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[
@@ -2330,13 +2351,19 @@ foreach ($products as $product) {
             <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
             openPopup(
-                `printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
+                $("#inv_type").val() == "si" ?
+                `printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
+                `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+            );
             <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
                         ?>
 
             openPopup(
-                `printinvoice2.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`);
+                $("#inv_type").val() == "si" ?
+                `printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
+                `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+            );
 
             <?php } ?>
         });

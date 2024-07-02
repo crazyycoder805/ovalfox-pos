@@ -261,11 +261,11 @@ $data = [];
         ?>
 
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style=" border-bottom: 1px solid black;">#</th>
-                    <th style=" border-bottom: 1px solid black;">Ctg</th>
-                    <th style=" border-bottom: 1px solid black;">Crd.At</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Ctg</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At</th>
 
                 </tr>
             </thead>
@@ -277,10 +277,15 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['category']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['category']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -293,13 +298,13 @@ $data = [];
         <?php } else if ($t == "subcategory") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style=" border-bottom: 1px solid black;">#</th>
-                    <th style=" border-bottom: 1px solid black;">S.Ctg</th>
-                    <th style=" border-bottom: 1px solid black;">Ctg</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">S.Ctg</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Ctg</th>
 
-                    <th style=" border-bottom: 1px solid black;">Crd.At</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At</th>
 
                 </tr>
             </thead>
@@ -311,13 +316,19 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['sub_category']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['category']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['category']; ?>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -330,29 +341,29 @@ $data = [];
         <?php } else if ($t == "product") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style=" border-bottom: 1px solid black;">#</th>
-                    <th style=" border-bottom: 1px solid black;">it.Cde</th>
-                    <th style=" border-bottom: 1px solid black;">Ctg</th>
-                    <th style=" border-bottom: 1px solid black;">S.Ctg</th>
-                    <th style=" border-bottom: 1px solid black;">P.Nme</th>
-                    <th style=" border-bottom: 1px solid black;">P.Dtls</th>
-                    <th style=" border-bottom: 1px solid black;">Pr.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Pr.Bx.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Whl.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Trd.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Trd.Bx.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Whl.Bx.Prc</th>
-                    <th style=" border-bottom: 1px solid black;">Qty.Pr.Bx</th>
-                    <th style=" border-bottom: 1px solid black;">T.Qty</th>
-                    <th style=" border-bottom: 1px solid black;">Str</th>
-                    <th style=" border-bottom: 1px solid black;">Rw</th>
-                    <th style=" border-bottom: 1px solid black;">Cl</th>
-                    <th style=" border-bottom: 1px solid black;">Dis</th>
-                    <th style=" border-bottom: 1px solid black;">Lw.St.Lim</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">it.Cde</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Ctg</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">S.Ctg</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">P.Nme</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">P.Dtls</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Pr.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Pr.Bx.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Whl.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Trd.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Trd.Bx.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Whl.Bx.Prc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Qty.Pr.Bx</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">T.Qty</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Str</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Rw</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Cl</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Dis</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Lw.St.Lim</th>
 
-                    <th style=" border-bottom: 1px solid black;">Crd.At</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At</th>
 
                 </tr>
             </thead>
@@ -364,42 +375,67 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['item_code']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['category']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['category']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['sub_category']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['product_name']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['product_details']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['purchase_per_unit_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['purchase_per_box_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['whole_sale_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['trade_unit_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['trade_box_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['whole_sale_box_price']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['quantity_per_box']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['total_quantity']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['store_name']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['row']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['col']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['discount']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['row']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['col']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['discount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['low_stock_limit']; ?>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -412,17 +448,17 @@ $data = [];
         <?php } else if ($t == "customer") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style=" border-bottom: 1px solid black;">#</th>
-                    <th style=" border-bottom: 1px solid black;">Nme</th>
-                    <th style=" border-bottom: 1px solid black;">CNIC</th>
-                    <th style=" border-bottom: 1px solid black;">Ph</th>
-                    <th style=" border-bottom: 1px solid black;">Add</th>
-                    <th style=" border-bottom: 1px solid black;">Blnc</th>
-                    <th style=" border-bottom: 1px solid black;">B.hd</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Nme</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">CNIC</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Ph</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Add</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Blnc</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">B.hd</th>
 
-                    <th style=" border-bottom: 1px solid black;">Crd.At</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At</th>
 
                 </tr>
             </thead>
@@ -434,17 +470,31 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['name']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['cnic']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['phone']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['address']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['balance']; ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['cnic']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['phone']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['address']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['balance']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['bill_head']; ?>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -457,13 +507,13 @@ $data = [];
         <?php } else if ($t == "expensecategory") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style=" border-bottom: 1px solid black;">#</th>
-                    <th style=" border-bottom: 1px solid black;">Nme</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Nme</th>
 
 
-                    <th style=" border-bottom: 1px solid black;">Crd.At</th>
+                    <th style=" border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At</th>
 
                 </tr>
             </thead>
@@ -475,10 +525,15 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['name']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -491,21 +546,24 @@ $data = [];
         <?php } else if ($t == "supplier") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Name</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dst.Nme</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Name</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dst.Nme
+                    </th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">CNIC</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Mbl</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ofc</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Add</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">D.Add</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Blnc</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">B.hd</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">CNIC</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Mbl</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ofc</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Add</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">D.Add
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Blnc</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">B.hd</th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Crd.At</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At
+                    </th>
 
                 </tr>
             </thead>
@@ -517,29 +575,47 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['name']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['dist_name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['cnic']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['cnic']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['mobile']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['mobile']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['office']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['office']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['address']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['address']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['dist_address']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['balanace']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['balanace']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['bill_head']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -552,19 +628,22 @@ $data = [];
         <?php } else if ($t == "gernelexpense") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ctgy</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Nme</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dte</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ctgy</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Nme</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dte</th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pd.By</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pd.To</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Amnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pd.By
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pd.To
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Amnt</th>
 
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Crd.At</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At
+                    </th>
 
                 </tr>
             </thead>
@@ -576,22 +655,36 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['name']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['expense_name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['date']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['paid_by']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['paid_by']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['paid_to']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['paid_to']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['amount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['amount']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -604,15 +697,17 @@ $data = [];
         <?php } else if ($t == "store") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Str</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Str.Dtls</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Str</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Str.Dtls
+                    </th>
 
 
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Crd.At</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At
+                    </th>
 
                 </tr>
             </thead>
@@ -624,15 +719,20 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['store_name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['store_details']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -648,24 +748,29 @@ $data = [];
         <?php } else if ($t == "ledger") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pay.Tpe</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">T.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Rec.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dtls</th>
-
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pay.Fro</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dr</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cr</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Rem.Amnt
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pay.Tpe
                     </th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Sts</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">T.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Rec.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dtls</th>
+
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pay.Fro
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dr</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Cr</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Rem.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Sts</th>
 
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Crd.At</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Crd.At
+                    </th>
 
                 </tr>
             </thead>
@@ -677,29 +782,44 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['date']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['payment_type']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['total_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['recevied_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['details']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['details']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['payment_from']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['dr']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['dr']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['cr']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['cr']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
-                        <?php echo $d['remaining_amount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['remaining_amount'] ; ?>
                     </td>
                     <?php 
                     if ($d['status'] == "Unpaid") {
@@ -707,23 +827,25 @@ $data = [];
                     
                     ?>
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #D3D3D3;">
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #D3D3D3;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php } else if ($d['status'] == "Incomplete") { ?>
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #A9A9A9;">
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #A9A9A9;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php }  else { ?>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php } ?>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -736,11 +858,12 @@ $data = [];
         <?php } else if ($t == "designation") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Name</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">CreatedAt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Name</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">CreatedAt
+                    </th>
 
                 </tr>
             </thead>
@@ -752,12 +875,17 @@ $data = [];
                 
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['name']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['name']; ?>
                     </td>
 
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['created_at']; ?>
                     </td>
 
@@ -772,23 +900,29 @@ $data = [];
         <?php } else if ($t == "sales_1") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Inv.</th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Cde</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Nme</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Prc</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Qty</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ex.Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">%</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">G.Ttl</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Cust.
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Bok.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Cde
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Nme
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Prc
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Qty</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Amnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ex.Dis
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">%</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">G.Ttl
+                    </th>
 
 
                 </tr>
@@ -810,37 +944,53 @@ $data = [];
                     $totalGrand[] = $d['grand_total'];
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['invoice_number']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['invoice_number']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $customer[0]['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['date']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_code']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['item_code']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $d['item_name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_price']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['item_price']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['quantity']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['quantity']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['discount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['extra_discount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['extra_discount'] == "" ? 0 : $d['extra_discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['percentage']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['percentage'] == "" ? 0 : $d['percentage']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['grand_total']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['grand_total']; ?>
                     </td>
 
                 </tr>
@@ -877,21 +1027,28 @@ $data = [];
         <?php } else if ($t == "sales_2") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">T.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Fin.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Rec.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ret.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pend.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Sts</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Detls</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Inv.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Cust.
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Bok.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">T.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Fin.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Rec.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ret.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pend.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Sts</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Detls
+                    </th>
 
 
                 </tr>
@@ -916,31 +1073,43 @@ $data = [];
                     $totalPendingAmnt[] = $d['pending_amount'];
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['invoice_number']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;border-left: 1px solid black;">
+                        <?php echo $d['id']; ?></td>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['invoice_number']; ?>
                     </td>
 
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $customer[0]['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
 
                     <td style=" border-bottom: 1px soled black;font-size: 8pt !important;"><?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['total_amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['total_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['discount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['final_amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['final_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['recevied_amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['recevied_amount']  == "" ? 0 : $d['recevied_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['returned_amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['returned_amount'] == "" ? 0 : $d['returned_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['pending_amount']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['pending_amount']  == "" ? 0 : $d['pending_amount']; ?>
                     </td>
                     <?php 
                     if ($d['status'] == "Unpaid") {
@@ -948,23 +1117,25 @@ $data = [];
                     
                     ?>
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #D3D3D3;">
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #D3D3D3;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php } else if ($d['status'] == "Incomplete") { ?>
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #A9A9A9;">
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #A9A9A9;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php }  else { ?>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['status']; ?>
                     </td>
 
                     <?php } ?>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['details']; ?>
+                    <td style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;">
+                        <?php echo $d['details']; ?>
                     </td>
 
                 </tr>
@@ -1009,23 +1180,33 @@ $data = [];
         <?php } else if (isset($_POST['t']) && $_POST['t'] == "search_daily") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead
+                style="border-left: 1px solid black;background-color: grey !important;color: white;border: 1px solid black;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bl.Nmb</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Inv.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Bl.Nmb
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Bok.</th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">T.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Fin.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Rec.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ret.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Pend.Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Status</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Details</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Cust.
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">T.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Fin.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Rec.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ret.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Pend.Amnt
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Status
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Details
+                    </th>
 
 
                 </tr>
@@ -1051,65 +1232,64 @@ $data = [];
                     $totalPendingAmnt[] = $d['pending_amount'];
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;border-left: 1px solid black;">
                         <?php echo $idx; ?></td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['invoice_number']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['bill_number']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
-                        <?php echo $customer[0]['name']; ?>
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        <?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
-
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['date']; ?>
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        <?php echo $customer[0]['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+
+
+
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;text-align: center;">
                         <?php echo $d['total_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['discount']; ?>
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['final_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
-                        <?php echo $d['recevied_amount']; ?>
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['recevied_amount'] == "" ? 0 : $d['recevied_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
-                        <?php echo $d['returned_amount']; ?>
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['returned_amount']== "" ? 0 : $d['returned_amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                    <td
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['pending_amount']; ?>
                     </td>
-                    <?php 
-                    if ($d['status'] == "Unpaid") {
-
-                    
-                    ?>
+                
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #D3D3D3;">
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['status']; ?>
                     </td>
-
-                    <?php } else if ($d['status'] == "Incomplete") { ?>
                     <td
-                        style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;background-color: #A9A9A9;">
-                        <?php echo $d['status']; ?>
-                    </td>
-
-                    <?php }  else { ?>
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
-                        <?php echo $d['status']; ?>
-                    </td>
-
-                    <?php } ?>
-
-                    <td style=" border-bottom: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
                         <?php echo $d['details']; ?>
                     </td>
                 </tr>
@@ -1154,23 +1334,29 @@ $data = [];
         <?php } else if (isset($_POST['t']) && $_POST['t'] == "search_item_wise") {
         ?>
         <table style="border-collapse: collapse;width: 100% !important;">
-            <thead style="background-color: grey !important;color: white;">
+            <thead style="border-left: 1px solid black;background-color: grey !important;color: white;">
                 <tr>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">#</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Inv.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">#</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Inv.</th>
 
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Cust.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Bok.</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Date</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Cde</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Nme</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">it.Prc</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Qty</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Amnt</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">Ex.Dis</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">%</th>
-                    <th style="font-size: 12px; border-bottom: 1px solid black;">G.Total</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Cust.
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Bok.</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Date</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Cde
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Nme
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">it.Prc
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Qty</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Amnt</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Dis</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">Ex.Dis
+                    </th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">%</th>
+                    <th style="font-size: 12px; border-bottom: 1px solid black;border-right: 1px solid black;">G.Total
+                    </th>
 
 
                 </tr>
@@ -1192,37 +1378,62 @@ $data = [];
                     $totalGrand[] = $d['grand_total'];
             ?>
                 <tr>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['id']; ?></td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['invoice_number']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;border-left: 1px solid black;font-size: 8pt !important;">
+                        <?php echo $d['id']; ?></td>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['invoice_number']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
                         <?php echo $customer[0]['name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
 
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;"><?php echo $d['date']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        <?php echo $d['date']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_code']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['item_code']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;font-size: 8pt !important;">
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;font-size: 8pt !important;text-align: center;">
                         <?php echo $d['item_name']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['item_price']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['item_price']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['quantity']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['quantity']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['amount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['amount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['discount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['extra_discount']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['extra_discount'] == "" ? 0 : $d['extra_discount']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['percentage']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['percentage']  == "" ? 0 : $d['percentage']; ?>
                     </td>
-                    <td style=" border-bottom: 1px solid black;text-align: center;"><?php echo $d['grand_total']; ?>
+                    <td
+                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        <?php echo $d['grand_total']; ?>
                     </td>
 
                 </tr>
