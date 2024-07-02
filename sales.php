@@ -1003,8 +1003,8 @@ foreach ($products as $product) {
                         item_name.val(product[2]);
                         total_quantity.val(product[3]);
                         $("#last_rate").html(product[4]);
-                        unit_price.focus();
 
+                        $('#unit_price').focus().select();
                         initialQuantity = total_quantity.val();
                     }
                 });
@@ -1032,7 +1032,6 @@ foreach ($products as $product) {
 
                         $("#last_rate").html(product[4]);
 
-                        unit_price.focus();
                         initialQuantity = totalQuan;
                         total_amount.val(quantity.val() * unit_price.val());
 
@@ -2352,8 +2351,8 @@ foreach ($products as $product) {
                         ?>
             openPopup(
                 $("#inv_type").val() == "si" ?
-                `printinvoice1.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
-                `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                `printinvoice1.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}` :
+                `printinvoice3.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`
             );
             <?php 
                        } else if ($user[0]['printing_page_size'] == "small") {
@@ -2361,8 +2360,8 @@ foreach ($products as $product) {
 
             openPopup(
                 $("#inv_type").val() == "si" ?
-                `printinvoice2.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}` :
-                `printinvoice3.php?inv=${$("#invoice_number").val()}&amountIn=${isDisInAmntorInPer}`
+                `printinvoice2.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}` :
+                `printinvoice3.php?inv=${$(e.target).data("cus")}&amountIn=${isDisInAmntorInPer}`
             );
 
             <?php } ?>

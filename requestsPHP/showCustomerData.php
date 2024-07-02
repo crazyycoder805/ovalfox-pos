@@ -23,7 +23,7 @@ require_once '../assets/includes/pdo.php';
     <td><?php echo $cs['date']; ?></td>
 
     <td>
-        <a href="printinvoice2.php?inv=<?php echo $cs['invoice_number'] ?>" id="printCustomer" data-cus="<?php echo $cs['invoice_number'] ?>" name="printCustomer">PRINT</a> || <a
+        <a href="printinvoice2.php?inv=<?php echo $cs['invoice_number'] ?>&amountIn=amount" id="printCustomer" data-cus="<?php echo $cs['invoice_number'] ?>" name="printCustomer">PRINT</a> || <a
             href="sales.php?inv_num=<?php echo $cs['invoice_number'] ?>" id="editCustomer"
             data-cus="<?php echo $cs['invoice_number'] ?>" name="printCustomer">EDIT</a>
     </td>
