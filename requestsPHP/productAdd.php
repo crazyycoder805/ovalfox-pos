@@ -139,7 +139,7 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
             'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
             $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
             'percentage' => $discount_percentage,
-            'discount' => ($qun * $sales_1[0]['item_price']) - $discountedValue,
+            'discount' => (double)$discountedValue != 0 ? (($qun * $sales_1[0]['item_price']) - $discountedValue) : 0,
             'grand_total' => $_POST['isItemFree'] == "true" ? 0 : ($discountedValue - $extra_discount)]);
             
         }
@@ -238,7 +238,7 @@ if (!empty($_POST['invoice_number']) && (!empty($_POST['customer_name']) || !emp
             'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['quantity' => 
             $qun, 'amount' => $_POST['isItemFree'] == "true" ? 0 : ($qun * $sales_1[0]['item_price']),
             'percentage' => $discount_percentage,
-            'discount' => ($qun * $sales_1[0]['item_price']) - $discountedValue,
+            'discount' => (double)$discountedValue != 0 ? (($qun * $sales_1[0]['item_price']) - $discountedValue) : 0,
             'grand_total' => $_POST['isItemFree'] == "true" ? 0 : ($discountedValue - $extra_discount)]);
             
 
@@ -273,7 +273,7 @@ foreach ($sales_1 as $key => $sale) {
         <?php !preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : ""; ?>>
         <?php echo $sale['item_price']; ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='amountTabledData<?php echo $sale['id'];?>'>
-        <?php echo $sale['amount']; ?></td>
+        <?php echo round($sale['amount']); ?></td>
     <td style='font-size: 13px !important;font-weight:bolder;'
         
         id='discountTabledData<?php echo $sale['id'];?>'>

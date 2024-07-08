@@ -1233,63 +1233,63 @@ $data = [];
             ?>
                 <tr>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;border-left: 1px solid black;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;border-left: 1px solid black;">
                         <?php echo $idx; ?></td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['invoice_number']; ?>
                     </td>
 
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['bill_number']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $d['date']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $customer[0]['name']; ?>
                     </td>
 
 
 
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;text-align: center;">
                         <?php echo $d['total_amount']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['final_amount']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['recevied_amount'] == "" ? 0 : $d['recevied_amount']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['returned_amount']== "" ? 0 : $d['returned_amount']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['pending_amount']; ?>
                     </td>
                 
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['status']; ?>
                     </td>
                     <td
-                        style="<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['details']; ?>
                     </td>
                 </tr>
@@ -1379,60 +1379,60 @@ $data = [];
             ?>
                 <tr>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;border-left: 1px solid black;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;border-left: 1px solid black;font-size: 10pt !important;">
                         <?php echo $d['id']; ?></td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['invoice_number']; ?>
                     </td>
 
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $customer[0]['name']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $booker_name[0]['username']; ?>
                     </td>
 
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
                         <?php echo $d['date']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['item_code']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;font-size: 8pt !important;font-size: 8pt !important;text-align: center;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;font-size: 10pt !important;text-align: center;">
                         <?php echo $d['item_name']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['item_price']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['quantity']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['amount']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['extra_discount'] == "" ? 0 : $d['extra_discount']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['percentage']  == "" ? 0 : $d['percentage']; ?>
                     </td>
                     <td
-                        style=" border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 8pt !important;">
+                        style="font-weight: bolder;border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
                         <?php echo $d['grand_total']; ?>
                     </td>
 

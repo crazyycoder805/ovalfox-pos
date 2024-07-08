@@ -28,15 +28,38 @@ $image_result = '';
 
 if (isset($_POST['add_product_btn'])) {
 
-        if (!empty($_POST['item_code']) && !empty($_POST['category_id']) && !empty($_POST['sub_category_id']) && !empty($_POST['product_name']) && !empty($_POST['product_details'])  && !empty($_POST['purchase_per_unit_price']) && !empty($_POST['purchase_per_box_price']) && !empty($_POST['whole_sale_price']) && !empty($_POST['trade_unit_price']) && !empty($_POST['trade_box_price']) && !empty($_POST['whole_sale_box_price'])  && !empty($_POST['quantity_per_box']) && !empty($_POST['total_quantity']) && !empty($_POST['store_id'])  && !empty($_POST['row']) && !empty($_POST['col'])) {
-            if (!$pdo->isDataInserted("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product_name']])) {
+        if (
+        !empty($_POST['item_code']) && 
+        !empty($_POST['category_id']) && 
+        !empty($_POST['sub_category_id']) && 
+        !empty($_POST['product']) && 
+        !empty($_POST['product_details'])  && 
+        !empty($_POST['purchase_per_unit_price']) && 
+        !empty($_POST['whole_sale_price']) && 
+        !empty($_POST['trade_unit_price']) && 
+        !empty($_POST['quantity_per_box']) && 
+        !empty($_POST['total_quantity']) && 
+        !empty($_POST['store_id'])
+        
+        ) {
+            
+            if (!$pdo->isDataInserted("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product']])) {
                 if (!empty($_FILES['image']['name'])) {
                     $image_result = $pdo2->upload('image', 'assets/ovalfox/products');
-                        if ($image_result && $pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
-                    'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
-                    'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
-                    'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
-                    'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 'image' => $image_result['filename']])) {
+                        if ($image_result && $pdo->create("products", [
+                        'item_code' => $_POST['item_code'], 
+                        'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                        'category_id' => $_POST['category_id'], 
+                        'sub_category_id' => $_POST['sub_category_id'], 
+                        'product_name' => $_POST['product'], 
+                        'product_details' => $_POST['product_details'], 
+                        'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                        'whole_sale_price' => $_POST['whole_sale_price'], 
+                        'trade_unit_price' => $_POST['trade_unit_price'], 
+                    'quantity_per_box' => $_POST['quantity_per_box'], 
+                    'total_quantity' => $_POST['total_quantity'], 
+                    'store_id' => $_POST['store_id'], 
+                    'image' => $image_result['filename']])) {
                         $success = "Product added.";
                                               header("Location:{$name}");
 
@@ -44,11 +67,20 @@ if (isset($_POST['add_product_btn'])) {
                         $error = "Something went wrong.";
                     }
                 } else {
-                    if ($pdo->create("products", ['item_code' => $_POST['item_code'], 'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
-                    'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
-                    'purchase_per_box_price' => $_POST['purchase_per_box_price'], 'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
-                    'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 
-                    'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
+                    if ($pdo->create("products", ['item_code' => $_POST['item_code'], 
+                    'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 
+                    'category_id' => $_POST['category_id'], 
+                    'sub_category_id' => $_POST['sub_category_id'], 
+                    'product_name' => $_POST['product'], 
+                    'product_details' => $_POST['product_details'], 
+                    'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                    'whole_sale_price' => $_POST['whole_sale_price'], 
+                    'trade_unit_price' => $_POST['trade_unit_price'], 
+                    'quantity_per_box' => $_POST['quantity_per_box'], 
+                    'total_quantity' => $_POST['total_quantity'], 
+                    'store_id' => $_POST['store_id'], 
+                    
+                    ])) {
                         $success = "Product added.";
                                               header("Location:{$name}");
 
@@ -63,22 +95,39 @@ if (isset($_POST['add_product_btn'])) {
         } else {
             $error = "All fields must be filled.";
         }
-    
+      
 } else if (isset($_POST['edit_product_btn'])) {
-    if (!empty($_POST['item_code']) && !empty($_POST['category_id']) && !empty($_POST['sub_category_id']) && !empty($_POST['product_name']) && !empty($_POST['product_details'])  && !empty($_POST['purchase_per_unit_price']) && !empty($_POST['purchase_per_box_price']) && !empty($_POST['whole_sale_price']) && !empty($_POST['trade_unit_price']) && !empty($_POST['trade_box_price']) && !empty($_POST['whole_sale_box_price'])  && !empty($_POST['quantity_per_box']) && !empty($_POST['total_quantity']) && !empty($_POST['store_id'])  && !empty($_POST['row']) && !empty($_POST['col'])) {
-        if (!$pdo->isDataInsertedUpdate("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product_name']])) {
+
+    if (
+        !empty($_POST['item_code']) && 
+        !empty($_POST['category_id']) && 
+        !empty($_POST['sub_category_id']) && 
+        !empty($_POST['product']) && 
+        !empty($_POST['product_details'])  && 
+        !empty($_POST['purchase_per_unit_price']) && 
+        !empty($_POST['whole_sale_price']) && 
+        !empty($_POST['trade_unit_price']) && 
+        !empty($_POST['quantity_per_box']) && 
+        !empty($_POST['total_quantity']) && 
+        !empty($_POST['store_id'])
+    
+    ) {
+        if (!$pdo->isDataInsertedUpdate("products", ['item_code' => $_POST['item_code'], 'product_name' => $_POST['product']])) {
             if (!empty($_FILES['image']['name'])) {
                 $image_result = $pdo2->upload('image', 'assets/ovalfox/products');
 
-                if ($image_result && $pdo->update("products", ['id' => $_GET['edit_product']], ['item_code' => $_POST['item_code'], 
-                'low_stock_limit' => !empty($_POST['low_stock_limit']) ? $_POST['low_stock_limit'] : 0, 
-                'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
-                'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 
+                if ($image_result && $pdo->update("products", ['id' => $_GET['edit_product']], [
+                'item_code' => $_POST['item_code'], 
+                'category_id' => $_POST['category_id'], 
+                'sub_category_id' => $_POST['sub_category_id'], 
+                'product_name' => $_POST['product'],
+                'product_details' => $_POST['product_details'], 
                 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
-                'purchase_per_box_price' => $_POST['purchase_per_box_price'], 
-                'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 
-                'trade_box_price' => $_POST['trade_box_price'], 'whole_sale_box_price' => $_POST['whole_sale_box_price'], 
-                'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col'], 
+                'whole_sale_price' => $_POST['whole_sale_price'], 
+                'trade_unit_price' => $_POST['trade_unit_price'],
+                'quantity_per_box' => $_POST['quantity_per_box'], 
+                'total_quantity' => $_POST['total_quantity'], 
+                'store_id' => $_POST['store_id'], 
                 'image' => $image_result['filename']])) {
                     $success = "Product updated.";
                                           header("Location:{$name}");
@@ -87,11 +136,20 @@ if (isset($_POST['add_product_btn'])) {
                     $error = "Something went wrong. or can't update this because no changes was found";
                 }
             } else {
-                if ($pdo->update("products", ['id' => $_GET['edit_product']], ['item_code' => $_POST['item_code'], 'category_id' => $_POST['category_id'], 'sub_category_id' => $_POST['sub_category_id'], 
-                'product_name' => $_POST['product_name'], 'product_details' => $_POST['product_details'], 'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 'purchase_per_box_price' => $_POST['purchase_per_box_price'], 
-                'whole_sale_price' => $_POST['whole_sale_price'], 'trade_unit_price' => $_POST['trade_unit_price'], 'trade_box_price' => $_POST['trade_box_price'], 
-                'whole_sale_box_price' => $_POST['whole_sale_box_price'], 'quantity_per_box' => $_POST['quantity_per_box'], 'total_quantity' => $_POST['total_quantity'], 
-                'store_id' => $_POST['store_id'], 'row' => $_POST['row'], 'col' => $_POST['col']])) {
+                if ($pdo->update("products", ['id' => $_GET['edit_product']], [
+                'item_code' => $_POST['item_code'], 
+                'category_id' => $_POST['category_id'], 
+                'sub_category_id' => $_POST['sub_category_id'], 
+                'product_name' => $_POST['product'], 
+                'product_details' => $_POST['product_details'], 
+                'purchase_per_unit_price' => $_POST['purchase_per_unit_price'], 
+                'whole_sale_price' => $_POST['whole_sale_price'], 
+                'trade_unit_price' => $_POST['trade_unit_price'], 
+                'quantity_per_box' => $_POST['quantity_per_box'], 
+                'total_quantity' => $_POST['total_quantity'], 
+                'store_id' => $_POST['store_id'], 
+                
+                ])) {
                     $success = "Product updated.";
                                           header("Location:{$name}");
 
@@ -260,7 +318,7 @@ if (isset($_GET['edit_product'])) {
                                                             Name</label>
                                                         <select class="select2 form-control select-opt" name="product"
                                                             id="product">
-                                                            <option selected value="">Select
+                                                            <option value="">Select
                                                                 product
                                                             </option>
                                                             <?php
@@ -268,7 +326,9 @@ if (isset($_GET['edit_product'])) {
 foreach ($products as $product) {
 
 ?>
-                                                            <option value="<?php echo $product['id']; ?>">
+                                                            <option
+                                                                <?php echo isset($_GET['edit_product']) && $id[0]['id'] == $product['id'] ? "selected" : null; ?>
+                                                                value="<?php echo $product['product_name']; ?>">
                                                                 <?php echo $product['product_name']; ?>
                                                             </option>
 
@@ -299,7 +359,7 @@ foreach ($products as $product) {
                                                             id="purchase_per_unit_price">
                                                     </div>
                                                 </div>
-                                                <div class="col-md">
+                                                <!-- <div class="col-md">
 
                                                     <div class="form-group">
                                                         <label for="purchase_per_box_price" class="col-form-label">Per
@@ -311,7 +371,7 @@ foreach ($products as $product) {
                                                             type="number" placeholder="Enter Per Box Price"
                                                             id="purchase_per_box_price">
                                                     </div>
-                                                </div>
+                                                </div> -->
                                                 <div class="col-md">
 
                                                     <div class="form-group">
@@ -336,7 +396,7 @@ foreach ($products as $product) {
                                                             placeholder="Enter Trade Unit Price" id="trade_unit_price">
                                                     </div>
                                                 </div>
-                                                <div class="col-md">
+                                                <!-- <div class="col-md">
 
                                                     <div class="form-group">
                                                         <label for="trade_box_price" class="col-form-label">Trade box
@@ -346,8 +406,8 @@ foreach ($products as $product) {
                                                             class="form-control" name="trade_box_price" type="number"
                                                             placeholder="Enter Trade Box Price" id="trade_box_price">
                                                     </div>
-                                                </div>
-                                                <div class="col-md">
+                                                </div> -->
+                                                <!-- <div class="col-md">
 
                                                     <div class="form-group">
                                                         <label for="whole_sale_box_price" class="col-form-label">Whole
@@ -358,7 +418,7 @@ foreach ($products as $product) {
                                                             type="number" placeholder="Enter Whole Sale Box Price"
                                                             id="whole_sale_box_price">
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                             <div class="row">
                                                 <div class="col-md">
@@ -408,8 +468,14 @@ foreach ($products as $product) {
                                                         <i class="fa fa-angle-down "></i>
                                                     </span>
                                                 </div>
+                                                <div class="form-group mb-3">
+                                                    <button class="btn btn-primary" type="reset">reset</button>
+                                                    <input
+                                                        name="<?php echo isset($_GET['edit_product']) ? "edit_product_btn" : "add_product_btn"; ?>"
+                                                        class="btn btn-danger" type="submit">
+                                                </div>
                                             </div>
-                                            <div class="col-md">
+                                            <!-- <div class="col-md">
 
                                                 <div class="form-group">
                                                     <label for="row" class="col-form-label">Row</label>
@@ -447,7 +513,7 @@ foreach ($products as $product) {
                                                         class="btn btn-danger" type="submit">
                                                 </div>
 
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <table id="example1" class="table table-striped table-bordered dt-responsive">
                                             <thead>

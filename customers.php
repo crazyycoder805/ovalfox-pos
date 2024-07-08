@@ -271,10 +271,10 @@ if (isset($_GET['edit_customer'])) {
                                                                     <i class="fa fa-edit"></i>
                                                                 </a>
                                                                 &nbsp;&nbsp;&nbsp;
-                                                                <a class="text-danger"
+                                                                <!-- <a class="text-danger"
                                                                     href="customers.php?delete_customer=<?php echo $customer['id']; ?>">
                                                                     <i class="fa fa-trash"></i>
-                                                                </a>
+                                                                </a> -->
                                                             </td>
 
                                                         </tr>

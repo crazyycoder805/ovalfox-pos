@@ -23,7 +23,11 @@ $(document).ready(function() {
     $(".customer-select").select2();
     $(".booker-select").select2();
 
-    $("#product").select2();
+    $("#product").select2({
+        tags: true
+
+    });
+    $("#payment_from").select2();
     $("#item_names").select2();
     // $("#company_name").select2();
     $("#last_rate").select2();

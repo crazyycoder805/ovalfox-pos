@@ -14,6 +14,7 @@ $id = "";
 
 $ledger = $pdo->read("ledger", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+$customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
 
 if (isset($_POST['add_ledger_btn'])) {
@@ -165,26 +166,28 @@ if (isset($_GET['edit_ledger'])) {
                                                 </div>
 
 
-                                                <div class="col-md">
-
-                                                    <div class="form-group">
-                                                        <label for="details" class="col-form-label">Details</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['details'] : null; ?>"
-                                                            class="form-control" name="details" type="text"
-                                                            placeholder="Enter ledger details" id="details">
-                                                    </div>
-                                                </div>
 
                                                 <div class="col-md">
 
                                                     <div class="form-group">
-                                                        <label for="payment_from" class="col-form-label">Paymnet
-                                                            from</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['payment_from'] : null; ?>"
-                                                            class="form-control" name="payment_from" type="text"
-                                                            placeholder="Enter ledger Payment from" id="payment_from">
+                                                        <label class="col-form-label">Customer name</label>
+                                                        <select class="select2 form-control select-opt customer-select"
+                                                            name="payment_from" id="payment_from">
+                                                            <option selected value="">
+                                                                Select Customer Name
+                                                            </option>
+                                                            <?php
+
+foreach ($customers as $customer) {
+
+?>
+                                                            <option value="<?php echo $customer['id']; ?>">
+                                                                <?php echo $customer['name']; ?>
+                                                            </option>
+
+
+                                                            <?php } ?>
+                                                        </select>
                                                     </div>
                                                 </div>
 
@@ -209,30 +212,46 @@ if (isset($_GET['edit_ledger'])) {
                                                     </div>
 
                                                 </div>
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label for="dr" class="col-form-label">Dr</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['dr'] : null; ?>"
-                                                            class="form-control" name="dr" type="text"
-                                                            placeholder="Enter ledger dr" id="dr">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md">
 
+                                                <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="cr" class="col-form-label">Cr</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['cr'] : null; ?>"
-                                                            class="form-control" name="cr" type="text"
-                                                            placeholder="Enter ledger cr" id="cr">
+                                                        <label class="col-form-label">Payment
+                                                            type</label>
+
+                                                        <select class="select2 form-control select-opt"
+                                                            name="payment_type" id="payment_type">
+
+                                                            <option value="dr">Debit
+                                                            </option>
+                                                            <option value="cr">Credit
+                                                            </option>
+
+
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="form-group mt-3">
-                                                    <button class="btn btn-primary" type="reset">reset</button>
-                                                    <input
-                                                        name="<?php echo isset($_GET['edit_ledger']) ? "edit_ledger_btn" : "add_ledger_btn"; ?>"
-                                                        class="btn btn-danger" type="submit">
+
+
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="col-md">
+
+                                                        <div class="form-group">
+                                                            <label for="details" class="col-form-label">Details</label>
+                                                            <textarea rows="1" cols="1" class="form-control"
+                                                                name="details" id="details"
+                                                                placeholder="Details"><?php echo isset($_GET['edit_ledger']) ? $id[0]['details'] : null; ?></textarea>
+                                                        </div>
+                                                        <div class="form-group mt-3">
+                                                            <button class="btn btn-primary" type="reset">reset</button>
+                                                            <input
+                                                                name="<?php echo isset($_GET['edit_ledger']) ? "edit_ledger_btn" : "add_ledger_btn"; ?>"
+                                                                class="btn btn-danger" type="submit">
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
 

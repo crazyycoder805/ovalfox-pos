@@ -6,7 +6,7 @@ if (isset($_POST['desc']) && $_POST['desc'] == "true") {
     $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 
 } else {
-    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 
 }
 
@@ -35,7 +35,7 @@ if (isset($_POST['desc']) && $_POST['desc'] == "true") {
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
-    <td style='font-size: 13px !important;font-weight:bolder;' id='"."amountTabledData{$sale['id']}'>{$sale['amount']}</td>
+    <td style='font-size: 13px !important;font-weight:bolder;' id='"."amountTabledData{$sale['id']}'>".round($sale['amount'], 2)."</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."discountTabledData{$sale['id']}'>{$sale['discount']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."extra_discountTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['extra_discount']}</td>
     <td style='font-size: 13px !important;font-weight:bolder;'  id='"."percentageTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['percentage']}</td>

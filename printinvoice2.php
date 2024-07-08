@@ -34,7 +34,6 @@ $total_price = 0;
 $total_quantity = 0;
 $total_price = 0;
 
-
 ?>
     <style>
     @media print {
@@ -262,10 +261,8 @@ $total_price = 0;
                 <p id="bbtn"><a href="sales.php">Back</a></p>
                 <h3 style="text-align: end; font-size: 20px !important;">
                     <?php echo $sales_2[0]['status']; ?>
-</h3>
-<h4 style="font-size: 30px !important;text-align: center;">
-                    Simple INV
-                </h4>
+                </h3>
+
                 <h1 style="font-size: 50px !important;" id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
@@ -326,8 +323,8 @@ $total_price = 0;
                                 <tr>
                                     <th style="text-align: start; font-size: 30px !important;width:200px">
                                         CUST.
-                                            <?php echo $customers[0]['name']; ?>
-</span>
+                                        <?php echo $customers[0]['name']; ?>
+                                        </span>
 
                                     </th>
                                 </tr>
@@ -418,12 +415,12 @@ $total_price = 0;
 
                             <div id="discount-outer">
                                 <span id="discount-text-inner" style="font-weight: bold;">Dicount
-<?php 
+                                    <?php 
 function calculate_cut($original_amount, $percentage_cut) {
     return $original_amount * ($percentage_cut / 100);
 }
 $per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
-$percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
+$percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2) : (double)$sales_2[0]['discount'];
 ?>
                                     (<?php    
                                     
@@ -436,6 +433,28 @@ $percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
                                 <b id="total-price-total" style="">Rs
                                     <?php echo $_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per; ?></b>
                             </div>
+                            <div id="rec-box" style="">
+                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
+
+                                <span id="rec-total">Rs <?php 
+                                    
+                                    //echo $minused;
+                                    $balance = (double)$customers[0]['balance'];
+                                    $amountIn = $_GET['amountIn'];
+                                    $discount = (double)$sales_2[0]['discount'];
+                                    $received_amount = (double)$sales_2[0]['recevied_amount'];
+                                    $totalPriceOrPer = $amountIn == "amount" ? (double)$total_price - $discount : (double)$per;
+                                    
+                                    $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
+                                    echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
+                                    
+                                    ?></span>
+                            </div>
+                            <div id="bala-box" style="">
+                                <span id="bala-text" style="font-weight: bold;">Final Amount</span>
+                                Rs
+                                <?php echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; ?>
+                            </div>
 
                             <div id="rec-box" style="">
                                 <span id="rec-text" style="font-weight: bold;">Received</span>
@@ -443,22 +462,7 @@ $percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
                                 <span id="rec-total">Rs
                                     <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
                             </div>
-                            <div id="bala-box" style="">
-                                <span id="bala-text" style="font-weight: bold;">Final Amount</span>
-                                Rs
-                                <?php echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; ?>
-                            </div>
-                            <div id="rec-box" style="">
-                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
 
-                                <span id="rec-total">Rs <?php 
-                                    
-                                    //echo $minused;
-                                    echo $customers[0]['balance'] != 0 ? (round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? (double)$total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2) < 0 ? 0 : round((double)$customers[0]['balance'] - ((double)($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - (double)$sales_2[0]['recevied_amount']), 2)) : 0;
-                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
-                                    
-                                    ?></span>
-                            </div>
 
 
 
@@ -491,7 +495,7 @@ $percetage = round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2);
     const options = {
         filename: 'small_inv.pdf',
         image: {
-            type: 'pdf',
+            type: 'png',
             quality: 0.98
         },
         html2canvas: {
