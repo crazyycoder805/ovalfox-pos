@@ -2,6 +2,13 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 $sales_1 = "";
+$sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['invoice_number'], "company_profile_id" => $_SESSION['ovalfox_pos_cp_id']]);
+$invMinus = intval($sales_2[0]['invoice_number']) - 1;
+$invPlus = intval($sales_2[0]['invoice_number']) + 1;
+
+$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+
 if (isset($_POST['desc']) && $_POST['desc'] == "true") {
     $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 
@@ -70,6 +77,6 @@ if (isset($_POST['desc']) && $_POST['desc'] == "true") {
 
     $amountGrand = array_sum($amountGrand);
 
-$data = [$html, count($sales_1), $all_over_qty, $amountGrand, isset($_POST['updatedRowId']) ? $_POST['updatedRowId'] : 0];
+$data = [$html, count($sales_1), $all_over_qty, $amountGrand, isset($_POST['updatedRowId']) ? $_POST['updatedRowId'] : 0, $customerInvMinus[0]['pending_amount']];
 
 echo json_encode($data);

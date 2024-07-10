@@ -51,7 +51,7 @@ if (isset($_POST["logout"])) {
 
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_fnts.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_bs.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_fa.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_fa_w.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_ifa.css">
     <link rel="stylesheet" type="text/css" href="assets/css/themes/full_white/fw_style.css">
     <style>

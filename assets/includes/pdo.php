@@ -134,12 +134,26 @@ public function update($table, $conditions = [], $data = [], $fileInputName = nu
     }
 
     if ($stmt->execute()) {
-        // Return the number of affected rows
-        return $stmt->rowCount();
+        // If the update was successful, retrieve the ID of the updated row
+        $idQuery = "SELECT id FROM $table $whereClause";
+        $idStmt = $this->db->prepare($idQuery);
+
+        // Bind values for conditions
+        foreach ($conditions as $key => $value) {
+            $idStmt->bindValue(":$key", $value);
+        }
+
+        if ($idStmt->execute()) {
+            $updatedRow = $idStmt->fetch(PDO::FETCH_ASSOC);
+            return $updatedRow['id'] ?? 0; // Return the updated row ID
+        } else {
+            return 0; // Failed to retrieve the updated row ID
+        }
     } else {
         return 0; // Data not updated
     }
 }
+
 
 
 

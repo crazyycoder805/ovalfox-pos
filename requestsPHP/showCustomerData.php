@@ -17,12 +17,12 @@ $html .= "<tr>
     </td>";
     if ($cs['status'] == "Unpaid") {
 
-        $html .= "<td style='background-color: #D3D3D3;color:white;'>{$cs['status']}</td>";
+        $html .= "<td style='background-color: blue;color:white;'>{$cs['status']}</td>";
  
  
  
    } else if ($cs['status'] == "Incomplete") {
-           $html .= "<td style='background-color: #A9A9A9;color:white;'>{$cs['status']}</td>";
+           $html .= "<td style='background-color: red;color:white;'>{$cs['status']}</td>";
  
  
  

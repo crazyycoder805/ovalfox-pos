@@ -4,6 +4,12 @@ require_once '../assets/includes/pdo.php';
 
 $sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+$invMinus = intval($sales_2[0]['invoice_number']) - 1;
+$invPlus = intval($sales_2[0]['invoice_number']) + 1;
+
+$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+
 $all_over_qty = [];
 $isRefunded = false;
 foreach ($sales_1 as $ss) {
@@ -58,5 +64,5 @@ foreach ($sales_1 as $key => $sale) {
 }
 
 
-$productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded];
+$productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded, $customerInvMinus[0]['pending_amount']];
 echo json_encode($productData);

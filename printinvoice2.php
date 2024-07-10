@@ -29,6 +29,16 @@ $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_pr
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+
+$invMinus = intval($invoice_number) - 1;
+$invPlus = intval($invoice_number) + 1;
+
+$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");  
+
+
+
+
 $total_quantity = 0;
 $total_price = 0;
 $total_quantity = 0;
@@ -439,15 +449,15 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                                 <span id="rec-total">Rs <?php 
                                     
                                     //echo $minused;
-                                    $balance = (double)$customers[0]['balance'];
-                                    $amountIn = $_GET['amountIn'];
-                                    $discount = (double)$sales_2[0]['discount'];
-                                    $received_amount = (double)$sales_2[0]['recevied_amount'];
-                                    $totalPriceOrPer = $amountIn == "amount" ? (double)$total_price - $discount : (double)$per;
+                                    // $balance = (double)$customers[0]['balance'];
+                                    // $amountIn = $_GET['amountIn'];
+                                    // $discount = (double)$sales_2[0]['discount'];
+                                    // $received_amount = (double)$sales_2[0]['recevied_amount'];
+                                    // $totalPriceOrPer = $amountIn == "amount" ? (double)$total_price - $discount : (double)$per;
                                     
-                                    $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
-                                    echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
-                                    
+                                    // $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
+                                    // echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
+                                    echo empty($customerInvMinus) ? 0 : $customerInvMinus[0]['pending_amount'];
                                     ?></span>
                             </div>
                             <div id="bala-box" style="">

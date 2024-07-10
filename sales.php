@@ -147,7 +147,7 @@ foreach ($customers as $customer) {
 
 ?>
                                         <option value="<?php echo $customer['id']; ?>">
-                                            <?php echo $customer['name']; ?>
+                                            <?php echo $customer['name']; ?> (<?php echo $customer['address']; ?>)
                                         </option>
 
 
@@ -164,7 +164,7 @@ foreach ($customers as $customer) {
                                 <div class="form-group">
                                     <label class="col-form-label">Booker name</label>
                                     <?php 
-if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2") || (isset($_GET['inv_num']))) {
+if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2")) {
 ?>
                                     <input type="text" class="form-control" disabled
                                         value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>">
@@ -173,7 +173,7 @@ if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id']
                                         value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_user_id'] : $booker_inv[0]['id']; ?>"
                                         name="booker_name" id="booker_name">
 
-                                    <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") {
+                                    <?php } else if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") || (isset($_GET['inv_num']))) {
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
 ?>
 
@@ -188,7 +188,8 @@ foreach ($bookers as $booker) {
 
 ?>
                                         <option
-                                            <?php echo isset($_SESSION['booker_select']) && $_SESSION['booker_select'] != "" && $_SESSION['booker_select'] == $booker['id'] ? "selected" : "" ?>
+                                            <?php 
+                                            echo isset($_GET['inv_num']) && $booker_inv[0]['id'] == $booker['id'] ? "selected" : (isset($_SESSION['booker_select']) && $_SESSION['booker_select'] != "" && $_SESSION['booker_select'] == $booker['id'] ? "selected" : "") ?>
                                             value="<?php echo $booker['id']; ?>">
                                             <?php echo $booker['username']; ?>
                                         </option>
@@ -229,7 +230,7 @@ foreach ($bookers as $booker) {
 
                                 <label class="col-form-label">Current date</label>
 
-                                <input value="<?php echo isset($_GET['edit_employee']) ? $id[0]['end_date'] : null; ?>"
+                                <input value="<?php echo isset($_GET['inv_num']) ? $sales_2_inv[0]['date'] : null; ?>"
                                     class="form-control" name="current_date" type="datetime-local"
                                     placeholder="End Date" id="current_date">
 
@@ -365,23 +366,23 @@ foreach ($products as $product) {
 
                                                     <h3>||</h3>
                                                     &nbsp;&nbsp;&nbsp;
-                                                    <h4 style="color: blue;">Customer Previous: <b id="cust_prev">0</b>
+                                                    <h4 style="color: blue;font-size:14px !important;">Customer
+                                                        Previous: <b style="font-size:14px !important;"
+                                                            id="cust_prev">0</b>
                                                     </h4>
 
                                                     &nbsp;&nbsp;&nbsp;
-                                                    <h4 style="color: red;">Customer Now Balance: <b id="cust_now">0</b>
-                                                        </h4s>
-                                                        &nbsp;&nbsp;&nbsp;
-                                                        <div id="pass_sales_div" hidden>
-                                                            <label for="password_sales_1"
-                                                                style="padding-top: 8px;">password to
-                                                                delete items:</label>
-                                                            &nbsp;&nbsp;&nbsp;
+                                                    <h4 style="color: red;font-size:14px !important;">Customer Now: <b style="font-size:14px !important;"
+                                                            id="cust_new">0</b>
+                                                    </h4>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <div id="pass_sales_div" hidden>
 
-                                                            <input type="password" id="password_sales_1"
-                                                                name="password_sales_1" placeholder="password" />
-                                                            <button id="deleteBtn">Delete</button>
-                                                        </div>
+
+                                                        <input style=" width: 100px;
+    height: 20px;" type="password" id="password_sales_1" name="password_sales_1" placeholder="password" />
+                                                        <button id="deleteBtn">Delete</button>
+                                                    </div>
                                                 </div>
                                                 <table style="user-select: none;
 -webkit-user-select: none;
@@ -846,18 +847,18 @@ foreach ($products as $product) {
             },
             success: e => {
                 const product = JSON.parse(e);
-                finalAmount = +product[1][0]['total_amount'].toFixed(2);
-                totalPayable = +product[1][0]['final_amount'].toFixed(2);
+                finalAmount = +product[1][0]['total_amount'];
+                totalPayable = +product[1][0]['final_amount'];
 
                 $("#data").html(product[0]);
                 $("#total_items").text(product[2]);
                 $("#total_quantity_added").text(product[3]);
 
-                $("#final_amount").val(+product[1][0]['total_amount'].toFixed(2));
-                $("#discount_in_amount").val(+product[1][0]['discount'].toFixed(2));
-                $("#total_payable").val((+product[1][0]['final_amount'].toFixed(2) != 0 ? product[1][0][
+                $("#final_amount").val(+product[1][0]['total_amount']);
+                $("#discount_in_amount").val(+product[1][0]['discount']);
+                $("#total_payable").val((+product[1][0]['final_amount'] != 0 ? product[1][0][
                     'final_amount'
-                ] : +product[1][0]['total_amount'].toFixed(2)));
+                ] : +product[1][0]['total_amount']));
 
                 $("#amount_received").val(+product[1][0][
                     'recevied_amount'
@@ -866,7 +867,7 @@ foreach ($products as $product) {
                 // $("#amount_return").val(+product[1][0]['returned_amount']);
                 // $("#pending_amount").val((+product[1][0]['pending_amount'] != 0 ? product[1][0][
                 //     'pending_amount'
-                // ] : +product[1][0]['total_amount'].toFixed(2)));
+                // ] : +product[1][0]['total_amount']));
                 if (+parseFloat($("#amount_received").val() || 0) >= $("#total_payable").val()) {
                     $("#amount_return").val(+parseFloat($("#amount_received").val() || 0) - (+
                         totalPayable != 0 &&
@@ -928,9 +929,15 @@ foreach ($products as $product) {
                         "isIncmp": false,
                         "amountIn": isDisInAmntorInPer == "" ? "amount" :
                             isDisInAmntorInPer,
-
+                        "isEdit": true,
+                        "date": "",
+                        "booker_name": ""
                     },
+                    success : () =>{
+                        $("#cust_prev").text(product[5]);
+                        $("#cust_new").text(parseFloat(product[5]) + parseFloat(product[1][0]['pending_amount']));
 
+                    }
 
                 });
             }
@@ -1348,7 +1355,7 @@ foreach ($products as $product) {
             const resultDis = calculateDiscount(0, 0, finalAmount, +$("#discount_in_amount").val());
             $("#total_payable").val(resultDis.discountedPrice);
             isDisInAmntorInPer = e.target.value;
-            totalPayable = resultDis.discountedPrice.toFixed(2);
+            totalPayable = resultDis.discountedPrice;
             $("#amount_received").val('');
 
             $("#amount_return").val('');
@@ -1404,9 +1411,9 @@ foreach ($products as $product) {
                 success: e => {
                     const item = JSON.parse(e);
 
-                    $("#final_amount").val(finalAmount - item[0].toFixed(2));
-                    $("#total_payable").val(finalAmount - item[0].toFixed(2));
-                    $("#pending_amount").val(finalAmount - item[0].toFixed(2));
+                    $("#final_amount").val(finalAmount - item[0]);
+                    $("#total_payable").val(finalAmount - item[0]);
+                    $("#pending_amount").val(finalAmount - item[0]);
 
                     $.ajax({
                         type: "POST",
@@ -1421,8 +1428,8 @@ foreach ($products as $product) {
                             $("#data").html(product[0]);
                             $("#total_items").text(product[1]);
                             $("#total_quantity_added").text(product[2]);
-                            finalAmount = product[3].toFixed(2);
-                            totalPayable = product[3].toFixed(2);
+                            finalAmount = product[3];
+                            totalPayable = product[3];
                             if (+parseFloat($("#amount_received").val() ||
                                     0) >= $("#total_payable").val()) {
                                 $("#amount_return").val(+parseFloat($(
@@ -1445,6 +1452,9 @@ foreach ($products as $product) {
                                 $("#amount_return").val(0);
 
                             }
+                            $("#cust_prev").text(product[5]);
+                            $("#cust_new").text(product[5]);
+
                         }
                     });
                 }
@@ -1553,14 +1563,14 @@ foreach ($products as $product) {
         //         },
         //         success: e => {
         //             const product = JSON.parse(e);
-        //             finalAmount = +product[1][0]['total_amount'].toFixed(2);
+        //             finalAmount = +product[1][0]['total_amount'];
         //             totalPayable = +product[1][0]['final_amount'];
 
         //             $("#data").html(product[0]);
         //             $("#total_items").text(product[2]);
         //             $("#total_quantity_added").text(product[3]);
 
-        //             $("#final_amount").val(+product[1][0]['total_amount'].toFixed(2));
+        //             $("#final_amount").val(+product[1][0]['total_amount']);
         //             $("#discount_in_amount").val(+product[1][0]['discount']);
         //             $("#total_payable").val(+product[1][0]['final_amount']);
         //             $("#amount_received").val(+product[1][0][
@@ -1792,9 +1802,19 @@ foreach ($products as $product) {
                                         "amountIn": isDisInAmntorInPer ==
                                             "" ? "amount" :
                                             isDisInAmntorInPer,
+                                        "isEdit": false,
+                                        "date": $("#current_date")
+                                            .val(),
+                                        "booker_name": $("#booker_name")
+                                            .val()
+
 
                                     },
+                                    success : () =>{
+                                        $("#cust_prev").text(product[5]);
+                                        $("#cust_new").text(product[5]);
 
+                                    }
 
                                 });
                             }
@@ -1824,6 +1844,11 @@ foreach ($products as $product) {
                     "details": $("#details").val(),
                     "isIncmp": false,
                     "amountIn": isDisInAmntorInPer == "" ? "amount" : isDisInAmntorInPer,
+                    "isEdit": true,
+                    "date": $("#current_date").val(),
+                    "booker_name": $("#booker_name").val()
+
+
 
                 },
                 success: target => {
@@ -2120,8 +2145,8 @@ foreach ($products as $product) {
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[
                                     2]);
-                                finalAmount = product[3].toFixed(2);
-                                totalPayable = finalAmount = product[3].toFixed(2);
+                                finalAmount = product[3];
+                                totalPayable = finalAmount = product[3];
 
                                 $("#final_amount").val(product[
                                     3]);
@@ -2151,6 +2176,9 @@ foreach ($products as $product) {
                                     $("#amount_return").val(0);
 
                                 }
+                                $("#cust_prev").text(product[5]);
+                                $("#cust_new").text(product[5]);
+
                                 // if (focusSet == false) {
                                 //     $(document).find(
                                 //         `#${$(product[0].match(/<td.*?id=['"]discountTabledData(\d+)['"].*?>.*?<\/td>/)[0]).attr("id")}`
@@ -2380,14 +2408,14 @@ foreach ($products as $product) {
         //         },
         //         success: e => {
         //             const product = JSON.parse(e);
-        //             finalAmount = +product[1][0]['total_amount'].toFixed(2);
+        //             finalAmount = +product[1][0]['total_amount'];
         //             totalPayable = +product[1][0]['final_amount'];
 
         //             $("#data").html(product[0]);
         //             $("#total_items").text(product[2]);
         //             $("#total_quantity_added").text(product[3]);
 
-        //             $("#final_amount").val(+product[1][0]['total_amount'].toFixed(2));
+        //             $("#final_amount").val(+product[1][0]['total_amount']);
         //             $("#discount_in_amount").val(+product[1][0]['discount']);
         //             $("#total_payable").val(+product[1][0]['final_amount']);
         //             $("#amount_received").val(+product[1][0][
