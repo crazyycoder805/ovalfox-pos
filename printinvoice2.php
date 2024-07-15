@@ -29,13 +29,20 @@ $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_pr
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+$inv =  intval(empty($pdo->customQuery("SELECT * FROM sales_2 WHERE bill_number = {$sales_2[0]['bill_number']}")[0]['invoice_number']) ? 0 : $pdo->customQuery("SELECT * FROM sales_2 WHERE bill_number = {$sales_2[0]['bill_number']}")[0]['invoice_number']);
 
-$invMinus = intval($invoice_number) - 1;
-$invPlus = intval($invoice_number) + 1;
 
-$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
-$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");  
 
+
+
+
+
+
+$invMinus = $inv - 1;
+$invPlus = $inv + 1;
+
+$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus");    
+$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus");    
 
 
 
@@ -481,7 +488,7 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                 ">
                                 <span id="cb-text" style="font-weight: bold;">Current Balance</span>
                                 <b> Rs
-                                    <?php echo $customers[0]['balance']; ?></b>
+                                    <?php echo (double)$customers[0]['balance'] + (empty($customerInvMinus) ? 0 : (double)$customerInvMinus[0]['pending_amount']); ?></b>
                             </div>
                         </div>
 

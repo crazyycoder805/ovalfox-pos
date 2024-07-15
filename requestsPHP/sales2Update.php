@@ -3,15 +3,51 @@ session_start();
 require_once '../assets/includes/pdo.php';
 $_POST['date'] = str_replace("T", " ", $_POST['date']);
 
-$customerSales = $pdo->read("sales_2", ["invoice_number" => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+$customerSales = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 $date = isset($_POST['date']) && $_POST['date'] != "" ? $_POST['date'] : $customerSales[0]['date'];
 $booker = isset($_POST['booker_name']) && $_POST['booker_name'] != "" ? $_POST['booker_name'] : $customerSales[0]['booker_name'];
 
-$invMinus = intval($_POST['invoice_number']) - 1;
-$invPlus = intval($_POST['invoice_number']) + 1;
 
-$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
-$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+
+
+
+
+
+
+$customerInvMinus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$customerSales[0]['customer_name']}'
+AND invoice_number < '{$_POST['invoice_number']}'
+ORDER BY invoice_number DESC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$customerSales[0]['customer_name']}'
+AND invoice_number < '{$_POST['invoice_number']}'
+ORDER BY invoice_number DESC 
+LIMIT 1");
+
+
+
+
+
+
+
+
+
+
+$customerInvPlus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$customerSales[0]['customer_name']}'
+AND invoice_number > '{$_POST['invoice_number']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$customerSales[0]['customer_name']}'
+AND invoice_number > '{$_POST['invoice_number']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1");
+
+
 
 $customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
 $ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
@@ -46,6 +82,7 @@ if (empty($ledger)) {
 
 
 if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
+    print_r(85);
     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => 
     $_POST['discount_in_amount'],
     'date' => $date,
@@ -56,6 +93,7 @@ if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
     "status" => ($_POST['isIncmp'] != "true" ? ($_POST['pending_amount'] == 0 || $_POST['pending_amount'] == "0" ? "Paid" : "Unpaid") : "Incomplete")]);    
 }
  else {
+    print_r(96);
     $updatedRow = $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => 
     $_POST['discount_in_amount'], 
     'date' => $date,
@@ -67,7 +105,7 @@ if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
 
 
     $row = $pdo->read("sales_2", ['id' => $updatedRow]);
-    $pdo->update("sales_2", ['invoice_number' => $invPlus, 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], [
+    $pdo->update("sales_2", ['invoice_number' => $customerInvPlus[0]['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], [
     'previous_blnce' => $row[0]['pending_amount'],     
     "booker_name" => $booker, 
     'date' => $date,

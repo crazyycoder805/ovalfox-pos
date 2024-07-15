@@ -174,7 +174,7 @@ if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id']
                                         name="booker_name" id="booker_name">
 
                                     <?php } else if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") || (isset($_GET['inv_num']))) {
-$bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
+$bookers = $pdo->customQuery("SELECT *  FROM access WHERE role_id != 1 AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"); 
 ?>
 
                                     <select class="select2 booker-select form-control select-opt" name="booker_name"
@@ -372,8 +372,8 @@ foreach ($products as $product) {
                                                     </h4>
 
                                                     &nbsp;&nbsp;&nbsp;
-                                                    <h4 style="color: red;font-size:14px !important;">Customer Now: <b style="font-size:14px !important;"
-                                                            id="cust_new">0</b>
+                                                    <h4 style="color: red;font-size:14px !important;">Customer Now: <b
+                                                            style="font-size:14px !important;" id="cust_new">0</b>
                                                     </h4>
                                                     &nbsp;&nbsp;&nbsp;
                                                     <div id="pass_sales_div" hidden>
@@ -692,7 +692,27 @@ foreach ($products as $product) {
                         </div>
                         <div class="row">
                             <div class="col-md">
+                                <label class="col-form-label">Booker name</label>
+
+                                <select class="select2 booker-select form-control select-opt" name="booker_name_details"
+                                    id="booker_name_details">
+                                    <option selected value="">
+                                        Select Booker
+                                    </option>
+                                    <?php
+
+foreach ($bookers as $booker) {
+
+?>
+                                    <option value="<?php echo $booker['username']; ?>">
+                                        <?php echo $booker['username']; ?>
+                                    </option>
+
+
+                                    <?php } ?>
+                                </select>
                                 <div class="form-group">
+
                                     <label class="col-form-label">Details</label>
                                     <textarea rows="1" cols="1" class="form-control" name="details" id="details"
                                         placeholder="Details"><?php echo isset($_GET['inv_num']) ? $sales_2_inv[0]['details'] : ""; ?></textarea>
@@ -772,6 +792,9 @@ foreach ($products as $product) {
                                         <th>Booker Name</th>
 
                                         <th>Total Amount</th>
+                                        <td>
+                                            Details
+                                        </td>
                                         <th>Date</th>
 
                                         <th>Action</th>
@@ -796,10 +819,6 @@ foreach ($products as $product) {
     <?php require_once 'assets/includes/javascript.php'; ?>
     <script>
     $(document).ready(() => {
-
-
-
-
 
         const item_code = $("#item_code");
         const invoice_number = $("#invoice_number");
@@ -933,10 +952,13 @@ foreach ($products as $product) {
                         "date": "",
                         "booker_name": ""
                     },
-                    success : () =>{
-                        $("#cust_prev").text(product[5]);
-                        $("#cust_new").text(parseFloat(product[5]) + parseFloat(product[1][0]['pending_amount']));
+                    success: (target) => {
+                        console.log(target);
 
+                        $("#cust_prev").text(product[5]);
+                        $("#cust_new").text(parseFloat(product[5]) + parseFloat(product[
+                            1][0]['pending_amount']));
+                        localStorage.setItem("details", $("#details").val());
                     }
 
                 });
@@ -1644,7 +1666,6 @@ foreach ($products as $product) {
                     finalAmount += +$("#total_amount").val();
                 }
 
-                console.log($("#free_items").is(":checked") ? true : false);
 
                 $.ajax({
                     type: "POST",
@@ -1682,10 +1703,8 @@ foreach ($products as $product) {
                     },
 
                     success: e => {
-                        console.log(e);
                         item_code.val('');
                         unit_price.val('');
-                        item_name.val('');
                         last_rate.val('');
                         quantity.val('');
                         discount.val('');
@@ -1721,7 +1740,9 @@ foreach ($products as $product) {
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
-                                "desc": true
+                                "desc": true,
+                                "item_name": $("#item_name").val(),
+                                "customer_name": $("#customer_name").val()
                             },
                             complete: () => {
                                 A = 0;
@@ -1732,6 +1753,7 @@ foreach ($products as $product) {
                                 $("#data").html(product[0]);
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[2]);
+                                item_name.val('');
 
                                 document.getElementById("free_items")
                                     .checked =
@@ -1810,9 +1832,17 @@ foreach ($products as $product) {
 
 
                                     },
-                                    success : () =>{
-                                        $("#cust_prev").text(product[5]);
-                                        $("#cust_new").text(product[5]);
+                                    success: (target) => {
+                                        console.log(target);
+
+                                        $("#cust_prev").text(
+                                            product[5]);
+                                        $("#cust_new").text(product[
+                                            5]);
+                                        localStorage.setItem(
+                                            "details", $(
+                                                "#details")
+                                            .val());
 
                                     }
 
@@ -1852,6 +1882,9 @@ foreach ($products as $product) {
 
                 },
                 success: target => {
+                    console.log(target);
+                    localStorage.setItem("details", $("#details").val());
+
                     <?php if ($user[0]['printing_page_size'] == "large") {
                         ?>
                     $(window).off('beforeunload');
@@ -1988,7 +2021,16 @@ foreach ($products as $product) {
             selection.addRange(range);
         }
 
+        function toggleActiveCellWithOutColor($cell) {
+            $('#customerPreviosTable td').removeClass('active-cell');
 
+            // Set cursor position to the end of the cell content
+            let range = document.createRange();
+            let selection = window.getSelection();
+            range.selectNodeContents($cell[0]);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
         // Function to find the next editable cell in a given direction
         function findNextEditableCell($startCell, direction) {
             let $cell = $startCell;
@@ -2087,6 +2129,81 @@ foreach ($products as $product) {
         });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $(document).on("keydown", "#customerPreviosTable td", function(e) {
+            let $this = $(this);
+
+            switch (e.which) {
+                case 37: // left arrow key
+                    let $leftCell = findNextEditableCell($this, 'left');
+                    if ($leftCell) {
+                        $leftCell.focus();
+                        toggleActiveCellWithOutColor($leftCell);
+                    }
+                    break;
+
+                case 38: // up arrow key
+                    let $upCell = findNextEditableCell($this, 'up');
+                    if ($upCell) {
+                        $upCell.focus();
+                        toggleActiveCellWithOutColor($upCell);
+                    }
+                    break;
+
+                case 39: // right arrow key
+                    let $rightCell = findNextEditableCell($this, 'right');
+                    if ($rightCell) {
+                        $rightCell.focus();
+                        toggleActiveCellWithOutColor($rightCell);
+                    }
+                    break;
+
+                case 40: // down arrow key
+                    let $downCell = findNextEditableCell($this, 'down');
+                    if ($downCell) {
+                        $downCell.focus();
+                        toggleActiveCellWithOutColor($downCell);
+                    }
+                    break;
+
+                default:
+                    return;
+            }
+            e.preventDefault();
+        });
+
+        $(document).on("focus", "#customerPreviosTable td[contenteditable='true']", function() {
+            let $this = $(this);
+            toggleActiveCellWithOutColor($this);
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
         $(document).on('keydown', "#itemAddedtable td", eTarget => {
             if (eTarget.keyCode == 13) {
                 focusSet = false;
@@ -2123,7 +2240,8 @@ foreach ($products as $product) {
                             data: {
                                 "__FILE__": "productFetch",
                                 "invoice_number": $("#invoice_number").val(),
-                                'updatedRowId': product[0]
+                                'updatedRowId': product[0],
+
                             },
                             complete: (jq) => {
                                 focusSet = true;
@@ -2136,11 +2254,9 @@ foreach ($products as $product) {
                                 const regexPattern = new RegExp(
                                     `itemMainKey_${product[4]}`);
 
-                                console.log($(
-                                    document
-                                ).find(
+                                $(document).find(
                                     `#${product[0].match(regexPattern)[0]}`
-                                ).addClass("active-cell"));
+                                ).addClass("active-cell")
                                 // let html = ;
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[
@@ -2429,8 +2545,9 @@ foreach ($products as $product) {
         //     });
         // });
 
-
-
+        $("#booker_name_details").on("change", e => {
+            $("#details").val(`${$(e.target).val()} ny wasool krlia: `);
+        })
 
     });
     </script>

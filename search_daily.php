@@ -77,7 +77,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
                                                         <label class="col-form-label">Booker Name</label>
 
-                                                        <select class="select select-opt" name="booker_name"
+                                                        <select  class="select booker-select select-opt" name="booker_name"
                                                             id="booker_name">
                                                             <option disabled selected value="">Select Booker
                                                             </option>
@@ -102,7 +102,7 @@ $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox
 
                                                         <label class="col-form-label">Customer Name</label>
 
-                                                        <select class="select select-opt" name="customer" id="customer">
+                                                        <select class="select customer-select select-opt" name="customer" id="customer">
                                                             <option disabled selected value="">Select Customer
                                                             </option>
                                                             <?php

@@ -11,35 +11,39 @@ $html = "";
         $itemNME = preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $cs['invoice_number'] : $cs['invoice_number']; 
 
 $html .= "<tr>
-    <td>$index</td>
-    <td>{$cs['bill_number']}</td>
-    <td>$itemNME
-    </td>";
+    <td contenteditable='true'>$index</td>
+    <td contenteditable='true'>{$cs['bill_number']}</td>
+    <td contenteditable='true'>$itemNME
+    </td contenteditable='true'>";
     if ($cs['status'] == "Unpaid") {
 
-        $html .= "<td style='background-color: blue;color:white;'>{$cs['status']}</td>";
+        $html .= "<td  style='background-color: blue;color:white;'>{$cs['status']}</td>";
  
  
  
    } else if ($cs['status'] == "Incomplete") {
-           $html .= "<td style='background-color: red;color:white;'>{$cs['status']}</td>";
+           $html .= "<td contenteditable='true' style='background-color: red;color:white;'>{$cs['status']}</td>";
  
  
  
       }  else { 
-         $html .= "<td>{$cs['status']}</td>";
+         $html .= "<td contenteditable='true'>{$cs['status']}</td>";
  
  
       } 
-    $html .= "<td>{$customer[0]['name']}</td>
-    <td>{$booker[0]['username']}</td>
+    $html .= "<td contenteditable='true'>{$customer[0]['name']}</td>
+    <td contenteditable='true'>{$booker[0]['username']}</td>
 
-    <td>{$cs['final_amount']}</td>";
+    <td contenteditable='true'>{$cs['final_amount']}</td>";
     
 
-    $html .= "<td style='background-color: #A9A9A9;color:white;'>{$cs['date']}</td>";
+    $html .= "
+    <td contenteditable='true'>
+     {$cs['details']}
+    </td>
+    <td contenteditable='true' style='background-color: #A9A9A9;color:white;'>{$cs['date']}</td>";
 
-    $html .= "<td>
+    $html .= "<td contenteditable='true'>
         <a href='printinvoice2.php?inv={$cs['invoice_number']}&amountIn=amount' id='printCustomer' data-cus='{$cs['invoice_number']}' name='printCustomer'>PRINT</a> || <a
             href='sales.php?inv_num={$cs['invoice_number']}' id='editCustomer'
             data-cus='{$cs['invoice_number']}' name='printCustomer'>EDIT</a>

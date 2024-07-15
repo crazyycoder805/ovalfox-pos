@@ -1261,15 +1261,15 @@ $data = [];
 
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;text-align: center;">
-                        <?php echo $d['total_amount']; ?>
+                        <?php echo round($d['total_amount'], 2); ?>
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
-                        <?php echo $d['discount'] == "" ? 0 : $d['discount']; ?>
+                        <?php echo $d['discount'] == "" ? 0 : round($d['discount'], 2); ?>
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
-                        <?php echo $d['final_amount']; ?>
+                        <?php echo round($d['final_amount'], 2); ?>
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
@@ -1281,7 +1281,7 @@ $data = [];
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
-                        <?php echo $d['pending_amount']; ?>
+                        <?php echo round($d['pending_amount'], 2); ?>
                     </td>
                 
                     <td

@@ -271,10 +271,10 @@ if (isset($_GET['edit_customer'])) {
                                                                     <i class="fa fa-edit"></i>
                                                                 </a>
                                                                 &nbsp;&nbsp;&nbsp;
-                                                                <!-- <a class="text-danger"
+                                                                <a id="deleteSure" class="text-danger"
                                                                     href="customers.php?delete_customer=<?php echo $customer['id']; ?>">
                                                                     <i class="fa fa-trash"></i>
-                                                                </a> -->
+                                                                </a>
                                                             </td>
 
                                                         </tr>
@@ -319,6 +319,14 @@ if (isset($_GET['edit_customer'])) {
     })
     $("#printbtncustomer").on("click", e => {
         location.href = `printreport1.php?s=${searchedValue}&t=customer`;
+    });
+    $(document).on("click", "#deleteSure", e => {
+        if (confirm("Are you sure you want to proceed?")) {
+
+        } else {
+            e.preventDefault();
+        }
+        
     });
     </script>
 

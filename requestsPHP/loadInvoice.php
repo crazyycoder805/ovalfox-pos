@@ -2,13 +2,49 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 
-$sales_1 = $pdo->read("sales_1", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$invMinus = intval($sales_2[0]['invoice_number']) - 1;
-$invPlus = intval($sales_2[0]['invoice_number']) + 1;
+$sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['in']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+$sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['in'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);;
 
-$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
-$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+
+
+
+
+
+
+$customerInvMinus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$_POST['in']}'
+ORDER BY invoice_number DESC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$_POST['in']}'
+ORDER BY invoice_number DESC 
+LIMIT 1");
+
+
+
+
+
+
+
+
+
+
+$customerInvPlus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$_POST['in']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$_POST['in']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1");
+
+
 
 $all_over_qty = [];
 $isRefunded = false;
@@ -29,7 +65,7 @@ foreach ($sales_1 as $key => $sale) {
     <td style='font-size: 21px !important;font-weight:bolder;'>{$key}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
-    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>".$sale['item_name']."</td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
@@ -64,5 +100,5 @@ foreach ($sales_1 as $key => $sale) {
 }
 
 
-$productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded, $customerInvMinus[0]['pending_amount']];
+$productData = [$html, $sales_2, count($sales_1), $all_over_qty, $isRefunded, empty($customerInvMinus[0]['pending_amount']) ? 0 : $customerInvMinus[0]['pending_amount']];
 echo json_encode($productData);

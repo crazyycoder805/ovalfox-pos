@@ -3,17 +3,60 @@ session_start();
 require_once '../assets/includes/pdo.php';
 $sales_1 = "";
 $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['invoice_number'], "company_profile_id" => $_SESSION['ovalfox_pos_cp_id']]);
-$invMinus = intval($sales_2[0]['invoice_number']) - 1;
-$invPlus = intval($sales_2[0]['invoice_number']) + 1;
 
-$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
-$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");    
+$inv =  intval(empty($pdo->customQuery("SELECT * FROM sales_2 WHERE customer_name = '{$sales_2[0]['customer_name']}'")[0]['invoice_number']) ? 0 : $pdo->customQuery("SELECT * FROM sales_2 WHERE customer_name = '{$sales_2[0]['customer_name']}'")[0]['invoice_number']);
+
+
+$productsYES = isset($_POST['item_name']) && isset($_POST['invoice_number']) ? $pdo->customQuery("SELECT * 
+FROM sales_1 
+WHERE item_name = '{$_POST['item_name']}' AND invoice_number < '{$_POST['invoice_number']}'
+  AND customer_name = '{$_POST['customer_name']}' 
+ORDER BY id DESC 
+LIMIT 1;
+") : [];
+
+
+
+
+$customerInvMinus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$_POST['invoice_number']}'
+ORDER BY invoice_number DESC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$_POST['invoice_number']}'
+ORDER BY invoice_number DESC 
+LIMIT 1");
+
+
+
+
+
+
+
+
+
+
+$customerInvPlus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$_POST['invoice_number']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$_POST['invoice_number']}' 
+ORDER BY invoice_number ASC 
+LIMIT 1");
+
 
 if (isset($_POST['desc']) && $_POST['desc'] == "true") {
     $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 
 } else {
-    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
+    $sales_1 = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 
 }
 
@@ -38,7 +81,7 @@ if (isset($_POST['desc']) && $_POST['desc'] == "true") {
     <td style='font-size: 21px !important;font-weight:bolder;' id='itemMainKey_{$sale['id']}'>{$key}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_codeTabledData{$sale['id']}'>{$sale['item_code']}</td>
-    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>{$sale['item_name']}</td>
+    <td style='width:400px;font-size: 13px !important;font-weight:bolder;' id='"."item_nameTabledData{$sale['id']}'>".$sale['item_name'] ."<span> (<b style='background-color:yellow;'>". (isset($_POST['item_name']) && isset($_POST['invoice_number']) ? (!empty($productsYES) ? $productsYES[0]['item_price'] : 0) : "") . "</b>)</span>"." </td>
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."quantityTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['quantity']}</td>
 
     <td style='font-size: 13px !important;font-weight:bolder;' id='"."item_priceTabledData{$sale['id']}' ".(!preg_match('/\(Refunded\)/', $sale['item_name']) && !preg_match('/\(Free Item\)/', $sale['item_name']) ? "contenteditable='true'" : "").">{$sale['item_price']}</td>
@@ -77,6 +120,6 @@ if (isset($_POST['desc']) && $_POST['desc'] == "true") {
 
     $amountGrand = array_sum($amountGrand);
 
-$data = [$html, count($sales_1), $all_over_qty, $amountGrand, isset($_POST['updatedRowId']) ? $_POST['updatedRowId'] : 0, $customerInvMinus[0]['pending_amount']];
+$data = [$html, count($sales_1), $all_over_qty, $amountGrand, isset($_POST['updatedRowId']) ? $_POST['updatedRowId'] : 0, empty($customerInvMinus[0]['pending_amount']) ? 0 : $customerInvMinus[0]['pending_amount']];
 
 echo json_encode($data);
