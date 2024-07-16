@@ -960,7 +960,7 @@ public function createMulti($table, $data, $fileInputName = null, $imageColumns 
 }
 
 $dbHost = "localhost";
-$dbName = "ovalfoxpos";
+$dbName = "tessst";
 $dbUser = "root";
 $dbPass = "";
 

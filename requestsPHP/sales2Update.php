@@ -3,7 +3,7 @@ session_start();
 require_once '../assets/includes/pdo.php';
 $_POST['date'] = str_replace("T", " ", $_POST['date']);
 
-$customerSales = $pdo->customQuery("SELECT * FROM sales_1 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+$customerSales = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 $date = isset($_POST['date']) && $_POST['date'] != "" ? $_POST['date'] : $customerSales[0]['date'];
 $booker = isset($_POST['booker_name']) && $_POST['booker_name'] != "" ? $_POST['booker_name'] : $customerSales[0]['booker_name'];
 
@@ -93,7 +93,6 @@ if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
     "status" => ($_POST['isIncmp'] != "true" ? ($_POST['pending_amount'] == 0 || $_POST['pending_amount'] == "0" ? "Paid" : "Unpaid") : "Incomplete")]);    
 }
  else {
-    print_r(96);
     $updatedRow = $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => 
     $_POST['discount_in_amount'], 
     'date' => $date,

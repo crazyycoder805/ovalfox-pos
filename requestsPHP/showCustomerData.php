@@ -43,7 +43,7 @@ $html .= "<tr>
     </td>
     <td contenteditable='true' style='background-color: #A9A9A9;color:white;'>{$cs['date']}</td>";
 
-    $html .= "<td contenteditable='true'>
+    $html .= "<td>
         <a href='printinvoice2.php?inv={$cs['invoice_number']}&amountIn=amount' id='printCustomer' data-cus='{$cs['invoice_number']}' name='printCustomer'>PRINT</a> || <a
             href='sales.php?inv_num={$cs['invoice_number']}' id='editCustomer'
             data-cus='{$cs['invoice_number']}' name='printCustomer'>EDIT</a>

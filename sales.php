@@ -948,7 +948,7 @@ foreach ($bookers as $booker) {
                         "isIncmp": false,
                         "amountIn": isDisInAmntorInPer == "" ? "amount" :
                             isDisInAmntorInPer,
-                        "isEdit": true,
+                        "isEdit": false,
                         "date": "",
                         "booker_name": ""
                     },
@@ -1950,6 +1950,7 @@ foreach ($bookers as $booker) {
         }
 
         $("#clear_bill").on("click", e => {
+            $(window).off('beforeunload');
 
             if (showConfirmation()) {
                 $.ajax({

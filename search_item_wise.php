@@ -9,7 +9,7 @@
 }
 
 
-$bookers = $pdo->read("access", ['role_id'=>2, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$bookers = $pdo->read("access", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
@@ -78,7 +78,7 @@ $products = $pdo->read("products", ['company_profile_id' => $_SESSION['ovalfox_p
                                                         <!-- <label class="col-form-label">Product name</label> -->
 
 
-                                                        <select class="select2 form-control select-opt" name="product"
+                                                        <select class="select2 form-control  select-opt" name="product"
                                                             id="product">
                                                             <option selected value="">Select
                                                                 product
@@ -103,7 +103,7 @@ foreach ($products as $product) {
 
                                                         <label class="col-form-label">Booker Name</label>
 
-                                                        <select class="select select-opt" name="booker_name"
+                                                        <select class="select booker-select select-opt" name="booker_name"
                                                             id="booker_name">
                                                             <option disabled selected value="">Select Booker
                                                             </option>
@@ -128,7 +128,7 @@ foreach ($products as $product) {
 
                                                         <label class="col-form-label">Customer Name</label>
 
-                                                        <select class="select select-opt" name="customer" id="customer">
+                                                        <select class="select customer-select select-opt" name="customer" id="customer">
                                                             <option disabled selected value="">Select Customer
                                                             </option>
                                                             <?php

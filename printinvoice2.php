@@ -28,23 +28,51 @@ $sales_1 = $pdo->read('sales_1', ['invoice_number'=>$invoice_number, 'company_pr
 $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-
-$inv =  intval(empty($pdo->customQuery("SELECT * FROM sales_2 WHERE bill_number = {$sales_2[0]['bill_number']}")[0]['invoice_number']) ? 0 : $pdo->customQuery("SELECT * FROM sales_2 WHERE bill_number = {$sales_2[0]['bill_number']}")[0]['invoice_number']);
-
-
-
-
-
-
-
-
-$invMinus = $inv - 1;
-$invPlus = $inv + 1;
-
-$customerInvMinus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invMinus");    
-$customerInvPlus = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = $invPlus");    
+$customerInvMinus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$invoice_number}'
+ORDER BY invoice_number DESC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$invoice_number}'
+ORDER BY invoice_number DESC 
+LIMIT 1");
 
 
+
+
+$customerInvMinusAll = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$sales_2[0]['customer_name']}
+AND invoice_number < {$invoice_number}
+
+")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$sales_2[0]['customer_name']}
+AND invoice_number < {$invoice_number}
+
+");
+
+
+// foreach ($customerInvMinusAll as $inv) {
+//     echo $inv['invoice_number'] . "<br />";
+// }
+
+
+
+$customerInvPlus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$invoice_number}' 
+ORDER BY invoice_number ASC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$invoice_number}' 
+ORDER BY invoice_number ASC 
+LIMIT 1");
 
 $total_quantity = 0;
 $total_price = 0;
@@ -464,13 +492,25 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                                     
                                     // $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
                                     // echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
-                                    echo empty($customerInvMinus) ? 0 : $customerInvMinus[0]['pending_amount'];
+                                    if (empty($customerInvMinusAll)) {
+                                        echo 0;
+                                    } else {
+                                        $amount = [];
+                                        foreach ($customerInvMinusAll as $inv) {
+                                            $amount[] = $inv['pending_amount'];
+                                        }
+                                        echo array_sum($amount);
+                                    }
                                     ?></span>
                             </div>
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
                                 Rs
-                                <?php echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; ?>
+                                <?php 
+                                
+                                // echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; 
+                                echo array_sum($amount) + $sales_2[0]['pending_amount']
+                                ?>
                             </div>
 
                             <div id="rec-box" style="">
@@ -488,7 +528,7 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                 ">
                                 <span id="cb-text" style="font-weight: bold;">Current Balance</span>
                                 <b> Rs
-                                    <?php echo (double)$customers[0]['balance'] + (empty($customerInvMinus) ? 0 : (double)$customerInvMinus[0]['pending_amount']); ?></b>
+                                    <?php echo (double)$customers[0]['balance']; ?></b>
                             </div>
                         </div>
 

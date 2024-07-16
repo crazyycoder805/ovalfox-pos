@@ -4,7 +4,6 @@ require_once '../assets/includes/pdo.php';
 $sales_1 = "";
 $sales_2 = $pdo->read("sales_2", ['invoice_number' => $_POST['invoice_number'], "company_profile_id" => $_SESSION['ovalfox_pos_cp_id']]);
 
-$inv =  intval(empty($pdo->customQuery("SELECT * FROM sales_2 WHERE customer_name = '{$sales_2[0]['customer_name']}'")[0]['invoice_number']) ? 0 : $pdo->customQuery("SELECT * FROM sales_2 WHERE customer_name = '{$sales_2[0]['customer_name']}'")[0]['invoice_number']);
 
 
 $productsYES = isset($_POST['item_name']) && isset($_POST['invoice_number']) ? $pdo->customQuery("SELECT * 
