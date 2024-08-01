@@ -34,7 +34,7 @@ $html .= "<tr>
     $html .= "<td contenteditable='true'>{$customer[0]['name']}</td>
     <td contenteditable='true'>{$booker[0]['username']}</td>
 
-    <td contenteditable='true'>{$cs['final_amount']}</td>";
+    <td contenteditable='true'>".round($cs['final_amount'], 2)."</td>";
     
 
     $html .= "

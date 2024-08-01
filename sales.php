@@ -834,6 +834,9 @@ foreach ($bookers as $booker) {
         const current_date = $("#current_date");
         const extra_discount = $("#extra_discount");
 
+        <?php 
+       if (!isset($_GET['inv_num'])) {
+       ?>
         let currentDate = new Date();
         let formattedDate = currentDate.toISOString().split('T')[0]; // Get the date part
 
@@ -844,6 +847,7 @@ foreach ($bookers as $booker) {
 
         let formattedDateTime = `${formattedDate}T${hours}:${minutes}`;
         current_date.val(formattedDateTime);
+        <?php } ?>
         let isDisInAmntorInPer = "amount";
 
         let isIncmp = false;
@@ -1882,7 +1886,6 @@ foreach ($bookers as $booker) {
 
                 },
                 success: target => {
-                    console.log(target);
                     localStorage.setItem("details", $("#details").val());
 
                     <?php if ($user[0]['printing_page_size'] == "large") {

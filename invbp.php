@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice</title>
     <?php 
-
+function calculate_cut($original_amount, $percentage_cut) {
+    return $original_amount * ($percentage_cut / 100);
+}
 require_once 'assets/includes/pdo.php';
 session_start();
     if (!isset($_SESSION["ovalfox_pos_username"])) {
@@ -24,14 +26,10 @@ if (!isset($invoice_number) || empty($invoice_number)) {
 
 }
 
-$sales_1 = $pdo->customQuery("SELECT *  FROM sales_1 WHERE invoice_number = $invoice_number AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+$sales_1 = $pdo->read('sales_1', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
-
-
-$sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($sales_2[0]['invoice_number']) ? $sales_2[0]['invoice_number'] : -1]);
-$itemNME = preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $sales_2[0]['invoice_number'] : $sales_2[0]['invoice_number']; 
 $customerInvMinus = empty($pdo->customQuery("SELECT * 
 FROM sales_2 
 WHERE customer_name = '{$sales_2[0]['customer_name']}'
@@ -82,6 +80,53 @@ $total_quantity = 0;
 $total_price = 0;
 $total_quantity = 0;
 $total_price = 0;
+
+
+
+$amount = [];
+
+
+// $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
+// echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
+if (!empty($customerInvMinusAll)) {
+    foreach ($customerInvMinusAll as $inv) {
+        $amount[] = $inv['pending_amount'];
+    }
+    $amount = array_sum($amount);
+} else {
+    $amount = 0;
+}
+
+$finAmnt = $amount + $sales_2[0]['final_amount'];
+
+$endAmnt = (double)$finAmnt - (double)$sales_2[0]['recevied_amount'];
+$blnc = $pdo->read("customer_p_b", ['invoice_number' => $sales_2[0]['invoice_number'], 'customer_name' => $sales_2[0]['customer_name']]);
+
+
+$upp_total_price = 0;
+foreach ($sales_1 as $sale) {
+
+    
+    $pddd = $pdo->read("products", ['item_code' => $sale['item_code']]);
+    $upp_total_price += $sale['grand_total'];
+}
+
+
+
+$per_up = (intval($sales_2[0]['discount']) != 0 ? ($upp_total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
+$percetage_up = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['discount'] / $upp_total_price) * 100, 2) : (double)$sales_2[0]['discount'];
+$discount_up = $_GET['amountIn'] == "amount" ? $percetage_up : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0);
+$total_up = $_GET['amountIn'] == "amount" ? $upp_total_price - (double)$sales_2[0]['discount'] : $per_up;
+$rece_up = $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0;
+
+$preV = "";
+if (empty($blnc)) {
+    $preV = $pdo->create("customer_p_b", ['prev' => $amount, 'rece' => $rece_up, 'sub_total' => $upp_total_price, 'total' => $total_up, 'final_amount' => $finAmnt, 'discount' => $discount_up,'invoice_number' => $sales_2[0]['invoice_number'], 'customer_name' => $sales_2[0]['customer_name'], 'balance' => $endAmnt]);
+} else {
+    $preV = $pdo->update("customer_p_b", ['invoice_number' => $sales_2[0]['invoice_number'], 'customer_name' => $sales_2[0]['customer_name']], ['prev' => $amount, 'rece' => $rece_up, 'sub_total' => $upp_total_price, 'total' => $total_up, 'final_amount' => $finAmnt, 'discount' => $discount_up, 'balance' => $endAmnt]);
+}
+
+$bbb = $pdo->read("customer_p_b", ['invoice_number' => $sales_2[0]['invoice_number'], 'customer_name' => $sales_2[0]['customer_name']]);
 
 ?>
     <style>
@@ -311,21 +356,13 @@ $total_price = 0;
                 <h3 style="text-align: end; font-size: 20px !important;">
                     <?php echo $sales_2[0]['status']; ?>
                 </h3>
-                <?php 
-                if (strpos($itemNME, 'Refunded') == true) {
 
-                ?>
-                <h3 id="company_name">
-                    (Refunded)
-                </h3>
-
-                <?php } ?>
-                <h1 style="font-size: 50px !important;color: royalblue;" id="company_name">
+                <h1 style="font-size: 50px !important;" id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
                 <p id="address" style="font-size: 10px;">Address:
                     <?php echo !empty($company['address']) ? $company['address'] : ""; ?>,
-                    <br>
+                    Ph. no.: <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
                     Email:
                     <?php echo !empty($company['email']) ? $company['email'] : ""; ?>
                 </p>
@@ -389,7 +426,7 @@ $total_price = 0;
                         </table>
 
                         <table id="table-data-product" style="width: 100%;" border="2">
-                            <thead style="background-color: royalblue;color: white !important;">
+                            <thead>
                                 <th style="text-align: center;font-size: 20px !important;">SR</th>
                                 <th style="text-align: center;font-size: 20px !important;">Description</th>
                                 <th style="text-align: center;font-size: 20px !important;">Qty</th>
@@ -457,7 +494,7 @@ $total_price = 0;
 
 
                             <p> <b>Terms and Conditions:</b> <br /> <textarea disabled
-                                    style="font-size: 8px;color:red !important;font-weight: bolder;" placeholder="Type..." name=""
+                                    style="font-size: 8px;background-color:white;" placeholder="Type..." name=""
                                     id="terms-cond" cols="22" rows="3"><?php echo $sales_2[0]['details']; ?></textarea>
                             </p>
 
@@ -473,9 +510,7 @@ $total_price = 0;
                             <div id="discount-outer">
                                 <span id="discount-text-inner" style="font-weight: bold;">Dicount
                                     <?php 
-function calculate_cut($original_amount, $percentage_cut) {
-    return $original_amount * ($percentage_cut / 100);
-}
+
 $per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
 $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2) : (double)$sales_2[0]['discount'];
 ?>
@@ -501,25 +536,16 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                                     // $discount = (double)$sales_2[0]['discount'];
                                     // $received_amount = (double)$sales_2[0]['recevied_amount'];
                                     // $totalPriceOrPer = $amountIn == "amount" ? (double)$total_price - $discount : (double)$per;
-                                    $amount = [];
 
                                     // $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
                                     // echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
-                                    if (empty($customerInvMinusAll)) {
-                                        echo 0;
-                                    } else {
-                                        foreach ($customerInvMinusAll as $inv) {
-                                            $amount[] = $inv['pending_amount'];
-                                        }
-                                        echo array_sum($amount);
-                                    }
+                                    echo $amount;
                                     ?></span>
                             </div>
                             <div id="bala-box" style="">
                                 <span id="bala-text" style="font-weight: bold;">Final Amount</span>
                                 Rs
                                 <?php 
-                                $finAmnt = array_sum($amount) + $sales_2[0]['final_amount'];
                                 // echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; 
                                 echo $finAmnt;
                                 ?>
@@ -540,7 +566,12 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                 ">
                                 <span id="cb-text" style="font-weight: bold;">Current Balance</span>
                                 <b> Rs
-                                    <?php echo $finAmnt - (double)$sales_2[0]['recevied_amount']; ?></b>
+                                    <?php 
+                                   echo $bbb[0]['balance'];
+                                    
+                                    ?></b>
+
+                            
                             </div>
                         </div>
 
@@ -550,7 +581,7 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
 
 
                 <div style="width: 100%;border-bottom: 1px solid black;"></div>
-                <h6 style="text-align: center;font-size: 10pt !important;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
+                <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
             </div>
 
         </div>

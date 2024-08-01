@@ -11,8 +11,7 @@ $html = "";
     $received_amount = [];
     $returned_amount = [];
     $pending_amount = [];
-    
-
+  
     if (!empty($_POST['start_date']) && !empty($_POST['end_date']) && !empty($_POST['booker_name']) && !empty($_POST['customer_name'])) {
         $sales_2 = $pdo->customQuery("SELECT * FROM sales_2 WHERE Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}' AND customer_name = '{$_POST['customer_name']}' AND booker_name = '{$_POST['booker_name']}'");
     } else if (!empty($_POST['start_date']) && !empty($_POST['booker_name']) && !empty($_POST['customer_name'])) {

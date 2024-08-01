@@ -22,11 +22,35 @@ $(document).ready(function() {
 
     $(".customer-select").select2();
     $(".booker-select").select2();
-
-    $("#product").select2({
-        tags: true
-
+    $("#product").select2();
+    $('#product-select').select2({
+        placeholder: 'Search for a product',
+        tags: true,
+        ajax: {
+            url: 'load_products.php',
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    term: params.term // Pass search term to the server
+                };
+            },
+            processResults: function(data) {
+                return {
+                    results: data.map(function(product) {
+                        return {
+                            id: product.id, // Unique identifier for the product
+                            text: product.product_name // The name to display in the dropdown
+                        };
+                    })
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 1,
+        allowClear: true
     });
+
     $("#payment_from").select2();
     $("#item_names").select2();
     // $("#company_name").select2();

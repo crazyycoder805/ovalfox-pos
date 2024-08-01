@@ -2,8 +2,9 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 $_POST['date'] = str_replace("T", " ", $_POST['date']);
+$customerSales = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}");
 
-$customerSales = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
+// $customerSales = $pdo->customQuery("SELECT * FROM sales_2 WHERE invoice_number = {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 $date = isset($_POST['date']) && $_POST['date'] != "" ? $_POST['date'] : $customerSales[0]['date'];
 $booker = isset($_POST['booker_name']) && $_POST['booker_name'] != "" ? $_POST['booker_name'] : $customerSales[0]['booker_name'];
 
@@ -30,6 +31,17 @@ LIMIT 1");
 
 
 
+$customerInvMinusAll = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$customerSales[0]['customer_name']}
+AND invoice_number < {$_POST['invoice_number']}
+
+")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$customerSales[0]['customer_name']}
+AND invoice_number < {$_POST['invoice_number']}
+
+");
 
 
 
@@ -49,22 +61,24 @@ LIMIT 1");
 
 
 
-$customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-$ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+$customer = $pdo->read("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$ledger = $pdo->read("ledger", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $currentBalance = (double)($customer[0]['balance']);
 $previousPendingAmount = (double)($customerSales[0]['pending_amount']);
-
 $newPendingAmount = (double)($_POST['pending_amount']);
-$previousBalance = $customerSales[0]['previous_blnce'];
-
+$receivedAmount = (double)($_POST['recevied_amount']);
 if ($newPendingAmount != $previousPendingAmount) {
-    $balanceAdjustment = ($newPendingAmount) - $previousPendingAmount;
-
-    $blnc = ($currentBalance + $balanceAdjustment);
-
-    $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ["balance" => ((double)$blnc)]);
+    $balanceAdjustment = $newPendingAmount - $previousPendingAmount;
+    $blnc = $currentBalance + $balanceAdjustment;
+    $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']], ["balance" => $blnc]);
 }
 
+if ($receivedAmount > $newPendingAmount) {
+    $balanceAdjustment = $newPendingAmount - $previousPendingAmount;
+    $blnc = $currentBalance + $balanceAdjustment;
+    $newBalance = $blnc - (double)$_POST['returned_amount'];
+    $pdo->update("customers", ["id" => $customerSales[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']], ["balance" => $newBalance]);
+}
 
 if (empty($ledger)) {
     $pdo->create("ledger", ["invoice_number" => $_POST['invoice_number'],
@@ -82,7 +96,7 @@ if (empty($ledger)) {
 
 
 if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
-    print_r(85);
+
     $pdo->update("sales_2", ['invoice_number' => $_POST['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], ['discount' => 
     $_POST['discount_in_amount'],
     'date' => $date,
@@ -107,7 +121,14 @@ if (isset($_POST['isEdit']) && $_POST['isEdit'] == "false") {
     $pdo->update("sales_2", ['invoice_number' => $customerInvPlus[0]['invoice_number'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']], [
     'previous_blnce' => $row[0]['pending_amount'],     
     "booker_name" => $booker, 
-    'date' => $date,
 
 ]); 
- }
+}
+
+
+
+
+
+
+
+

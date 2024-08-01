@@ -1230,6 +1230,9 @@ $data = [];
                     $totalReceviedAmnt[] = $d['recevied_amount'];
                     $totalReturnedAmnt[] = $d['returned_amount'];
                     $totalPendingAmnt[] = $d['pending_amount'];
+                    $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($d['invoice_number']) ? $d['invoice_number'] : -1]);
+                    $itemNME = preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $d['invoice_number'] : $d['invoice_number']; 
+
             ?>
                 <tr>
                     <td
@@ -1237,7 +1240,7 @@ $data = [];
                         <?php echo $idx; ?></td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
-                        <?php echo $d['invoice_number']; ?>
+                        <?php echo $itemNME; ?>
                     </td>
 
                     <td
