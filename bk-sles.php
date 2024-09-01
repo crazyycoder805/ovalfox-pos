@@ -309,9 +309,9 @@ foreach ($bookers as $booker) {
                                         </option>
                                         <?php
 
-                                                    foreach ($products as $product) {
+foreach ($products as $product) {
 
-                                                    ?>
+?>
                                         <option value="<?php echo $product['id']; ?>">
                                             <?php echo $product['product_name']; ?>
                                         </option>
@@ -634,15 +634,8 @@ foreach ($bookers as $booker) {
                                         Received</label>
                                     <input class="form-control" class="" name="amount_received" type="number"
                                         placeholder="Amount Received" id="amount_received">
-                                    <div class="checkbox mt-3">
-                                        <input disabled id="new_legder_entry" name="new_legder_entry"
-                                            value="new_legder_entry" type="checkbox">
-                                        <label for="new_legder_entry">Click here to receive amount</label>
-                                    </div>
-
                                 </div>
                             </div>
-
                             <div class="col-md">
                                 <div class="form-group">
                                     <label class="col-form-label">Payment
@@ -864,23 +857,8 @@ foreach ($bookers as $booker) {
         <?php 
             if (isset($_GET['inv_num'])) {
 
-                $invoice_sales_2 = $pdo->read("sales_2", ['invoice_number' => $_GET['inv_num']]);
-                $maxedInvoiceNumberCus = $pdo->customQuery("SELECT *
-                FROM 
-                sales_2 
-                WHERE 
-                company_profile_id = '{$_SESSION['ovalfox_pos_cp_id']}' AND customer_name = '{$invoice_sales_2[0]['customer_name']}' 
-                AND invoice_number > {$invoice_sales_2[0]['invoice_number']}");
-                
-                if (count($maxedInvoiceNumberCus) > 0) {
-                    echo "location.href = 'sales.php';alert('Previous invoice cant be editable.')";
-
-                } 
-                
-      
+            
             ?>
-       
-      
         $.ajax({
             type: "POST",
             url: "requestsPHP/loadInvoice.php",
@@ -894,17 +872,17 @@ foreach ($bookers as $booker) {
                 const product = JSON.parse(e);
                 finalAmount = +product[1][0]['total_amount'];
                 totalPayable = +product[1][0]['final_amount'];
-                universelHTML = product[0];
+                console.log(e);
                 $("#data").html(product[0]);
                 $("#total_items").text(product[2]);
                 $("#total_quantity_added").text(product[3]);
 
                 $("#final_amount").val(+product[1][0]['total_amount']);
                 $("#discount_in_amount").val(+product[1][0]['discount']);
-                $("#total_payable").val(+product[1][0]['final_amount']);
-                // $("#total_payable").val((+product[1][0]['final_amount'] != 0 ? product[1][0][
-                //     'final_amount'
-                // ] : +product[1][0]['total_amount']));
+                $("#total_payable").val((+product[1][0]['final_amount'] != 0 ? product[1][0][
+                    'final_amount'
+                ] : +product[1][0]['total_amount']));
+
                 $("#amount_received").val(+product[1][0][
                     'recevied_amount'
                 ]);
@@ -971,7 +949,6 @@ foreach ($bookers as $booker) {
                         "total_amount": $("#final_amount").val(),
                         "payment_type": $("#payment_type").val(),
                         "details": $("#details").val(),
-                        'new_legder_entry': $("#new_legder_entry").val(),
                         "isIncmp": false,
                         "amountIn": isDisInAmntorInPer == "" ? "amount" :
                             isDisInAmntorInPer,
@@ -1010,7 +987,6 @@ foreach ($bookers as $booker) {
         let box_quantity = 0;
         let total_quantity_is = 0;
         let total_discount = 0;
-        let universelHTML = "";
 
         function loadScreen() {
             $(window).on('beforeunload', function(
@@ -1050,43 +1026,19 @@ foreach ($bookers as $booker) {
                         product: e.target.value,
                         "customer_name": $("#manual_customer").is(":checked") == true ?
                             $("#customer_manual").val() : $("#customer_name").val(),
-                        'invoice_number': $("#invoice_number").val()
 
                     },
                     success: e => {
 
                         const product = JSON.parse(e);
-
+                        item_code.val(product[0]);
+                        unit_price.val(product[1]);
+                        item_name.val(product[2]);
+                        total_quantity.val(product[3]);
                         $("#last_rate").html(product[4]);
-                        if (product[5] != "false") {
-                            const targetProductCode = product[6];
 
-                            $("[id^='item_codeTabledData']").each(function() {
-                                if ($(this).text().trim() === targetProductCode) {
-                                    const dynamicNumber = $(this).attr('id')
-                                        .replace('item_codeTabledData', '');
-
-                                    const quantityElementId = 'quantityTabledData' +
-                                        dynamicNumber;
-                                    $('#' + quantityElementId).focus();
-                                }
-                            });
-                            $('#unit_price').prop("disabled", true);
-                            $('#unit_price').val('');
-                            $("#wholeFormBtn").prop("disabled", true);
-                        } else {
-                            $('#unit_price').prop("disabled", false);
-                            $("#wholeFormBtn").prop("disabled", false);
-
-                            item_code.val(product[0]);
-                            unit_price.val(product[1]);
-                            item_name.val(product[2]);
-                            total_quantity.val(product[3]);
-                            $('#unit_price').focus().select();
-                            initialQuantity = total_quantity.val();
-                        }
-
-
+                        $('#unit_price').focus().select();
+                        initialQuantity = total_quantity.val();
                     }
                 });
             } else {
@@ -1250,6 +1202,38 @@ foreach ($bookers as $booker) {
         });
 
 
+        // function AmountToPer(discount, amount) {
+        //     return (discount / amount) * 100;
+        // }
+
+        // function PertToAmount(discount, amount) {
+        //     return (+$("#quantity").val() * +$("#unit_price").val()) - ;
+        // }
+
+        // const calculateDiscount = (quantity, unitPrice, discountRate) => {
+        //     const discountedPrice = (unitPrice * quantity) - discountRate;
+        //     let totalNEW = +$("#quantity").val() * +unit_price.val();
+
+        //     const discountPercentage = totalNEW - ((unitPrice * quantity) / 100) * discountRate;
+        //     return {
+        //         discountedPrice: discountedPrice,
+        //         discountPercentage: discountPercentage
+        //     };
+        // }
+        // const calculateExtraDiscount = (totalAmount, extraDiscountRate) => {
+        //     const extraDiscountedPrice = totalAmount - extraDiscountRate;
+        //     let totalNEW = +$("#quantity").val() * +unit_price.val();
+
+        //     const discountPercentage = totalNEW - (totalAmount / 100) * extraDiscountRate;
+
+        //     return {
+        //         extraDiscountedPrice: extraDiscountedPrice,
+        //         discountPercentage: discountPercentage,
+        //     };
+        // };
+
+
+
         const calculateDiscount = (quantity = 0, unitPrice = 0, finalAmount = 0, discountRate, ) => {
             const discountedPrice = quantity != 0 && unitPrice != 0 ? ((quantity * unitPrice) -
                 discountRate) : ((finalAmount) - discountRate);
@@ -1268,6 +1252,27 @@ foreach ($bookers as $booker) {
         };
 
 
+
+        // discount.on("input", e => {
+        //     const result = calculateDiscount(quantity.val(), unit_price.val(), discount.val());
+        //     total_amount.val(result.discountedPrice);
+        //     total_discount = result.discountedPrice;
+        //     extra_discount.val('');
+        // });
+        // extra_discount.on("input", e => {
+        //     const extraDiscountValue = parseFloat(e.target.value || 0);
+        //     const total = parseFloat(total_discount || 0);
+        //     const result = calculateExtraDiscount(total, extraDiscountValue);
+        //     total_amount.val(result.extraDiscountedPrice);
+        // });
+        // $("#discount_amount").on("click", e => {
+        //     const resultDis = AmountToPer(+discount.val(), +quantity.val() * +unit_price.val());
+        //     total_amount.val(resultDis);
+        // });
+        // $("#discount_percentage").on("click", e => {
+        //     const resultDis = PertToAmount(+discount.val(), +quantity.val() * +unit_price.val());
+        //     total_amount.val(resultDis);
+        // });
 
         let isAmount = "";
 
@@ -1410,17 +1415,11 @@ foreach ($bookers as $booker) {
                 //$("#amount_return").val($("#type").val() != "rf" ? parseFloat(e.target.value || 0) - (totalPayable != 0 ? totalPayable : finalAmount) : Math.abs(parseFloat(e.target.value || 0)) - (totalPayable != 0 ? Math.abs(totalPayable) : Math.abs(finalAmount)))  ;
 
                 $("#pending_amount").val(0);
-                $("#new_legder_entry").prop("disabled", false);
-
-
-
             } else {
 
                 $("#pending_amount").val((+totalPayable != 0 ? +totalPayable : +finalAmount) - +
                     parseFloat(e.target.value || 0));
                 $("#amount_return").val(0);
-                $("#new_legder_entry").prop("disabled", true);
-                $("#new_legder_entry").prop("checked", false);
 
             }
         });
@@ -1436,7 +1435,6 @@ foreach ($bookers as $booker) {
 
                 },
                 success: e => {
-                    console.log(e);
                     const item = JSON.parse(e);
 
                     $("#final_amount").val(finalAmount - item[0]);
@@ -1453,10 +1451,7 @@ foreach ($bookers as $booker) {
                         },
                         success: e => {
                             const product = JSON.parse(e);
-                            universelHTML = product[0];
-
                             $("#data").html(product[0]);
-
                             $("#total_items").text(product[1]);
                             $("#total_quantity_added").text(product[2]);
                             finalAmount = product[3];
@@ -1579,7 +1574,6 @@ foreach ($bookers as $booker) {
             if (inputValue <= 0) {
                 e.target.value = 1;
             }
-
             location.href = `sales.php?inv_num=${e.target.value}`;
 
         });
@@ -1761,8 +1755,6 @@ foreach ($bookers as $booker) {
                             },
                             success: e => {
                                 const product = JSON.parse(e);
-                                universelHTML = product[0];
-
                                 $("#data").html(product[0]);
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[2]);
@@ -1815,10 +1807,6 @@ foreach ($bookers as $booker) {
                                         "invoice_number": $(
                                                 "#invoice_number")
                                             .val(),
-                                        'new_legder_entry': $(
-                                                "#new_legder_entry")
-                                            .val(),
-
                                         "discount_in_amount": $(
                                                 "#discount_in_amount")
                                             .val(),
@@ -1881,7 +1869,6 @@ foreach ($bookers as $booker) {
                 data: {
                     "__FILE__": "sales2Update",
                     "invoice_number": $("#invoice_number").val(),
-                    'new_legder_entry': $("#new_legder_entry").val(),
                     "discount_in_amount": $("#discount_in_amount").val(),
                     "final_amount": $("#total_payable").val(),
                     "recevied_amount": $("#amount_received").val(),
@@ -1900,8 +1887,6 @@ foreach ($bookers as $booker) {
 
                 },
                 success: target => {
-                    console.log(target);
-
                     localStorage.setItem("details", $("#details").val());
 
                     <?php if ($user[0]['printing_page_size'] == "large") {
@@ -2268,9 +2253,7 @@ foreach ($bookers as $booker) {
 
                             },
                             success: e => {
-
                                 const product = JSON.parse(e);
-                                universelHTML = product[0];
 
                                 $("#data").html(product[0]);
                                 const regexPattern = new RegExp(
@@ -2278,7 +2261,8 @@ foreach ($bookers as $booker) {
 
                                 $(document).find(
                                     `#${product[0].match(regexPattern)[0]}`
-                                ).addClass("active-cell");
+                                ).addClass("active-cell")
+                                // let html = ;
                                 $("#total_items").text(product[1]);
                                 $("#total_quantity_added").text(product[
                                     2]);
@@ -2568,15 +2552,7 @@ foreach ($bookers as $booker) {
 
         $("#booker_name_details").on("change", e => {
             $("#details").val(`${$(e.target).val()} ny wasool krlia: `);
-        });
-
-        $("#new_legder_entry").change(target => {
-            if ($(target.target).is(':checked')) {
-                $(target.target).val("true");
-            } else {
-                $(target.target).val("false");
-            }
-        });
+        })
 
     });
     </script>

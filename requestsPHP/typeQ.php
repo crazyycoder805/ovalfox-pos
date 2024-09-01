@@ -2,34 +2,39 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 
-if (!empty($_POST['productId'])){
-    $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
+if (!empty($_POST['productId'])) {
+    $productId = $_POST['productId'];
     $type = $_POST['type'];
     $quantityType = $_POST['typeQuantity'];
 
-    $pdData = [];
+    // Read product data from database
+    $pr = $pdo->read("products", [
+        'id' => $productId,
+        'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']
+    ]);
 
-    if ($type != "rf" && $type != "") {
-        if ($type == "tr") {
-            if ($quantityType == "piece") {
-                $pdData = [$pr[0]['trade_unit_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-            }
+    if (!empty($pr)) {
+        $product = $pr[0];
+        $priceKey = '';
+        $quantityTypeIndex = $quantityType == 'piece' ? 0 : 1;
+
+        // Determine the correct price key based on type
+        if ($type == 'tr') {
+            $priceKey = 'trade';
+        } elseif ($type == 'wr') {
+            $priceKey = 'whole_sale';
         }
-        if ($type == "wr") {
-            if ($quantityType == "piece") {
-                $pdData = [$pr[0]['whole_sale_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-            }
+
+        // Build the price key string
+        if ($priceKey && $quantityTypeIndex !== null) {
+            $priceKey .= $quantityTypeIndex ? '_box_price' : '_unit_price';
+            $pdData = [
+                $product[$priceKey],
+                $product['total_quantity'],
+                $product['box_quantity'],
+                $product['quantity_per_box']
+            ];
+            echo json_encode($pdData);
         }
-        if ($type == "tr") {
-            if ($quantityType == "box") {
-                $pdData = [$pr[0]['trade_box_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-            }
-        }
-        if ($type == "wr") {
-            if ($quantityType == "box") {
-                $pdData = [$pr[0]['whole_sale_box_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-            }
-        }
-        echo json_encode($pdData);
     }
 }

@@ -2,39 +2,35 @@
 session_start();
 require_once '../assets/includes/pdo.php';
 
-if (!empty($_POST['productId']) || !empty($_POST['itemSearch'])){
-    $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-
+// Check if either productId or itemSearch is provided
+if (!empty($_POST['productId']) || !empty($_POST['itemSearch'])) {
+    $criteria = [];
     if (!empty($_POST['productId'])) {
-        $pr = $pdo->read("products", ['id' => $_POST['productId'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-    } else if (!empty($_POST['itemSearch'])) {
-        $pr = $pdo->read("products", ['item_code' => $_POST['itemSearch'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id']]);
-
+        $criteria = ['id' => $_POST['productId']];
+    } elseif (!empty($_POST['itemSearch'])) {
+        $criteria = ['item_code' => $_POST['itemSearch']];
     }
-    $type = $_POST['type'];
-    $quantityType = $_POST['typeQuantity'];
-
-    $pdData = [];
-
-    if ($type == "tr") {
-        if ($quantityType == "piece") {
-            $pdData = [$pr[0]['trade_unit_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-        }
+    
+    // Add company profile id to the criteria
+    $criteria['company_profile_id'] = $_SESSION['ovalfox_pos_cp_id'];
+    
+    // Fetch product details
+    $pr = $pdo->read("products", $criteria);
+    
+    if (!empty($pr)) {
+        $type = $_POST['type'];
+        $quantityType = $_POST['typeQuantity'];
+        
+        $priceKey = ($type == "tr") ? 'trade_' : 'whole_sale_';
+        $quantityKey = ($quantityType == "piece") ? 'piece' : 'box';
+        
+        $priceField = $priceKey . ($quantityType == "piece" ? 'unit_price' : 'box_price');
+        $quantityFields = ['total_quantity', 'box_quantity', 'quantity_per_box'];
+        
+        $pdData = array_merge([$pr[0][$priceField]], array_map(fn($field) => $pr[0][$field], $quantityFields));
+        
+        echo json_encode($pdData);
+    } else {
+        echo json_encode([]);
     }
-    if ($type == "wr") {
-        if ($quantityType == "piece") {
-            $pdData = [$pr[0]['whole_sale_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-        }
-    }
-    if ($type == "tr") {
-        if ($quantityType == "box") {
-            $pdData = [$pr[0]['trade_box_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-        }
-    }
-    if ($type == "wr") {
-        if ($quantityType == "box") {
-            $pdData = [$pr[0]['whole_sale_box_price'], $pr[0]['total_quantity'], $pr[0]['box_quantity'], $pr[0]['quantity_per_box']];
-        }
-    }
-    echo json_encode($pdData);
 }

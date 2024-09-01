@@ -4,11 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Invoice</title>
     <?php 
 
 require_once 'assets/includes/pdo.php';
 session_start();
+    if (!isset($_SESSION["ovalfox_pos_username"])) {
+        header("location:login.php");
+    }
 
 $invoice_number = $_GET['inv'];
 
@@ -21,25 +24,65 @@ if (!isset($invoice_number) || empty($invoice_number)) {
 
 }
 
-$sales_1 = $pdo->read('sales_1', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+$sales_1 = $pdo->customQuery("SELECT *  FROM sales_1 WHERE invoice_number = $invoice_number AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC");
 $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
+
+$sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($sales_2[0]['invoice_number']) ? $sales_2[0]['invoice_number'] : -1]);
+$itemNME = preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $sales_2[0]['invoice_number'] : $sales_2[0]['invoice_number']; 
+$customerInvMinus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$invoice_number}'
+ORDER BY invoice_number DESC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number < '{$invoice_number}'
+ORDER BY invoice_number DESC 
+LIMIT 1");
+
+
+
+
+$customerInvMinusAll = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$sales_2[0]['customer_name']}
+AND invoice_number < {$invoice_number}
+
+")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = {$sales_2[0]['customer_name']}
+AND invoice_number < {$invoice_number}
+
+");
+
+
+// foreach ($customerInvMinusAll as $inv) {
+//     echo $inv['invoice_number'] . "<br />";
+// }
+
+
+
+$customerInvPlus = empty($pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$invoice_number}' 
+ORDER BY invoice_number ASC 
+LIMIT 1")) ? [] : $pdo->customQuery("SELECT * 
+FROM sales_2 
+WHERE customer_name = '{$sales_2[0]['customer_name']}'
+AND invoice_number > '{$invoice_number}' 
+ORDER BY invoice_number ASC 
+LIMIT 1");
+
 $total_quantity = 0;
 $total_price = 0;
 $total_quantity = 0;
 $total_price = 0;
 
-// Paginate the product list
-$productsPerPage = 40;
-$totalProducts = count($sales_1);
-$pageCount = ceil($totalProducts / $productsPerPage);
-
-// Get the page number from the URL parameter
-$page = isset($_GET['page']) ? max(1, min($pageCount, $_GET['page'])) : 1;
-$startIndex = ($page - 1) * $productsPerPage;
-$endIndex = min($startIndex + $productsPerPage, $totalProducts);
 ?>
     <style>
     @media print {
@@ -49,7 +92,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
         }
 
 
-        body {
+        /* body {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -58,30 +101,30 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
 
         table {
             width: 100%;
-        }
+        } */
 
-        td {
+        /* td {
             word-wrap: break-word;
             max-width: calc(100% / 9);
-        }
+        } */
 
-        #main {
+        /* #main {
             padding: 5px;
             height: calc(100% - 20px);
-        }
-
+        } */
+        /* 
         #main-inner {
             height: 100%;
-        }
-
+        } */
+        /* 
         #table-info,
         #footer-outer {
             font-size: 10px;
-        }
-
+        } */
+        /* 
         #table-data-product {
             font-size: 10px;
-        }
+        } */
 
         #bbtn {
             display: none;
@@ -89,7 +132,7 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
 
 
     }
-    
+
 
 
     #footer-outer {
@@ -109,20 +152,18 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
     * {
         margin: 0;
         padding: 0;
+        font-size: 25px !important;
+
     }
 
-    body {
-        width: 4.1in;
-    }
+
 
     #main {
         padding-left: 3px;
-        margin-top: -0.3px !important;
+        /* margin-top: -0.3px !important; */
     }
 
-    #main-inner {
-        width: 4.1in;
-    }
+
 
 
 
@@ -139,8 +180,8 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
     }
 
     #table-info {
-        margin-left: 15px;
-        margin-right: 18px;
+        /* margin-left: 15px;
+        margin-right: 18px; */
         font-size: 12px;
     }
 
@@ -262,15 +303,29 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
 <body>
 
     <div class="page">
-        <div id="main" style="margin-top: 0.2in;margin-bottom: 0.2in;">
+        <!-- style of main: style="margin-top: 0.2in;margin-bottom: 0.2in;" -->
+
+        <div id="main">
             <div id="main-inner" style="">
                 <p id="bbtn"><a href="sales.php">Back</a></p>
-                <h1 id="company_name">
+                <h3 style="text-align: end; font-size: 20px !important;">
+                    <?php echo $sales_2[0]['status']; ?>
+                </h3>
+                <?php 
+                if (strpos($itemNME, 'Refunded') == true) {
+
+                ?>
+                <h3 id="company_name">
+                    (Refunded)
+                </h3>
+
+                <?php } ?>
+                <h1 style="font-size: 50px !important;color: royalblue;" id="company_name">
                     <?php echo !empty($company['company_name']) ? $company['company_name'] : ""; ?>
                 </h1>
                 <p id="address" style="font-size: 10px;">Address:
                     <?php echo !empty($company['address']) ? $company['address'] : ""; ?>,
-                    Ph. no.: <?php echo !empty($company['phone1']) ? $company['phone1'] : ""; ?>
+                    <br>
                     Email:
                     <?php echo !empty($company['email']) ? $company['email'] : ""; ?>
                 </p>
@@ -280,82 +335,109 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
                     <?php echo !empty($company['phone3']) ?  '- - '. $company['phone3'] : ""; ?>
                 </p>
                 <div id="table-info">
-                    <div style="border: 1px solid black;">
-                        <table id="" style="">
+                    <div style="border: 2px solid black;">
+                        <table id="" style="width: 100%; table-layout: fixed;">
                             <thead>
-
                                 <tr>
-                                    <th style="text-align: start;" id="table-info-first-th-child" style="">
-                                        <?php echo $sales_2[0]['created_at'] ?></th>
-                                    <th style="text-align: center;">Invoice: <?php echo $invoice_number; ?></th>
-
-                                    <th style="text-align: end;"><?php echo $sales_2[0]['status']; ?></th>
-
-                                </tr>
-                                <tr>
-                                    <th style="text-align: start;">Cashier :
-                                        <?php echo $_SESSION['ovalfox_pos_username']; ?>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        <?php echo str_replace('T', ' ', $sales_2[0]['date']); ?>
                                     </th>
-                                    <th style="text-align: start;">Booker : <?php echo $booker[0]['username']; ?>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Inv.: <?php echo $invoice_number; ?>
+                                    </th>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Add.<span style="white-space: nowrap; font-size: 20px !important;">
+                                            <?php echo $customers[0]['address']; ?>
+
+                                        </span>
                                     </th>
 
 
 
                                 </tr>
                                 <tr>
-                                    <th style="text-align: start;">Add : <?php echo $customers[0]['address'];?></th>
+                                    <th style="text-align: start; white-space: nowrap;font-size: 20px !important;">BOK.
+                                        <?php echo $booker[0]['username']; ?></th>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Cash.: <?php echo $_SESSION['ovalfox_pos_username']; ?>
                                     </th>
-                                    <th style="text-align: center;">Phone: <?php echo $customers[0]['phone'];?></th>
-                                    <th style="text-align: center;">Name:
-                                        <?php echo $customers[0]['name'];?></th>
+                                    <th style="text-align: start; font-size: 20px !important;">
+                                        Ph.: <?php echo $customers[0]['phone']; ?>
+                                    </th>
+
+
+                                </tr>
+
+                            </thead>
+                        </table>
+                        <table style="width: 100%; table-layout: fixed;">
+                            <thead>
+                                <tr>
+
+
+
+                                </tr>
+                                <tr>
+                                    <th style="text-align: start; font-size: 30px !important;width:200px">
+                                        CUST.
+                                        <?php echo $customers[0]['name']; ?>
+                                        </span>
+
+                                    </th>
                                 </tr>
                             </thead>
-
                         </table>
-                        <table id="table-data-product" style="
-        " border="1">
-                            <thead>
-                                <th style="text-align: center;font-size: 11px;">SR</th>
-                                <th style="text-align: center;font-size: 11px;">Qty</th>
-                                <th style="text-align: center;font-size: 11px;">Description</th>
-                                <th style="text-align: center;font-size: 11px;">Rate</th>
-                                <th style="text-align: center;font-size: 11px;">Total</th>
-                                <th style="text-align: center;font-size: 11px;">Dis</th>
-                                <th style="text-align: center;font-size: 11px;">%</th>
-                                <th style="text-align: center;font-size: 11px;">Ex.Dis</th>
 
-                                <th style="text-align: center;font-size: 11px;">G.Total</th>
+                        <table id="table-data-product" style="width: 100%;" border="2">
+                            <thead style="background-color: royalblue;color: white !important;">
+                                <th style="text-align: center;font-size: 20px !important;">SR</th>
+                                <th style="text-align: center;font-size: 20px !important;">Description</th>
+                                <th style="text-align: center;font-size: 20px !important;">Qty</th>
+                                <th style="text-align: center;font-size: 20px !important;">Rate</th>
+                                <th style="text-align: center;font-size: 20px !important;">Total</th>
+                                <th style="text-align: center;font-size: 20px !important;">Dis</th>
+                                <th style="text-align: center;font-size: 20px !important;">%</th>
+                                <th style="text-align: center;font-size: 20px !important;">E.D</th>
+
+                                <th style="text-align: center;font-size: 20px !important;">G.Total</th>
 
                             </thead>
                             <tbody>
                                 <?php 
-    for ($i = $startIndex; $i < $endIndex; $i++) {
-        $sale = $sales_1[$i];
+    foreach ($sales_1 as $index => $sale) {
+        $index += 1;
+
+        
         $pd = $pdo->read("products", ['item_code' => $sale['item_code']]);
-        $index = $i + 1;
         $total_quantity += $sale['quantity'];
         $total_price += $sale['grand_total'];
     ?>
                                 <tr>
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $index; ?></td>
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['quantity']; ?>
-                                    </td>
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['item_name']; ?>
+                                    <td style="text-align: center;font-size: 23px !important;"><?php echo $index; ?>
                                     </td>
 
-
-                                    <td style="text-align: center;font-size: 11px;">
-                                        <?php echo $sale['item_price']; ?></td>
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['amount']; ?></td>
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['discount']; ?>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo $sale['item_name']; ?>
                                     </td>
-                                    <td style="text-align: center;font-size: 11px;">
-                                        <?php echo !empty($sale['percentage']) ? $sale['percentage'] : 0; ?></td>
-                                    <td style="text-align: center;font-size: 11px;">
-                                        <?php echo $sale['extra_discount']; ?>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo $sale['quantity']; ?>
                                     </td>
 
-                                    <td style="text-align: center;font-size: 11px;"><?php echo $sale['grand_total']; ?>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round($sale['item_price'], 2); ?></td>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round($sale['amount'], 2); ?></td>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round($sale['discount'], 2); ?>
+                                    </td>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round(!empty($sale['percentage']) ? $sale['percentage'] : 0); ?></td>
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round($sale['extra_discount'], 2); ?>
+                                    </td>
+
+                                    <td style="text-align: center;font-size: 23px !important;">
+                                        <?php echo round($sale['grand_total'], 2); ?>
                                     </td>
                                     </td>
 
@@ -364,69 +446,102 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
                                 <?php } ?>
                             </tbody>
                         </table>
-                        <div style="text-align: center;">
-                            <?php for ($i = 1; $i <= $pageCount; $i++) { ?>
-                            <a href="?inv=<?php echo $invoice_number ?>&page=<?php echo $i ?>"><?php echo $i ?></a>
-                            <?php } ?>
-                        </div>
+
 
                     </div>
-                    <?php
-    // Check if it's the last page
-    if ($page == $pageCount) {
-?>
+
                     <div id="footer-outer" style="">
                         <div style="">
                             <h4>Items: <?php echo $total_quantity; ?></h4>
                             <h4>Bill Number: <?php echo $sales_2[0]['bill_number']; ?></h4>
 
 
-                            <p> <b>Terms and Conditions:</b> <br /> <span disabled style="font-size: 12px;"
+                            <p> <b>Terms and Conditions:</b> <br /> <textarea disabled
+                                    style="font-size: 8px;color:red !important;font-weight: bolder;"
                                     placeholder="Type..." name="" id="terms-cond" cols="22"
-                                    rows="10"><?php echo $sales_2[0]['details']; ?></span></p>
+                                    rows="3"><?php echo $sales_2[0]['details']; ?></textarea>
+                            </p>
 
 
                         </div>
                         <div id="sub-total" style="width: 100%;">
                             <div id="sub-total-inner">
-                                <span id="sub-total-text" style="">Sub Total</span>
+                                <span id="sub-total-text" style="font-weight: bold;">Sub Total</span>
                                 <span id="sub-total-price">Rs <?php echo $total_price; ?></span>
                             </div>
 
 
                             <div id="discount-outer">
-                                <span id="discount-text-inner" style="">Dicount
-
-                                    (<?php echo $sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0; ?>%)</span>
+                                <span id="discount-text-inner" style="font-weight: bold;">Dicount
+                                    <?php 
+function calculate_cut($original_amount, $percentage_cut) {
+    return $original_amount * ($percentage_cut / 100);
+}
+$per = (intval($sales_2[0]['discount']) != 0 ? ($total_price) * (1 - (intval($sales_2[0]['discount']) / 100)) : 0);
+$percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['discount'] / $total_price) * 100, 2) : (double)$sales_2[0]['discount'];
+?>
+                                    (<?php    
+                                    
+ echo $_GET['amountIn'] == "amount" ? $percetage : ($sales_2[0]['discount'] != 0 && !empty($sales_2[0]['discount']) ? $sales_2[0]['discount'] : 0); ?>%)</span>
                                 <span id="discount-total-price" style="">Rs
-                                    <?php $per = ($sales_2[0]['discount'] != 0 ? ($total_price) * (1 - ($sales_2[0]['discount'] / 100)) : 0); echo $per; ?></span>
+                                    <?php $minused = $total_price - $per;echo $_GET['amountIn'] == "amount" ? calculate_cut($total_price, $percetage) : $minused; ?></span>
                             </div>
                             <div id="total-box" style="">
                                 <span id="total-text" style=""><b>Total</b></span>
                                 <b id="total-price-total" style="">Rs
-                                    <?php $minused = $total_price - $per;echo $minused; ?></b>
+                                    <?php echo $_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per; ?></b>
+                            </div>
+                            <div id="rec-box" style="">
+                                <span id="rec-text" style="font-weight: bold;">Prev.</span>
+
+                                <span id="rec-total">Rs <?php 
+                                    
+                                    //echo $minused;
+                                    // $balance = (double)$customers[0]['balance'];
+                                    // $amountIn = $_GET['amountIn'];
+                                    // $discount = (double)$sales_2[0]['discount'];
+                                    // $received_amount = (double)$sales_2[0]['recevied_amount'];
+                                    // $totalPriceOrPer = $amountIn == "amount" ? (double)$total_price - $discount : (double)$per;
+                                    $amount = [];
+
+                                    // $new_balance = round($balance - ($totalPriceOrPer - $received_amount), 2);
+                                    // echo $balance != 0 ? (empty($sales_2[0]['returned_amount']) ? $new_balance : $new_balance - (double)$sales_2[0]['returned_amount']) : 0;                                    //echo ($customers[0]['balance']) - ($minused) >= 0 ? ($customers[0]['balance']) - ($minused) : 0 ;
+                                    if (empty($customerInvMinusAll)) {
+                                        echo 0;
+                                    } else {
+                                        foreach ($customerInvMinusAll as $inv) {
+                                            $amount[] = $inv['pending_amount'];
+                                        }
+                                        echo array_sum($amount);
+                                    }
+                                    ?></span>
+                            </div>
+                            <div id="bala-box" style="">
+                                <span id="bala-text" style="font-weight: bold;">Final Amount</span>
+                                Rs
+                                <?php 
+                                $finAmnt = array_sum($amount) + $sales_2[0]['final_amount'];
+                                // echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; 
+                                echo $finAmnt;
+                                ?>
                             </div>
 
                             <div id="rec-box" style="">
-                                <span id="rec-text" style="">Received</span>
+                                <span id="rec-text" style="font-weight: bold;">Received</span>
 
-                                <span
-                                    id="rec-total">Rs<?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
+                                <span id="rec-total">Rs
+                                    <?php echo $sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0; ?></span>
                             </div>
 
-                            <div id="bala-box" style="">
-                                <span id="bala-text" style="">Balance</span>
-                                Rs
-                                <?php echo $minused - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0); ?>
-                            </div>
+
 
 
 
                             <div id="cb-box" style=" 
                 ">
-                                <span id="cb-text" style="">Current Balance</span>
-                                Rs
-                                <?php echo !empty($customers[0]['balance']) ? $minused + $customers[0]['balance'] : $customers[0]['balance']; ?>
+                                <span id="cb-text" style="font-weight: bold;">Current Balance</span>
+                                <b> Rs
+                                    <?php echo $finAmnt - (double)$sales_2[0]['recevied_amount']; ?></b>
                             </div>
                         </div>
 
@@ -434,75 +549,37 @@ $endIndex = min($startIndex + $productsPerPage, $totalProducts);
                     </div>
                 </div>
 
-                <h6 style="text-align: center;"><?php echo date("Y-m-d"); ?> <span id="time"></span></h6>
 
-                <h6 style="text-align: center;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
                 <div style="width: 100%;border-bottom: 1px solid black;"></div>
-                <h6 class="content" style="text-align: center;"></h6>
-                <?php } ?>
+                <h6 style="text-align: center;font-size: 10pt !important;">Powerd By ovalfox.com || Contact 0334 8647633
+                </h6>
             </div>
 
         </div>
     </div>
-    <button onclick="printContent()">Print</button>
-    <!-- <button id="downloadBtn">Download as PDF</button> -->
+    <button hidden id="downloadBtn">Download as PDF</button>
 
     <script src="assets/js/jquery.min.js"></script>
-    <!-- <script src="assets/js/print.js"></script> -->
+    <script src="assets/js/print.js"></script>
 
     <script>
-    function printContent() {
-   
-        window.print();
-    }
-    window.onload = function() {
-        // Calculate the height of the first page
-        var firstPageHeight = document.getElementById('main').offsetHeight;
-        // Set the top margin of the second page to the height of the first page
-        document.documentElement.style.setProperty('--page-margin', firstPageHeight + 'px');
+    const options = {
+        filename: 'small_inv.pdf',
+        image: {
+            type: 'png',
+            quality: 0.98
+        },
+        html2canvas: {
+            scale: 2
+        },
+        jsPDF: {
+            unit: 'in',
+            format: 'letter',
+            orientation: 'portrait'
+        }
     };
-    // const options = {
-    //     filename: 'small_inv.pdf',
-    //     image: {
-    //         type: 'jpeg',
-    //         quality: 0.98
-    //     },
-    //     html2canvas: {
-    //         scale: 2
-    //     },
-    //     jsPDF: {
-    //         unit: 'in',
-    //         format: 'a6',
-    //         orientation: 'portrait'
-    //     }
-    // };
 
-    // html2pdf().from(document.body).set(options).save();
-
-
-    var currentTime = new Date();
-
-    // Get the current hour, minute, and second
-    var hours = currentTime.getHours();
-    var minutes = currentTime.getMinutes();
-    var seconds = currentTime.getSeconds();
-    // Determine if it's AM or PM
-    var period = hours < 12 ? "AM" : "PM";
-
-    // Adjust hours for AM/PM format
-    hours = hours % 12;
-    hours = hours ? hours : 12; // Handle midnight (0 hours)
-    const time = `${hours}:${minutes}:${seconds} ${period}`;
-    document.getElementById("time").textContent = time;
-
-    function addPageNumbers() {
-        var pageNumbers = document.querySelectorAll('.content');
-        pageNumbers.forEach(function(pageNumber, index) {
-            pageNumber.textContent = 'Page: ' + (index + 1);
-        });
-    }
-
-    window.onload = addPageNumbers;
+    html2pdf().from(document.body).set(options).save();
     </script>
 </body>
 

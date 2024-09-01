@@ -247,15 +247,21 @@ if (isset($_GET['edit_product'])) {
                                                             Name</label>
                                                         <select class="select2 form-control select-opt" name="product_name"
                                                             id="product-select">
-
+                                                            
+                                                        <?php 
+                                                            if (isset($_GET['edit_product'])) {
+                                                            ?>
+                                                            <option selected value="<?php echo $id[0]['product_name']; ?>"><?php echo $id[0]['product_name']; ?></option>
+                                                            <?php } ?>
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
+                                        
                                             <div class="row">
                                                 <div class="col-md">
                                                     <div class="form-group">
-                                                        <label for="image" class="col-form-label">Product</label>
+                                                        <label for="image" class="col-form-label">Product image</label>
                                                         <input class="form-control" name="image" type="file" id="image">
 
                                                         <?php 
@@ -339,13 +345,12 @@ if (isset($_GET['edit_product'])) {
                                                 <div class="col-md">
 
                                                     <div class="form-group">
-                                                        <label for="purchase_per_unit_price" class="col-form-label">Per
-                                                            unit
+                                                        <label for="purchase_per_unit_price" class="col-form-label">Cost
                                                             price</label>
                                                         <input
                                                             value="<?php echo isset($_GET['edit_product']) ? $id[0]['purchase_per_unit_price'] : null; ?>"
                                                             class="form-control" name="purchase_per_unit_price"
-                                                            type="number" placeholder="Enter Per Unit Price"
+                                                            type="number" placeholder="Enter Cost Price"
                                                             id="purchase_per_unit_price">
                                                     </div>
                                                 </div>
