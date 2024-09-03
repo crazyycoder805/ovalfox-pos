@@ -10,22 +10,22 @@ $total_quantity = $total_amount = $grand_total = 0;
 $query = "SELECT * FROM sales_1 WHERE company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 
 if (!empty($_POST['start_date'])) {
-    $query .= " AND Date(date) = {$_POST['start_date']}";
+    $query .= " AND Date(date) = '{$_POST['start_date']}'";
     if (!empty($_POST['end_date'])) {
-        $query .= " AND Date(date) BETWEEN {$_POST['start_date']} AND {$_POST['end_date']}";
+        $query .= " AND Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}'";
     }
 }
 
 if (!empty($_POST['customer_name'])) {
-    $query .= " AND customer_name = {$_POST['customer_name']}";
+    $query .= " AND customer_name = '{$_POST['customer_name']}'";
 }
 
 if (!empty($_POST['booker_name'])) {
-    $query .= " AND booker_name = {$_POST['booker_name']}";
+    $query .= " AND booker_name = '{$_POST['booker_name']}'";
 }
 
 if (!empty($_POST['product_name'])) {
-    $query .= " AND item_code = {$_POST['product_name']}";
+    $query .= " AND item_code = '{$_POST['product_name']}'";
 }
 
 $sales_1 = $pdo->customQuery($query);

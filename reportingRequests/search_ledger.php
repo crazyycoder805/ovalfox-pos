@@ -8,15 +8,15 @@ $query = "SELECT *, SUM(total_amount) AS total_price FROM ledger WHERE company_p
 
 // Add conditions based on POST data
 if (!empty($_POST["customer_name"])) {
-    $query .= " AND customer_name = {$_POST["customer_name"]}";
+    $query .= " AND customer_name = '{$_POST["customer_name"]}'";
 }
 
 if (!empty($_POST['start_date'])) {
-    $query .= " AND Date(date) = {$_POST['start_date']}";
+    $query .= " AND Date(date) = '{$_POST['start_date']}'";
     
 
     if (!empty($_POST['end_date'])) {
-        $query .= " AND Date(date) BETWEEN {$_POST['start_date']} AND {$_POST['end_date']}";
+        $query .= " AND Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}'";
     }
 }
 

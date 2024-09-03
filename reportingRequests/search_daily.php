@@ -10,24 +10,25 @@ $total_amount = $final_amount = $received_amount = $returned_amount = $pending_a
 
 
 
-$query = "SELECT * FROM sales_2 WHERE company_profile_id = :company_profile_id";
+$query = "SELECT * FROM sales_2 WHERE company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 
 // Build query based on available POST data
 if (!empty($_POST['start_date'])) {
-    $query .= " AND Date(date) = {$_POST['start_date']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
+    $query .= " AND Date(date) = '{$_POST['start_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 }
 
 if (!empty($_POST['end_date'])) {
-    $query .= " AND Date(date) BETWEEN {$_POST['start_date']} AND {$_POST['end_date']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
+    $query .= " AND Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 }
 
 if (!empty($_POST['customer_name'])) {
-    $query .= " AND customer_name = {$_POST['customer_name']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
+    $query .= " AND customer_name = '{$_POST['customer_name']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 }
 
 if (!empty($_POST['booker_name'])) {
-    $query .= " AND booker_name = {$_POST['booker_name']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
+    $query .= " AND booker_name = '{$_POST['booker_name']}' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}";
 }
+
 
 // Execute the query
 $sales_2 = $pdo->customQuery($query);
@@ -100,3 +101,4 @@ $html .= "</tbody></table>
 </div>";
 
 echo json_encode([$html, $sales_2]);
+

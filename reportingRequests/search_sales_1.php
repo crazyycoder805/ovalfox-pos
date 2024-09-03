@@ -14,16 +14,16 @@ $query = "SELECT item_code, item_name, SUM(item_price) AS total_price,
 
 // Add conditions based on POST data
 if (!empty($_POST['start_date'])) {
-    $query .= " AND Date(date) = {$_POST['start_date']}";
+    $query .= " AND Date(date) = '{$_POST['start_date']}'";
     
 
     if (!empty($_POST['end_date'])) {
-        $query .= " AND Date(date) BETWEEN {$_POST['start_date']} AND {$_POST['end_date']}";
+        $query .= " AND Date(date) BETWEEN '{$_POST['start_date']}' AND '{$_POST['end_date']}'";
     }
 }
 
 if (!empty($_POST['booker_name'])) {
-    $query .= " AND booker_name = {$_POST['booker_name']}";
+    $query .= " AND booker_name = '{$_POST['booker_name']}'";
 }
 
 $query .= " GROUP BY item_code";
