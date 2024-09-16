@@ -8,12 +8,11 @@
     <div class="side-menu-wrap">
         <ul class="main-menu">
 
-
             <?php 
             if (isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d != 0) {
             ?>
             <li>
-                <a href="index.php">
+                <a href="user-index.php">
                     <span class="icon-menu feather-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -43,7 +42,8 @@
                     </span>
                 </a>
             </li>
-            <?php } ?>
+            <?php }  ?>
+
             <?php 
             if (isset($_SESSION['ovalfox_pos_access_of']->s) && $_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->s != 0) {
             ?>

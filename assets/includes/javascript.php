@@ -23,6 +23,7 @@ $(document).ready(function() {
     $(".customer-select").select2();
     $(".booker-select").select2();
     $("#product").select2();
+    // Initialize the Select2 component
     $('#product-select').select2({
         placeholder: 'Search for a product',
         tags: true,
@@ -40,7 +41,8 @@ $(document).ready(function() {
                     results: data.map(function(product) {
                         return {
                             id: product.id, // Unique identifier for the product
-                            text: product.product_name // The name to display in the dropdown
+                            text: product
+                                .product_name // The name to display in the dropdown
                         };
                     })
                 };
@@ -50,6 +52,40 @@ $(document).ready(function() {
         minimumInputLength: 1,
         allowClear: true
     });
+    let sVle = "";
+    // When a product is selected, set its value into the input field
+    $('#product-select').on('select2:select', function(e) {
+        var selectedValue = e.params.data.text; // Get the selected option's text
+        // Open the dropdown to ensure the search input is in the DOM
+        $('#product-select').select2('open');
+        // Add a small delay to allow the DOM to render the search field
+        setTimeout(function() {
+            // Now try to find the search input field
+            var searchInput = $('.select2-container .select2-search__field');
+
+            if (searchInput.length) {
+                $(searchInput[0]).val(selectedValue);
+                $(searchInput[0]).focus();
+
+            }
+            sVle = selectedValue;
+        }, 150); // Delay of 100ms
+    });
+
+    $('#product-select').on('select2:open', function() {
+        setTimeout(function() {
+            // Now try to find the search input field
+            var searchInput = $('.select2-container .select2-search__field');
+
+            if (searchInput.length) {
+                $(searchInput[0]).val(sVle);
+                $(searchInput[0]).focus();
+
+            }
+        }, 150);
+    });
+
+
 
     $("#payment_from").select2();
     $("#item_names").select2();

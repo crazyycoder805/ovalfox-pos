@@ -164,39 +164,42 @@ foreach ($customers as $customer) {
                                 <div class="form-group">
                                     <label class="col-form-label">Booker name</label>
                                     <?php 
-if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2")) {
+if ((isset($_SESSION['ovalfox_pos_role_id']) && ($_SESSION['ovalfox_pos_role_id'] == "2" || $_SESSION['ovalfox_pos_role_id'] == "3"))) {
 ?>
                                     <input type="text" class="form-control" disabled
-                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>">
+                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && ($_SESSION['ovalfox_pos_role_id'] == "2" || $_SESSION['ovalfox_pos_role_id'] == "3" )? $_SESSION['ovalfox_pos_username'] : $booker_inv[0]['username']; ?>">
 
                                     <input hidden type="text" class="form-control" disabled
-                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "2" ? $_SESSION['ovalfox_pos_user_id'] : $booker_inv[0]['id']; ?>"
+                                        value="<?php echo isset($_SESSION['ovalfox_pos_role_id']) && ($_SESSION['ovalfox_pos_role_id'] == "2" || $_SESSION['ovalfox_pos_role_id'] == "3" )? $_SESSION['ovalfox_pos_user_id'] : $booker_inv[0]['id']; ?>"
                                         name="booker_name" id="booker_name">
 
                                     <?php } else if ((isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "1") || (isset($_GET['inv_num']))) {
 $bookers = $pdo->customQuery("SELECT *  FROM access WHERE role_id != 1 AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']}"); 
 ?>
 
+                                    <?php
+function isSelected($booker_inv, $booker, $session_booker_select) {
+    if (isset($_GET['inv_num']) && $booker_inv[0]['id'] == $booker['id']) {
+        return "selected";
+    } elseif (isset($session_booker_select) && $session_booker_select != "" && $session_booker_select == $booker['id']) {
+        return "selected";
+    }
+    return "";
+}
+?>
+
                                     <select class="select2 booker-select form-control select-opt" name="booker_name"
                                         id="booker_name">
-                                        <option selected value="">
-                                            Select Booker
-                                        </option>
-                                        <?php
-
-foreach ($bookers as $booker) {
-
-?>
+                                        <option selected value="">Select Booker</option>
+                                        <?php foreach ($bookers as $booker) { ?>
                                         <option
-                                            <?php 
-                                            echo isset($_GET['inv_num']) && $booker_inv[0]['id'] == $booker['id'] ? "selected" : (isset($_SESSION['booker_select']) && $_SESSION['booker_select'] != "" && $_SESSION['booker_select'] == $booker['id'] ? "selected" : "") ?>
+                                            <?php echo isSelected($booker_inv, $booker, isset($_SESSION['booker_select']) ? $_SESSION['booker_select'] : ""); ?>
                                             value="<?php echo $booker['id']; ?>">
                                             <?php echo $booker['username']; ?>
                                         </option>
-
-
                                         <?php } ?>
                                     </select>
+
 
                                     <?php } else if (isset($_SESSION['ovalfox_pos_role_id']) && $_SESSION['ovalfox_pos_role_id'] == "3") {
 $bookers = $pdo->read("access", ['role_id' => '2', 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]); 
@@ -786,13 +789,15 @@ foreach ($bookers as $booker) {
                     <div class="row">
                         <div class="col-md">
                             <table id="customerPreviosTable"
-                                class="table table-striped table-bordered dt-responsive table-responsive ">
+                                class="table table-striped table-bordered dt-responsive table-responsive "
+                                style="table-layout: fixed;">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>Bill number</th>
                                         <th>Inv number</th>
                                         <th>Status</th>
+                                        <th>Payment Type</th>
 
 
                                         <th>Customer Name</th>
@@ -873,14 +878,14 @@ foreach ($bookers as $booker) {
                 AND invoice_number > {$invoice_sales_2[0]['invoice_number']}");
                 
                 if (count($maxedInvoiceNumberCus) > 0) {
-                    echo "location.href = 'sales.php';alert('Previous invoice cant be editable.')";
+                    // echo "location.href = 'sales.php';alert('Previous invoice cant be editable.')";
 
                 } 
                 
       
             ?>
-       
-      
+
+
         $.ajax({
             type: "POST",
             url: "requestsPHP/loadInvoice.php",
@@ -1266,7 +1271,7 @@ foreach ($bookers as $booker) {
 
             return extraDiscountedPrice;
         };
-
+        // --Code Block 1 Here END--
 
 
         let isAmount = "";
@@ -1634,6 +1639,8 @@ foreach ($bookers as $booker) {
                 });
             }
         });
+        // -- Code block 2 to be refactor --
+
 
         let A = 0;
         $("#wholeFormBtn").on("click", e => {
@@ -1806,7 +1813,6 @@ foreach ($bookers as $booker) {
                                 isAmount = "amount";
 
                                 total_discount = 0;
-                                loadScreen();
                                 $.ajax({
                                     type: "POST",
                                     url: "requestsPHP/sales2Update.php",
@@ -1864,6 +1870,9 @@ foreach ($bookers as $booker) {
                                     }
 
                                 });
+
+                                loadScreen();
+
                             }
                         });
                     }
@@ -2019,6 +2028,7 @@ foreach ($bookers as $booker) {
                     "cusId": e.target.value
                 },
                 success: e => {
+                    console.log(e);
                     const items = JSON.parse(e);
                     $("#customerDataShow").html(items[0]);
                     $(".modalCustomer").modal("show");
@@ -2026,8 +2036,14 @@ foreach ($bookers as $booker) {
             })
 
         });
+
+        // -- Code to be optimzed block 3
         let focusSet = false;
-        // Function to toggle active cell class
+
+
+
+
+
         // Function to toggle active cell class
         function toggleActiveCell($cell) {
             $('#itemAddedtable td').removeClass('active-cell');
@@ -2051,6 +2067,7 @@ foreach ($bookers as $booker) {
             selection.removeAllRanges();
             selection.addRange(range);
         }
+
         // Function to find the next editable cell in a given direction
         function findNextEditableCell($startCell, direction) {
             let $cell = $startCell;
@@ -2142,11 +2159,48 @@ foreach ($bookers as $booker) {
             e.preventDefault();
         });
 
-        // Focus event handler for mouse clicks
+        // Store the previous value in a data attribute on focus
         $(document).on("focus", "#itemAddedtable td[contenteditable='true']", function() {
             let $this = $(this);
+            let previousValue = $this.text().trim();
+
+            // Store the previous value in a data attribute
+            $this.data('previous-value', previousValue);
+
             toggleActiveCell($this);
         });
+
+        // Show the previous value when typing starts
+        $(document).on("input", "#itemAddedtable td[contenteditable='true']", function() {
+            let $this = $(this);
+            let previousValue = $this.data('previous-value');
+
+            // Display previous value only if not already displayed
+            if (previousValue && !$this.find('.previous-value').length) {
+                $this.append(
+                    `<span class="previous-value" contenteditable="false" style="font-size: 12px; color: #999;"> (${previousValue})</span>`
+                );
+            }
+
+            // Optionally, remove the previous value after a short delay
+            setTimeout(function() {
+                $this.find('.previous-value').fadeOut(300, function() {
+                    $(this).remove();
+                });
+            }, 2000); // Adjust delay as needed
+        });
+
+        // Function to get the actual cell value without the previous value span
+        function getCellValue($cell) {
+            // Clone the cell content
+            let $clone = $cell.clone();
+
+            // Remove the span with the previous value
+            $clone.find('.previous-value').remove();
+
+            // Return the text content without the span
+            return $clone.text().trim();
+        }
 
 
 
@@ -2413,6 +2467,11 @@ foreach ($bookers as $booker) {
             }
         });
 
+
+        // Code Block to be optimized 4
+
+
+
         // $(document).on("blur", "#itemAddedtable td", eTarget => {
 
         // });
@@ -2578,6 +2637,7 @@ foreach ($bookers as $booker) {
             }
         });
 
+        // Code need to be optimized 5
     });
     </script>
 

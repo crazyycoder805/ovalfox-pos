@@ -16,9 +16,7 @@ if (isset($_GET['theme']) && $_GET['theme'] == "dark") {
 
 }
 
-
-$today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND id = {$_SESSION['ovalfox_pos_user_id']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND created_at >= '".date("Y-m-d 00:00:00")."' AND created_at <= '".date("Y-m-d 23:59:59")."'"));
-
+$total_orders = $pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND booker_name = {$_SESSION['ovalfox_pos_user_id']}");
 ?>
 
 <body>
@@ -44,14 +42,13 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                                     <li class="breadcrumb-link">
                                         <a href="index.php"><i class="fas fa-home mr-2"></i>Dashboard</a>
                                     </li>
-                                    <li class="breadcrumb-link active">Admin</li>
+                                    <li class="breadcrumb-link active">Booker</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h1>Welcome, to Point Of Sale.</h1>
                 <!-- Revanue Status Start -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12">
@@ -69,6 +66,7 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                                                     <th>Inv number</th>
                                                     <th>Customer</th>
                                                     <th>Booker</th>
+                                                    <th>Amount</th>
 
                                                     <th>Status</th>
 
@@ -77,18 +75,20 @@ $today_orders = count($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'U
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                            foreach ($pdo->customQuery("SELECT * FROM sales_2 WHERE status = 'Unpaid' OR status = 'Incomplete' AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND created_at >= '".date("Y-m-d 00:00:00")."' AND created_at <= '".date("Y-m-d 23:59:59")."'") as $index => $order) {
+                                                            foreach ($total_orders as $index => $order) {
                                                                 $index += 1;
+                                                                $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($order['invoice_number']) ? $order['invoice_number'] : -1]);
                                                                 $booker = $pdo->read("access", ['id' => $order['booker_name']]);
                                                                 $customer = $pdo->read("customers", ['id' => $order['customer_name']]);
-
                                                             ?>
                                                 <tr>
                                                     <td><?php echo $index; ?></td>
-                                                    <td><?php echo $order['invoice_number']; ?></td>
+                                                    <td><?php echo preg_match('/\(Refunded\)/', $sl1[0]['item_name']) ? '(Refunded) ' . $order['invoice_number'] : $order['invoice_number']; ?>
+                                                    </td>
                                                     <td><?php echo $customer[0]['name']; ?></td>
 
                                                     <td><?php echo $booker[0]['username']; ?></td>
+                                                    <td><?php echo $order['final_amount']; ?></td>
 
                                                     <td><?php echo $order['status']; ?></td>
 

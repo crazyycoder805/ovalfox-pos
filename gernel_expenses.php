@@ -25,7 +25,7 @@ if (isset($_POST['add_customer_btn'])) {
 
             $pdo->create("gernel_expenses", ['expense_category_id' => $_POST['expense_category_id'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'expense_name' => $_POST['expense_name'], 'date' => $_POST['date'], 
             'paid_by' => $_POST['paid_by'], 'paid_to' => $_POST['paid_to'], 'amount' => $_POST['amount']])
-&&             $pdo->create("ledger", ['date' => $_POST['date'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'payment_type' => $_POST['expense_name'], 'total_amount' => $_POST['amount'], 'dr' => $_POST['amount'],
+&&             $pdo->create("ledger", ['date' => $_POST['date'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'payment_type' => $_POST['expense_name'], 'total_amount' => $_POST['amount'],
 'status' => "GERNEL_EXPENSE"])
 
 

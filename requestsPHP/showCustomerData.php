@@ -9,7 +9,6 @@ $html = "";
 $customerSales2 = $pdo->customQuery(
     "SELECT * FROM sales_2 WHERE customer_name = {$_POST['cusId']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} ORDER BY id DESC"
 );
-
 // Iterate over each sale record
 foreach ($customerSales2 as $index => $cs) {
     $index += 1;
@@ -23,6 +22,7 @@ foreach ($customerSales2 as $index => $cs) {
     $itemNME = !empty($sl1) && preg_match('/\(Refunded\)/', $sl1[0]['item_name'] ?? '') 
         ? '(Refunded) ' . $cs['invoice_number'] 
         : $cs['invoice_number'];
+    $customerLedger = $pdo->read("ledger", ['invoice_number' => $cs['invoice_number']]);
 
     // Determine status style
     $statusStyle = "";
@@ -43,10 +43,12 @@ foreach ($customerSales2 as $index => $cs) {
         <td contenteditable='true'>{$cs['bill_number']}</td>
         <td contenteditable='true'>$itemNME</td>
         <td contenteditable='true' style='$statusStyle'>{$cs['status']}</td>
+        <td contenteditable='true'>{$customerLedger[0]['payment_type']}</td>
+
         <td contenteditable='true'>{$customer[0]['name']}</td>
         <td contenteditable='true'>{$booker[0]['username']}</td>
-        <td contenteditable='true'>" . round($cs['final_amount'], 2) . "</td>
-        <td contenteditable='true'>{$cs['details']}</td>
+        <td contenteditable='true'>" . round((double)$cs['final_amount'], 2) . "</td>
+        <td contenteditable='true' style='width:10px !important;'>{$cs['details']}</td>
         <td contenteditable='true' style='background-color: #A9A9A9; color: white;'>{$cs['date']}</td>
         <td>
             <a href='printinvoice2.php?inv={$cs['invoice_number']}&amountIn=amount' id='printCustomer' data-cus='{$cs['invoice_number']}' name='printCustomer'>PRINT</a> || 

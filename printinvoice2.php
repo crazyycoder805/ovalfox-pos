@@ -29,7 +29,20 @@ $sales_2 = $pdo->read('sales_2', ['invoice_number'=>$invoice_number, 'company_pr
 $customers = $pdo->read('customers', ['id' => $sales_2[0]['customer_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 $booker = $pdo->read('access', ['id' => $sales_2[0]['booker_name'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
 
-$ledger = $pdo->read('ledger', ['invoice_number' => $invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+
+
+
+
+//$previousedger = $pdo->customQuery("SELECT * FROM ledger WHERE invoice_number < $invoice_number AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND payment_from = {$customers[0]['id']}");
+$ledger = $pdo->read("ledger", ['invoice_number' => $invoice_number, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]);
+
+
+
+
+
+
+
+
 
 $sl1 = $pdo->read("sales_1", ['invoice_number' => !empty($sales_2[0]['invoice_number']) ? $sales_2[0]['invoice_number'] : -1]);
 $itemNME = preg_match('/\(Refunded\)/', (!empty($sl1[0]['item_name']) ? $sl1[0]['item_name'] : "")) ? '(Refunded) ' . $sales_2[0]['invoice_number'] : $sales_2[0]['invoice_number']; 
@@ -424,6 +437,11 @@ $total_price = 0;
                             </thead>
                             <tbody>
                                 <?php 
+                                $total_qty = 0;
+                                $total_grid_amnt = 0;
+                                $total_discount = 0;
+                                $total_e_discount = 0;
+
     foreach ($sales_1 as $index => $sale) {
         $index += 1;
 
@@ -431,6 +449,14 @@ $total_price = 0;
         $pd = $pdo->read("products", ['item_code' => $sale['item_code']]);
         $total_quantity += $sale['quantity'];
         $total_price += $sale['grand_total'];
+
+
+        $total_qty += $sale['quantity'];
+        $total_grid_amnt += $sale['amount'];
+        $total_discount += $sale['discount'];
+        $total_e_discount += $sale['extra_discount'];
+
+
     ?>
                                 <tr>
                                     <td style="text-align: center;font-size: 23px !important;"><?php echo $index; ?>
@@ -465,6 +491,24 @@ $total_price = 0;
                                 </tr>
                                 <?php } ?>
                             </tbody>
+                            <tfoot style="border: none;">
+                                <tr>
+                                    <th style="border: none;"></th> <!-- Empty cell under "SR" -->
+                                    <th style="border: none;"></th> <!-- Empty cell under "Description" -->
+                                    <th style="border: none;">Qty: <?php echo $total_qty; ?></th> <!-- Under "Qty" -->
+                                    <th style="border: none;"></th> <!-- Empty cell under "Rate" -->
+                                    <th style="border: none;">Amnt: <?php echo $total_grid_amnt; ?></th>
+                                    <!-- Under "Total" -->
+                                    <th style="border: none;">Dis: <?php echo $total_discount; ?></th>
+                                    <!-- Under "Dis" -->
+                                    <th style="border: none;"></th> <!-- Empty cell under "%" -->
+                                    <th style="border: none;">E.Dis: <?php echo $total_e_discount; ?></th>
+                                    <!-- Under "E.D" -->
+                                    <th style="border: none;"></th> <!-- Empty cell under "G.Total" -->
+                                </tr>
+                            </tfoot>
+
+
                         </table>
 
 
@@ -477,8 +521,9 @@ $total_price = 0;
 
 
                             <p> <b>Terms and Conditions:</b> <br /> <textarea disabled
-                                    style="font-size: 8px;color:red !important;font-weight: bolder;" placeholder="Type..." name=""
-                                    id="terms-cond" cols="22" rows="3"><?php echo $sales_2[0]['details']; ?></textarea>
+                                    style="font-size: 8px;color:red !important;font-weight: bolder;"
+                                    placeholder="Type..." name="" id="terms-cond" cols="22"
+                                    rows="3"><?php echo $sales_2[0]['details']; ?></textarea>
                             </p>
 
 
@@ -536,7 +581,8 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                                     //     }
                                     //     echo array_sum($amount);
                                     // }
-                                    echo $ledger[0]['prev_blnc'];
+                                   
+                                    echo array_key_exists(1, $ledger) ? $ledger[1]['prev_blnc'] : $ledger[0]['prev_blnc'];
                                     ?></span>
                             </div>
                             <div id="bala-box" style="">
@@ -544,10 +590,10 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                                 Rs
                                 <?php
                                 // $finAmnt = $gT + $sales_2[0]['final_amount'];
-                                $finAmnt = ($gT + $sales_2[0]['final_amount']) - $rT;
+                                // $finAmnt = ($gT + $sales_2[0]['final_amount']) - $rT;
 
                                 // echo (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) >= 0 ? (($_GET['amountIn'] == "amount" ? $total_price - (double)$sales_2[0]['discount'] : $per) - ($sales_2[0]['recevied_amount'] != 0 && !empty($sales_2[0]['recevied_amount']) ? $sales_2[0]['recevied_amount'] : 0)) : 0; 
-                                echo $finAmnt;
+                                echo $ledger[0]['blnce'] + $ledger[0]['prev_blnc'];
                                 ?>
                             </div>
 
@@ -566,7 +612,9 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
                 ">
                                 <span id="cb-text" style="font-weight: bold;">Current Balance</span>
                                 <b> Rs
-                                    <?php echo $ledger[0]['blnce']; ?></b>
+                                    <?php
+                                                                        echo array_key_exists(1, $ledger) ? $ledger[1]['blnce'] : $ledger[0]['blnce'];;
+ ?></b>
                             </div>
                         </div>
 
@@ -576,7 +624,8 @@ $percetage = (double)$sales_2[0]['discount'] != 0 ? round(((double)$sales_2[0]['
 
 
                 <div style="width: 100%;border-bottom: 1px solid black;"></div>
-                <h6 style="text-align: center;font-size: 10pt !important;">Powerd By ovalfox.com || Contact 0334 8647633</h6>
+                <h6 style="text-align: center;font-size: 10pt !important;">Powerd By ovalfox.com || Contact 0334 8647633
+                </h6>
             </div>
 
         </div>

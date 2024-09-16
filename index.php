@@ -19,6 +19,12 @@ if(isset($_SESSION['ovalfox_pos_access_of']->d) && $_SESSION['ovalfox_pos_role_i
         header("location:404.php");
     
 }
+
+if($_SESSION['ovalfox_pos_role_id'] == 3 && $_SESSION['ovalfox_pos_access_of']->d == 0) {
+    echo 1;
+    header("location:404.php");
+
+}
 // Done
 $total_customers = count($pdo->read("customers", ['company_profile_id' => $_SESSION['ovalfox_pos_cp_id']]));
 // Done
@@ -417,7 +423,7 @@ $today_gernel_expenses = count($pdo->customQuery("SELECT * FROM gernel_expenses 
                                 <div class="row">
                                     <div class="col-md">
                                         <div class="chart-holder">
-                                            <div id="chartL"></div>
+                                            <div id="chartLs"></div>
                                         </div>
                                     </div>
 

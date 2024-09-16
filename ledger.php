@@ -25,7 +25,12 @@ if (isset($_POST['add_ledger_btn'])) {
 
 
 
-            $pdo->create("ledger", ['date' => $_POST['date'], 'payment_type' => $_POST['payment_type'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'total_amount' => $_POST['total_amount'], 'recevied_amount' => $_POST['recevied_amount'], 'details' => $_POST['details'], 'payment_from' => $_POST['payment_from'], 'dr' => $_POST['dr'], 'cr' => $_POST['cr'], 'remaining_amount' => $_POST['remaining_amount']])
+            $pdo->create("ledger", ['date' => $_POST['date'], 'payment_type' => $_POST['d_or_c'], 'company_profile_id'=>$_SESSION['ovalfox_pos_cp_id'], 'recevied_amount' => $_POST['rec_amnt'], 'details' => $_POST['details'], 'payment_from' => $_POST['payment_from']
+            , 'prev_blnc' => $_POST['prev_blnc_hidden'], 'blnce' => $_POST['new_blnc_hidden']]) 
+
+            &&
+
+            $pdo->update("customers", ['id' => $_POST['payment_from']], ['balance' => $_POST['new_blnc_hidden']])
 
 
         ) {
@@ -125,135 +130,13 @@ if (isset($_GET['edit_ledger'])) {
                 <!-- From Start -->
                 <div class="from-wrapper">
                     <div class="row">
-
-                        <div class="col-xl col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="col-md-8">
                             <div class="card">
 
                                 <div class="card-body">
 
                                     <form class="separate-form" method="post">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <div class="row">
-                                                <div class="col-md">
-
-
-
-                                                    <div class="form-group">
-                                                        <label for="date" class="col-form-label">Date</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['date'] : null; ?>"
-                                                            class="form-control" name="date" type="date"
-                                                            placeholder="Enter ledge date" id="date">
-                                                    </div>
-
-
-                                                </div>
-                                                <div class="col-md">
-
-                                                    <div class="form-group s-opt">
-                                                        <label for="payment_type"
-                                                            class="col-form-label">Categories</label>
-                                                        <select class="select2 form-control select-opt"
-                                                            name="payment_type" id="payment_type">
-
-                                                            <option value="cash_on_delivery">Cash on delivery</option>
-                                                            <option value="online">Online</option>
-                                                        </select>
-                                                        <span class="sel_arrow">
-                                                            <i class="fa fa-angle-down "></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class="col-md">
-
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Customer name</label>
-                                                        <select class="select2 form-control select-opt customer-select"
-                                                            name="payment_from" id="payment_from">
-                                                            <option selected value="">
-                                                                Select Customer Name
-                                                            </option>
-                                                            <?php
-
-foreach ($customers as $customer) {
-
-?>
-                                                            <option value="<?php echo $customer['id']; ?>">
-                                                                <?php echo $customer['name']; ?>
-                                                            </option>
-
-
-                                                            <?php } ?>
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-
-
-
-
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label for="remaining_amount" class="col-form-label">Recevied
-                                                            amount</label>
-                                                        <input
-                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['remaining_amount'] : null; ?>"
-                                                            class="form-control" name="remaining_amount" type="number"
-                                                            placeholder="Enter ledger Recevied amount"
-                                                            id="remaining_amount">
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="col-md">
-                                                    <div class="form-group">
-                                                        <label class="col-form-label">Payment
-                                                            type</label>
-
-                                                        <select class="select2 form-control select-opt"
-                                                            name="payment_type" id="payment_type">
-
-                                                            <option value="dr">Debit
-                                                            </option>
-                                                            <option value="cr">Credit
-                                                            </option>
-
-
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md">
-                                                    <div class="col-md">
-
-                                                        <div class="form-group">
-                                                            <label for="details" class="col-form-label">Details</label>
-                                                            <textarea rows="1" cols="1" class="form-control"
-                                                                name="details" id="details"
-                                                                placeholder="Details"><?php echo isset($_GET['edit_ledger']) ? $id[0]['details'] : null; ?></textarea>
-                                                        </div>
-                                                        <div class="form-group mt-3">
-                                                            <button class="btn btn-primary" type="reset">reset</button>
-                                                            <input
-                                                                name="<?php echo isset($_GET['edit_ledger']) ? "edit_ledger_btn" : "add_ledger_btn"; ?>"
-                                                                class="btn btn-danger" type="submit">
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
 
                                             <div class="row">
                                                 <table id="example1"
@@ -267,8 +150,7 @@ foreach ($customers as $customer) {
                                                             <th>Recevied amount</th>
                                                             <th>Details</th>
                                                             <th>Payment from</th>
-                                                            <th>Dr</th>
-                                                            <th>Cr</th>
+
                                                             <th>Remaining amount</th>
                                                             <th>Status</th>
 
@@ -290,17 +172,22 @@ foreach ($customers as $customer) {
                                                             <td><?php echo $ledge['recevied_amount']; ?></td>
                                                             <td><?php echo $ledge['details']; ?></td>
                                                             <td><?php echo $ledge['payment_from']; ?></td>
-                                                            <td><?php echo $ledge['dr']; ?></td>
-                                                            <td><?php echo $ledge['cr']; ?></td>
+
                                                             <td><?php echo $ledge['remaining_amount']; ?></td>
                                                             <td><?php echo $ledge['status']; ?></td>
 
                                                             <td><?php echo $ledge['created_at']; ?></td>
                                                             <td>
-                                                                <a class="text-success"
+                                                                <!-- <a class="text-success"
                                                                     href="ledger.php?edit_ledger=<?php echo $ledge['id']; ?>">
                                                                     <i class="fa fa-edit"></i>
                                                                 </a>
+                                                                &nbsp;&nbsp;&nbsp; -->
+
+                                                                <button class="text-success" id="print_ledger"
+                                                                    data-id="<?php echo $ledge['id']; ?>">
+                                                                    <i class="fa fa-print"></i>
+                                                                </button>
                                                                 &nbsp;&nbsp;&nbsp;
                                                                 <a class="text-danger"
                                                                     href="ledger.php?delete_ledger=<?php echo $ledge['id']; ?>">
@@ -318,6 +205,182 @@ foreach ($customers as $customer) {
 
                                                 </div>
                                             </div>
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card">
+
+                                <div class="card-body">
+
+                                    <form class="separate-form" method="post">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="row">
+                                                <div class="col-md">
+
+
+
+                                                    <div class="form-group">
+                                                        <label for="date" class="col-form-label">Date</label>
+                                                        <input
+                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['date'] : null; ?>"
+                                                            class="form-control" name="date" type="date"
+                                                            placeholder="Enter ledge date" id="date">
+                                                    </div>
+
+
+                                                </div>
+
+
+
+
+
+
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+
+                                                    <div class="form-group s-opt">
+                                                        <label for="payment_type"
+                                                            class="col-form-label">Categories</label>
+                                                        <select class="select2 form-control select-opt"
+                                                            name="payment_type" id="payment_type">
+
+                                                            <option value="cash_on_delivery">Cash on delivery</option>
+                                                            <option value="online">Online</option>
+                                                        </select>
+                                                        <span class="sel_arrow">
+                                                            <i class="fa fa-angle-down "></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Customer name</label>
+                                                        <select class="select2 form-control select-opt customer-select"
+                                                            name="payment_from" id="payment_from">
+                                                            <option selected value="">
+                                                                Select Customer Name
+                                                            </option>
+                                                            <?php
+
+        foreach ($customers as $customer) {
+
+        ?>
+                                                            <option value="<?php echo $customer['id']; ?>">
+                                                                <?php echo $customer['name']; ?>
+                                                            </option>
+
+
+                                                            <?php } ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Payment
+                                                            type</label>
+
+                                                        <select class="select2 form-control select-opt" name="d_or_c"
+                                                            id="d_or_c">
+
+                                                            <option value="dr">Debit
+                                                            </option>
+                                                            <option value="cr">Credit
+                                                            </option>
+
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label for="remaining_amount" class="col-form-label">Previous
+                                                            Balance</label>
+                                                        <input
+                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['remaining_amount'] : null; ?>"
+                                                            class="form-control" name="prev_blnc" type="number" disabled
+                                                            placeholder="Enter ledger Recevied amount" id="prev_blnc">
+                                                        <input type="text" hidden id="prev_blnc_hidden"
+                                                            name="prev_blnc_hidden" />
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label for="rec_amnt" class="col-form-label">Recevied
+                                                            amount</label>
+                                                        <input
+                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['rec_amnt'] : null; ?>"
+                                                            class="form-control" name="rec_amnt" type="number"
+                                                            placeholder="Enter ledger Recevied amount" id="rec_amnt">
+                                                    </div>
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="form-group">
+                                                        <label for="rec_amnt" class="col-form-label">New Balance</label>
+                                                        <input disabled
+                                                            value="<?php echo isset($_GET['edit_ledger']) ? $id[0]['rec_amnt'] : null; ?>"
+                                                            class="form-control" name="new_blnc" type="number"
+                                                            placeholder="Enter ledger Recevied amount" id="new_blnc">
+                                                        <input type="text" hidden id="new_blnc_hidden"
+                                                            name="new_blnc_hidden" />
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md">
+                                                    <div class="col-md">
+
+                                                        <div class="form-group">
+                                                            <label for="details" class="col-form-label">Details</label>
+                                                            <textarea rows="1" cols="1" class="form-control"
+                                                                name="details" id="details"
+                                                                placeholder="Details"><?php echo isset($_GET['edit_ledger']) ? $id[0]['details'] : null; ?></textarea>
+                                                        </div>
+                                                        <div class="form-group mt-3">
+                                                            <button class="btn btn-primary" type="reset">reset</button>
+                                                            <input
+                                                                name="<?php echo isset($_GET['edit_ledger']) ? "edit_ledger_btn" : "add_ledger_btn"; ?>"
+                                                                class="btn btn-danger" type="submit">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
                                         </div>
 
 
@@ -350,6 +413,55 @@ foreach ($customers as $customer) {
     $("#printbtnledger").on("click", e => {
         location.href = `printreport1.php?s=${searchedValue}&t=ledger`;
     });
+
+
+
+    $("#payment_from").on("change", target => {
+        $.ajax({
+            type: "POST",
+            url: "requestsPHP/getCustomerLedger.php",
+            data: {
+                "cus_id": $(target.target).val()
+            },
+            success: ajaxTarget => {
+                $("#prev_blnc").val(ajaxTarget);
+                $("#prev_blnc_hidden").val(ajaxTarget);
+
+            }
+        });
+    });
+
+    $("#d_or_c").on("change", target => {
+        $("#rec_amnt").val('');
+        $("#new_blnc").val('');
+        $("#new_blnc_hidden").val('');
+
+    });
+
+    $("#rec_amnt").on("input", target => {
+        if ($("#d_or_c").val() == "dr") {
+            $("#new_blnc").val(+$("#prev_blnc").val() + +$(target.target).val());
+            $("#new_blnc_hidden").val($("#new_blnc").val());
+
+        } else {
+            $("#new_blnc").val(+$("#prev_blnc").val() - +$(target.target).val());
+            $("#new_blnc_hidden").val($("#new_blnc").val());
+
+        }
+    });
+
+    function openPopup(urlUp) {
+        var url = urlUp;
+        var windowName = "Ledger Data Print";
+        var windowFeatures = "width=1000,height=1000";
+
+        window.open(url, windowName, windowFeatures);
+    }
+    $(document).on("click", "#print_ledger", target => {
+        target.preventDefault();
+
+        openPopup(`ledger_print.php?leid=${$(target.currentTarget).data("id")}`);
+    })
     </script>
 </body>
 

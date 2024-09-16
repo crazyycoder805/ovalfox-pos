@@ -16,9 +16,9 @@ function getLedgerData($pdo, $invoiceNumber, $companyProfileId) {
 }
 
 // Helper function to update or create ledger
-function upsertLedger($pdo, $invoiceNumber, $customerId, $data) {
-    $pdo->customQuery("DELETE FROM ledger WHERE details LIKE '%{$_POST['invoice_number']}, e%';");
-    $pdo->customQuery("DELETE FROM ledger WHERE invoice_number = $invoiceNumber;");
+function upsertLedger($pdo, $invoiceNumber, $customerId, $data, $customer) {
+    $pdo->customQuery("DELETE FROM ledger WHERE details LIKE '%{$_POST['invoice_number']}, e%' AND payment_from = '{$customer[0]['id']}';");
+    $pdo->customQuery("DELETE FROM ledger WHERE invoice_number = $invoiceNumber  AND payment_from = '{$customer[0]['id']}';");
     $existingLedger = $pdo->read("ledger", ['invoice_number' => $invoiceNumber]);
     if (empty($existingLedger)) {
         $pdo->create("ledger", array_merge(['invoice_number' => $invoiceNumber, 'payment_from' => $customerId], $data));
@@ -85,6 +85,8 @@ $customerInvoices = array_merge($customerInvMinusAll, $customerInvPlusAll);
 $gT = 0;
 $rT = 0;
 $prev = 0;
+$previosLedger = $pdo->customQuery("SELECT * FROM ledger WHERE invoice_number < {$_POST['invoice_number']} AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} AND payment_from = {$customer[0]['id']}");
+
 
 if (!empty($customerInvMinusAll)) {
     foreach ($customerInvMinusAll as $record) {
@@ -115,6 +117,7 @@ $_POST['date'] = str_replace("T", " ", $_POST['date']);
 
 $date = !empty($_POST['date']) ? $_POST['date'] : $customerSales['date'];
 $booker = !empty($_POST['booker_name']) ? $_POST['booker_name'] : $customerSales['booker_name'];
+$_SESSION['booker_select'] = $booker;
 
 // Fetch previous and next invoices
 $previousInvoice = $pdo->customQuery("SELECT * FROM sales_2 WHERE customer_name = $customerName AND invoice_number < {$_POST['invoice_number']} ORDER BY invoice_number DESC LIMIT 1")[0] ?? [];
@@ -134,7 +137,7 @@ $ledgerData = [
     "payment_type" => $_POST['payment_type'],
     "total_amount" => $_POST['total_amount'],
     "recevied_amount" => $_POST['recevied_amount'],
-    "prev_blnc" => $prev,
+    "prev_blnc" => $currentBalance,
     "remaining_amount" => (((double)$_POST['total_amount'] - (double)$_POST['recevied_amount']) <= 0 ? 0 : (double)$_POST['total_amount'] - (double)$_POST['recevied_amount']),
     "blnce" => (double)$_POST['pending_amount'] + (double)$gT,
     'company_profile_id' => $_SESSION['ovalfox_pos_cp_id'],
@@ -142,10 +145,10 @@ $ledgerData = [
     'date' => $_POST['date'],
     "status" => $_POST['pending_amount'] != 0 ? "Paid" : "Unpaid"
 ];
-upsertLedger($pdo, $_POST['invoice_number'], $customer[0]['id'], $ledgerData);
-
+upsertLedger($pdo, $_POST['invoice_number'], $customer[0]['id'], $ledgerData, $customer);
 $pdo->update("customers", ["id" => $customerName, 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']], ["balance" => (double)$_POST['pending_amount'] != 0 ? (double)$_POST['pending_amount'] + (double)$gT : 
 (double)$gT - (double)$_POST['returned_amount']]);
+
 if (!empty($_POST['returned_amount'])) {
     
     if (empty($pdo->customQuery("SELECT * FROM ledger WHERE details LIKE '%{$_POST['invoice_number']}, e%';"))) {
@@ -281,4 +284,3 @@ if ($_POST['isEdit'] ?? 'true' === "false") {
     $pdo->update("sales_2", ['invoice_number' => $nextInvoice['invoice_number'], 'company_profile_id' => $_SESSION['ovalfox_pos_cp_id']], $nextInvoiceData);
 }
 
-print_r(1);

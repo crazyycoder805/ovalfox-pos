@@ -1264,7 +1264,7 @@ $data = [];
 
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;text-align: center;">
-                        <?php echo round($d['total_amount'], 2); ?>
+                        <?php echo round((double)$d['total_amount'], 2); ?>
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;font-size: 10pt !important;text-align: center;">
@@ -1272,7 +1272,7 @@ $data = [];
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">
-                        <?php echo round($d['final_amount'], 2); ?>
+                        <?php echo round((double)$d['final_amount'], 2); ?>
                     </td>
                     <td
                         style="font-weight: bolder;<?php echo $d['status'] == "Paid" ? "background-color: #A9A9A9;color:white;" : "" ?>border-bottom: 1px solid black;border-right: 1px solid black;text-align: center;font-size: 10pt !important;">

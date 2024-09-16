@@ -24,7 +24,7 @@ if (!empty($customer) && !empty($product)) {
         AND company_profile_id = {$_SESSION['ovalfox_pos_cp_id']} 
         AND item_code = '{$product[0]['item_code']}' 
         ORDER BY id DESC 
-        LIMIT 5
+        LIMIT 10
     ");
 
     foreach ($sales_2_last_rate as $sale1) {
